@@ -608,6 +608,7 @@
                   },
                   success: function(response){
                     if(rush == "Yes"){ 
+                      console.log();
                       $.ajax({ // Start of creating rush rcp data
                         type: "POST",
                         url: "../controls/requestor/create_rush_data.php",
