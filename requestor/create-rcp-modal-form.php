@@ -99,7 +99,7 @@
                               </thead>
                               <tbody>
                                 <?php
-                                  for ($i=0; $i < 3; $i++) { 
+                                  for ($i=0; $i < 5; $i++) { 
                                     echo '
                                       <tr>
                                         <td class="particulars" contenteditable="true" name="rcp-td1" id="td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>
@@ -114,7 +114,7 @@
                           </div>
                           <div class="panel-footer">
                             <div class="row">
-                              <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 3 out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+                              <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
                               <div class="input-group">
                                 <span class="input-group-addon">₱</span>
                                 <input class="form-control" type="text" readonly id="total_amount" value="0.00" style="background-color: white">
@@ -421,7 +421,7 @@
                   }); 
                 }
                 if(!hasApprover){
-                  $('#no-approver-modal').modal('show');
+                  toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
                   document.getElementById("send-rcp-btn").disabled = true;
                 }
                 else{
@@ -437,6 +437,17 @@
 
 <script>
     var rcp_no;
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000"        
+      }
     $('#send-rcp-btn').click(function () {
       var date_needed;
       var user_id = <?php echo $_SESSION['user_id']; ?>;
@@ -467,18 +478,6 @@
       var missingIndex = 0;
       var isCompleted = false;
       var rqstr_name = "<?php echo $user_fullname; ?>";
-
-      toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "progressBar": true,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": true,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000"        
-      }
 
 
       if(dept_code == null || apprvr_id == null || comp_code == null || proj_code == null || 
@@ -562,10 +561,9 @@
             dataType:'json',
             cache: false,
             success: function(result){
-            var total_rcp = parseInt(result[0]) + 1;
-            rcp_no = dept_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-
-            $.ajax({
+              var total_rcp = parseInt(result[0]) + 1;
+              rcp_no = dept_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
+              $.ajax({ // Start of sending mail
                 type: "POST",
                 async: false,
                 url: "../controls/mails/new_rcp_mail.php",
@@ -582,16 +580,18 @@
 
                 },
                 complete: function(){
-                  swal(rcp_no, "has been successfully sent", "success");
                   $('#form').trigger("reset");
                   $('td').empty();
                   $('#load-rcp').load("../controls/requestor/load_rcp.php",{
                     user_id: user_id
                   });
+                  swal(rcp_no, "has been successfully sent", "success");
                 },
                 success: function(response){
+                  console.log(response);
                   $.ajax({ // Start of creating new rcp
                     type: "POST",
+                    async: false,
                     url: "../controls/requestor/create_rcp.php",
                     data: {
                     rcp_no:rcp_no, 
@@ -607,15 +607,43 @@
                     rush:rush
                   },
                   success: function(response){
-                    if(rush == "Yes"){ 
-                      console.log();
-                      $.ajax({ // Start of creating rush rcp data
-                        type: "POST",
-                        url: "../controls/requestor/create_rush_data.php",
-                        data: {
-                          rcp_no:rcp_no, 
-                          reason:reason, 
-                          due_date:due_date
+                    for (var i = 0; i < table_length; i++){ // Start of for loop
+                      var arraytd1 = $("#td1"+i+"").text();
+                      var arraytd2 = $("#td2"+i+"").text();
+                      var arraytd3 = $("#td3"+i+"").text();
+                      var currencyNoCommas = arraytd3.replace(/\,/g,'');
+                      currencyNoCommas = Number(currencyNoCommas);
+
+                      if(arraytd1 == "" || arraytd2 == "" || arraytd3 && ""){
+                        continue;
+                      }
+                      else{
+                        $.ajax({
+                          type: "POST",
+                          async: false,
+                          url: "../controls/requestor/create_particulars.php",
+                          data: {
+                            rcp_no:rcp_no, 
+                            arraytd1:arraytd1, 
+                            arraytd2:arraytd2, 
+                            arraytd3:currencyNoCommas
+                          },
+                          success: function(response){
+                            isCompleted = true;
+                          },
+                          error: function(xhr, ajaxOptions, thrownError) {
+                              alert(thrownError);
+                          }
+                        });
+                      }
+                    } // End of for loop
+                    if(isCompleted){
+                      $.ajax({ // Start of updating department no of rcp
+                          type: "POST",
+                          async: false,
+                          url: "../controls/requestor/upd_dept_rcp.php",
+                          data: { 
+                          dept_code:dept_code
                         },
                         success: function(response){
                           
@@ -623,65 +651,40 @@
                         error: function(xhr, ajaxOptions, thrownError){
                           alert(thrownError);
                         }
-                      }); // End of creating rush rcp data
-                    }
-                      $.ajax({ // Start of updating department no of rcp
-                          type: "POST",
-                          url: "../controls/requestor/upd_dept_rcp.php",
-                          data: { 
-                          dept_code:dept_code
-                        },
-                        success: function(response){ 
-                          var table_length = $('td[name=rcp-td1]').length;
-                          for (var i = 0; i < table_length; i++){ // Start of for loop
-                            var arraytd1 = $("#td1"+i+"").text();
-                            var arraytd2 = $("#td2"+i+"").text();
-                            var arraytd3 = $("#td3"+i+"").text();
-                            var currencyNoCommas = arraytd3.replace(/\,/g,'');
-                            currencyNoCommas = Number(currencyNoCommas);
-
-                            if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
-                              continue;
-                            }
-                            else{
-                              $.ajax({
-                                type: "POST",
-                                async: false,
-                                url: "../controls/requestor/create_particulars.php",
-                                data: {
-                                  rcp_no:rcp_no, 
-                                  arraytd1:arraytd1, 
-                                  arraytd2:arraytd2, 
-                                  arraytd3:currencyNoCommas
-                                },
-                                success: function(response, xhr){
-                                  isCompleted = true;
-                                },
-                                error: function(xhr, ajaxOptions, thrownError) {
-                                    alert(thrownError);
-                                }
-                              });
-                            }
-                          } // End of for loop
-                        },
-                        error: function(xhr, ajaxOptions, thrownError){
-                          alert(thrownError);
-                        }
                       }); // End of updating department no of rcp
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
+                      if(rush == "Yes"){ 
+                        $.ajax({ // Start of creating rush rcp data
+                          type: "POST",
+                          async: false,
+                          url: "../controls/requestor/create_rush_data.php",
+                          data: {
+                            rcp_no:rcp_no, 
+                            reason:reason, 
+                            due_date:due_date
+                          },
+                          success: function(response){
+                            
+                          },
+                          error: function(xhr, ajaxOptions, thrownError){
+                            alert(thrownError);
+                          }
+                        }); // End of creating rush rcp data
+                      }
                     }
-                  }); // End of creating new rcp
+                  },
+                  error: function(xhr, ajaxOptions, thrownError){
+                    swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
+                  }
+                }); // End of creating new rcp
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-                  swal("Error", "" + thrownError + " or please contact the System Administrator.", "error");
+                  swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
                 } 
-            });
+              }); // End of sending mail
             },
             error: function(xhr, ajaxOptions, thrownError){
-                alert(thrownError);
-              }
+              swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
+            }
           }); // End of getting department no of rcp -->
         }
         else{
@@ -691,142 +694,3 @@
       });
     });
 </script>
-
-<script>
-  function getRcpNo(dept_code){
-    
-  }
-</script>
-
-
-<!-- $.ajax({ // Start of getting department no of rcp
-                  type: "POST",
-                  url: "../controls/requestor/get_no_of_rcp.php",
-                  data: {
-                    dept_code:dept_code
-                  },
-                  dataType:'json',
-                  cache: false,
-                  success: function(result){
-                    var total_rcp = parseInt(result[0]) + 1;
-                    rcp_no = dept_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-                    $.ajax({ // Start of creating new rcp
-                        type: "POST",
-                        url: "../controls/requestor/create_rcp.php",
-                        data: {
-                        rcp_no:rcp_no, 
-                        user_id:user_id, 
-                        apprvr_id:apprvr_id, 
-                        payee:payee, 
-                        comp_code:comp_code, 
-                        proj_code:proj_code, 
-                        dept_code:dept_code, 
-                        current_date:current_date, 
-                        amount_in_words:amount_in_words, 
-                        currencyNoCommas:currencyNoCommas,
-                        rush:rush
-                      },
-                      success: function(response){
-                      if(rush == "Yes"){ 
-                        $.ajax({ // Start of creating rush rcp data
-                          type: "POST",
-                          url: "../controls/requestor/create_rush_data.php",
-                          data: {
-                            rcp_no:rcp_no, 
-                            reason:reason, 
-                            due_date:due_date
-                          },
-                          success: function(response){
-                            //
-                          },
-                          error: function(xhr, ajaxOptions, thrownError){
-                            alert(thrownError);
-                          }
-                        }); // End of creating rush rcp data
-                      }
-                      
-                        $.ajax({ // Start of updating department no of rcp
-                            type: "POST",
-                            url: "../controls/requestor/upd_dept_rcp.php",
-                            data: { 
-                            dept_code:dept_code
-                          },
-                          success: function(response){ 
-                            var table_length = $('td[name=rcp-td1]').length;
-                            for (var i = 0; i < table_length; i++){ // Start of for loop
-                              var arraytd1 = $("#td1"+i+"").text();
-                              var arraytd2 = $("#td2"+i+"").text();
-                              var arraytd3 = $("#td3"+i+"").text();
-                              var currencyNoCommas = arraytd3.replace(/\,/g,'');
-                              currencyNoCommas = Number(currencyNoCommas);
-
-                              if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
-                                continue;
-                              }
-                              else{
-                                $.ajax({
-                                  type: "POST",
-                                  async: false,
-                                  url: "../controls/requestor/create_particulars.php",
-                                  data: {
-                                    rcp_no:rcp_no, 
-                                    arraytd1:arraytd1, 
-                                    arraytd2:arraytd2, 
-                                    arraytd3:currencyNoCommas
-                                  },
-                                  success: function(response, xhr){
-                                    isCompleted = true;
-                                  },
-                                  error: function(xhr, ajaxOptions, thrownError) {
-                                      alert(thrownError);
-                                  }
-                                });
-                              }
-                            } // End of for loop
-                            if(isCompleted){
-                              setTimeout(function () {
-                                var xhr = new XMLHttpRequest();
-                                  xhr.onreadystatechange = function() {
-                                    if(this.readyState === 4 && this.status === 200){
-                                      alert(this.responseText);
-                                      console.log("responseText: " + this.responseText);
-                                    }
-                                  }
-                                  xhr.open({
-                                    type: POST,
-                                    async: true,
-                                    url: "../controls/mails/new_rcp_mail.php",
-                                    data: {
-                                      rcp_no:rcp_no, 
-                                      rqstr_name:rqstr_name,
-                                      due_date: due_date,
-                                      justification: reason,
-                                      rush:rush,
-                                      email:email
-                                    }
-                                  });
-                                  xhr.send();
-
-                                swal(rcp_no, "has been successfully sent", "success")
-                                $('#form').trigger("reset");
-                                $('td').empty();
-                                $('#load-rcp').load("../controls/requestor/load_rcp.php",{
-                                  user_id: user_id
-                                });
-                              }, 2000);
-                            }
-                          },
-                          error: function(xhr, ajaxOptions, thrownError){
-                            alert(thrownError);
-                          }
-                        }); // End of updating department no of rcp
-                      },
-                      error: function(xhr, ajaxOptions, thrownError){
-                        alert(thrownError);
-                      }
-                    }); // End of creating new rcp
-                  },
-                  error: function(xhr, ajaxOptions, thrownError){
-                          alert(thrownError);
-                }
-              }); // End of getting department no of rcp -->

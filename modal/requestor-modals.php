@@ -141,7 +141,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="date-span-btn" data-toggle="modal" data-target="#span-date-modal" disabled><i class="fa fa-calendar"></i> Add Date Span</button>
+        <button type="button" class="btn btn-primary" id="date-span-btn" data-dismiss="modal" data-toggle="modal" data-target="#span-date-modal" disabled><i class="fa fa-calendar"></i> Add Date Span</button>
         <a href="javascript:;"  target="new" class="pdf_view" type="view" id="generate-href">
           <button type="button" class="btn btn-success" disabled id="generate-btn"><i class="fa fa-file"></i> Generate Report</button>
         </a>
@@ -161,27 +161,27 @@
           <div class="col-md-12">
               <div class="col-md-6">
                   <label for="company" class="form-control-label" style="font-weight: normal !important">From</label>
-                  <div class="input-group date" data-provide="datepicker">
+                  <div class="input-group date" id="from-datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                     <span class="fa fa-calendar "></span>
                     </div>
-                    <input type="text" class="form-control col-md-6" id="from" readonly="" style="background-color: white">
+                    <input type="text" class="form-control col-md-6" readonly id="from" style="background-color: white;">
                   </div>
               </div>
               <div class="col-md-6">
                   <label for="company" class=" form-control-label" style="font-weight: normal !important">To</label>
-                  <div class="input-group date" data-provide="datepicker">
+                  <div class="input-group date" id="to-datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                     <span class="fa fa-calendar "></span>
                     </div>
-                    <input type="text" class="form-control col-md-6" id="to" readonly=""  style="background-color: white"> 
+                    <input type="text" class="form-control col-md-6" readonly id="to" style="background-color: white;">
                   </div>
               </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#report-generation-modal">Go Back</button>
         <a href="#" id="generate-report-with-date-span" target="new" class="pdf_view" type="view"  >
           <button type="button" class="btn btn-success" disabled id="generate-btn-with-date-span"><i class="fa fa-file"></i> Generate Report</button>
         </a>

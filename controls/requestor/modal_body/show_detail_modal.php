@@ -66,8 +66,8 @@
                 </div>
 
                 <div class="col-md-4">
-                  <label for="company" class=" form-control-label tooltiptext">APPROVER</label><span class="pull-right" style="color: red; display: none" id="required3"> required**</span>
-                  <select class="form-control" id="show-approver" onchange="approverChange()">
+                  <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
+                  <select class="form-control" id="show-approver" onchange="editApprover()">
                     ';
                 ?>
                     <?php
@@ -268,10 +268,21 @@
 												<td class="show-particulars" contenteditable="true" name="show-td1" id="show-td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
 												<td class="show-ref_code" contenteditable="true" name="show-td2" id="show-td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
 												<td class="allownumericwithdecimal show-amount" contenteditable="true" name="show-td3" id="show-td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()"> '.number_format($row['rcp_amount'], 2).'</td>
-												<td style="display:none" name="td4" id="show-td4'.$index.'">'.($row['rcp_id']).'</td>
+												<td style="display:none" name="td4" id="show-td4'.$index.'">'.$row['rcp_id'].'</td>
 											</tr>
 								 		';
 							 			$index++;
+								 	}
+
+								 	for($i = $index; $i < 5; $i++){
+								 		echo '
+								 			<tr>
+												<td class="show-particulars" contenteditable="true" name="show-td1" id="show-td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>
+												<td class="show-ref_code" contenteditable="true" name="show-td2" id="show-td2'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>
+												<td class="allownumericwithdecimal show-amount" contenteditable="true" name="show-td3" id="show-td3'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>
+												<td style="display:none" name="td4" id="show-td4'.$i.'"></td>
+											</tr>
+								 		';
 								 	}
 								?>
                                 <?php
@@ -281,7 +292,7 @@
                           </div>
                           <div class="panel-footer">
                             <div class="row">
-                              <div class="col-md-6"><span class="panel-note"><label id="show-no-of-rows"> '.$index.' out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="show-add-row"> Add New Row</a></span></div>
+                              <div class="col-md-6"><span class="panel-note"><label id="show-no-of-rows"> '.$i.' out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="show-add-row"> Add New Row</a></span></div>
                               <div class="input-group">
                                 <span class="input-group-addon">₱</span>
                                 <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="show_total_amount">
@@ -303,12 +314,12 @@
           <div class="col-md-12">
             <div class="col-md-6">
                   <label class=" form-control-label">Date needed:</label>
-                  <div class="input-group date" id="mDatepicker_v2">
-                    <div class="input-group-addon">
-                      	<span class="glyphicon glyphicon-th"></span>
+                  	<div class="input-group date" id="mDatePicker">
+                      	<div class="input-group-addon">
+                       		<span class="fa fa-calendar "></span>
+                      	</div>
+                      	<input type="text" class="form-control col-md-6" id="mDatePicker2" readonly value="'.date("m/d/Y", strtotime($rcp_due_date)).'" style="background-color: white;">
                     </div>
-                    <input style="background-color: white" type="text" readonly class="form-control col-md-6" id="mDatePicker" value="'.date("m/d/Y", strtotime($rcp_due_date)).'">
-          		</div>
             </div>
             <div class="col-md-12">
           		<br>

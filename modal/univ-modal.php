@@ -361,7 +361,8 @@
                   swal({
                     title: "Logout",
                     text: "Your password has been changed successfully, please logout to complete the process",
-                    imageUrl: '../assets/vendor/bootstrap-sweetalert/assets/thumbs-up.jpg'
+                    imageUrl: '../assets/vendor/bootstrap-sweetalert/assets/thumbs-up.jpg',
+                    allowEscapeKey: false
                   },
                   function(data){
                     if(data){

@@ -12,7 +12,7 @@
                             <h3 style='padding: 0; margin: 0;'>NOTICE: RCP change of approver</h3>
                         </div>
                         <div style='border: 1px solid #e1e1e1; padding: 5px'>    
-                            Hi, <br><br> The approver of RCP NO. <strong>".$rcp_no."</strong> has been changed by the requestor.<br><br>
+                            Hi, <br><br> We would like to inform you that the approver of RCP NO. <strong>".$rcp_no."</strong> has been changed by the requestor.<br><br>
                             Thank you. <br><br> Best Regards, <br>System Administrator
                         </div>
                         <br/>

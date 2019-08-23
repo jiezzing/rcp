@@ -151,7 +151,7 @@
 											<div class="panel-footer show-more-details" value="'.$row['rcp_id'].':'.$row['rcp_no'].':'.$row['rcp_employee_id'].':'.$row['rcp_rush'].':'.$row['user_email'].'">
 												<h5>
 													<ul class="list-unstyled list-justify">
-														<li>CLICK TO VIEW DETAILS <i class="fa fa-eye pull-right"></i> </li>
+														<li>VIEW / PRINT <i class="fa fa-print pull-right"></i> </li>
 													</ul>
 												</h5>
 											</div>
@@ -418,6 +418,181 @@
                 }
             }); // End of updating RCP File
 		}
+	</script>
+
+
+	<script>
+	    $('#decline-btn').click(function () {
+	      var rcp_no = $('#rcp-no').val();
+	      var apprvr_id = "<?php echo $_SESSION['user_id']; ?>";
+	      var apprvr_name = "<?php echo $user_fullname; ?>";
+	      var isDeclinedSuccess = false;
+
+	      $('#rcp-modal-details-approver').modal('toggle');
+	      swal({
+	        title: "Disapproval",
+	        text: "Reason for declining: ",
+	        type: "input",
+	        showCancelButton: true,
+	        closeOnConfirm: false,
+	        confirmButtonClass: "btn-danger",
+	        confirmButtonText: "Decline",
+	        inputPlaceholder: "Your text here . . .",
+	        showLoaderOnConfirm: true
+	      }, function (inputValue) {
+	        if (inputValue === false){
+	          $('#rcp-modal-details-approver').modal('show');
+	          return false;
+	        }
+	        if (inputValue === "") {
+	          swal.showInputError("You need to write something!");
+	          return false;
+	        }
+	        else{
+	        	if(inputValue.length > 100){
+	          swal.showInputError("The number of characters exceeds to 100.");
+	        		return;
+	        	}
+	          $.ajax({ // Start of inserting data to decline file
+	              type: "POST",
+	              async: false,
+	              url: "../controls/approver/insert_decline_file.php",
+	              data: {
+	                rcp_no: rcp_no, 
+	                justification: inputValue 
+	              },
+	              cache: false,
+	              success: function(response){
+	                $.ajax({ // Start of declining status of rcp file
+	                  type: "POST",
+	                  async: false,
+	                  url: "../controls/approver/decline_rcp_status.php",
+	                  data: {
+	                    rcp_no: rcp_no,
+	                    rush: rush
+	                  },
+	                  cache: false,
+	                  success: function(response){
+	                    $.ajax({
+	                        type: "POST",
+	                        url: "../controls/mails/rcp_declined_mail.php",
+	                        data: {
+	                          rcp_no: rcp_no, 
+	                          approver_name: approver_name, 
+	                          reason: inputValue,
+	                          email: email
+	                        },
+	                        cache: false,
+	                      	beforeSend: function(){
+
+	                      	},
+	                      	complete: function(){
+	                      		console.log(email);
+		                    	setTimeout(function () {
+	                          		swal("" + rcp_no, "has been successfully declined", "error");
+								}, 2000);
+	                      	},
+	                        success: function(response){
+                          		$('#load-rcp').load("../controls/approver/load_rcp.php",{
+		                            user_id: apprvr_id
+	                          	});
+	                        },
+	                        error: function(xhr, ajaxOptions, thrownError){
+	                            alert(thrownError);
+	                        } // end of rush file status
+	                    });
+	                  },
+	                  error: function(xhr, ajaxOptions, thrownError){
+	                      alert(thrownError);
+	                  } 
+	              }); // End of declining status of rcp file
+	              },
+	              error: function(xhr, ajaxOptions, thrownError){
+	                  alert(thrownError);
+	              } 
+	          }); // End of inserting data to decline file
+	        }
+	      });
+	  });
+	</script>
+
+	<script>
+	    $('#approve-btn').click(function () {
+	      var apprvr_id = "<?php echo $_SESSION['user_id']; ?>";
+	      var rcp_no = $('#rcp-no').val();
+
+	      $('#rcp-modal-details-approver').modal('toggle');
+	      swal({
+	        title: "Confirmation",
+	        text: "Would you like to approve RCP No. " + rcp_no + "?",
+	        type: "info",
+	        showCancelButton: true,
+	        confirmButtonClass: "btn-success",
+	        confirmButtonText: "Yes",
+	        closeOnConfirm: false
+	      },
+	      function(data){
+	        if(data){
+	          $.ajax({ // Start of inserting data to approved file
+	            type: "POST",
+	            async: false,
+	            url: "../controls/approver/insert_approve_file.php",
+	            data: {
+	              rcp_no: rcp_no
+	            },
+	            cache: false,
+	            success: function(response){
+	              $.ajax({ // Start of declining status of rcp file
+	                type: "POST",
+	                async: false,
+	                url: "../controls/approver/approve_rcp_status.php",
+	                data: {
+	                  rcp_no: rcp_no,
+	                  rush: rush
+	                },
+	                success: function(response){
+	                  	$.ajax({
+	                        type: "POST",
+	                        url: "../controls/mails/mail_approval.php",
+	                      	data: {
+	                        rcp_no: rcp_no, 
+	                        approver_name: approver_name, 
+	                        rush: rush,
+	                        email: email
+	                      	},
+	                      	cache: false,
+	                      	beforeSend: function(){
+
+	                      	},
+	                      	complete: function(){
+	                          	swal("" + rcp_no, "has been approved.", "success");
+	                      	},
+	                      	success: function(response){
+	                          $('#load-rcp').load("../controls/approver/load_rcp.php",{
+	                            user_id: apprvr_id
+	                          });
+	                        },
+	                        error: function(xhr, ajaxOptions, thrownError){
+	                            alert(thrownError);
+	                        } // end of rush file status
+	                    });
+	                },
+	                error: function(xhr, ajaxOptions, thrownError){
+	                    alert(thrownError);
+	                } 
+	            }); // End of declining status of rcp file
+	            },
+	            error: function(xhr, ajaxOptions, thrownError){
+	                alert(thrownError);
+	            } 
+	          }); // End of inserting data to approved file
+	        }
+	        else{
+	          	$('#rcp-modal-details-approver').modal('show');
+	          	return false;
+	        }
+	      });
+	  });
 	</script>
 
 	<script>
