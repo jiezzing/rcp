@@ -127,7 +127,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
             <table  cellpadding="4">
             <tr nobr="true">
-                <th colspan="6"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+                <th colspan="6"><strong>'.$dept_name.'</strong></th>
                 <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
              </tr>
              <tr nobr="true">
@@ -186,7 +186,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
     $tbl = '
         <table  cellpadding="4">
         <tr nobr="true">
-            <th colspan="6"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+            <th colspan="6"><strong>'.$dept_name.'</strong></th>
             <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
          </tr>
          <tr nobr="true">
@@ -249,7 +249,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
             <table  cellpadding="4">
             <tr nobr="true">
-                <th colspan="6"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+                <th colspan="6"><strong>'.$dept_name.'</strong></th>
                 <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
              </tr>
              <tr nobr="true">

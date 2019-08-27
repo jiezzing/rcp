@@ -35,3 +35,24 @@
 	</footer>
 </div>
 <?php include '../modal/admin-modals.php'; ?>
+
+<script>
+	$(document).ready(function (){
+        $('#mDatePicker').datepicker({
+        	startDate: "today"
+        });
+        $('#from-datepicker').datepicker();
+     	$('#to-datepicker').datepicker();
+	});
+</script>
+
+<script>
+	$('#from-datepicker').change(function(){
+		var selected_date = $('#from').val();
+		$('#to').val("");
+		$('#to').datepicker({
+			startDate: selected_date
+		});
+  		document.getElementById("generate-btn-with-date-span").disabled = false;
+	});
+</script>

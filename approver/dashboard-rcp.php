@@ -193,6 +193,7 @@
 		var rqstr_id;
 		var rush;
 		var email;
+		var approver_name = "<?php echo $user_fullname ?>";
         $(document).on('click', '.show-more-details', function(e){
             e.preventDefault();
 
@@ -232,9 +233,7 @@
     </script>
 
     <script>
-		var approver_name = "<?php echo $user_fullname ?>";
     	$('#save-changes-btn').click(function (){
-			var rcp_no = $('#rcp-no').val();
 			var payee = $('#payee').val();
 			var amount_in_words = $('#amount-in-words').val();
 			var table_length = $('td[name=app-td1]').length;
@@ -633,27 +632,6 @@
       		var myData = "rcp_no=" + rcp_no;
 			document.getElementById("hrefBtn").href="../tcpdf/rcp_pdf.php?" + myData;
 		}
-	</script>
-
-	<script>
-		$(document).ready(function (){
-	        $('#mDatePicker').datepicker({
-	        	startDate: "today"
-	        });
-	        $('#from-datepicker').datepicker();
-         	$('#to-datepicker').datepicker();
-		});
-	</script>
-
-	<script>
-		$('#from-datepicker').change(function(){
-			var selected_date = $('#from').val();
-			$('#to').val("");
-			$('#to').datepicker({
-				startDate: selected_date
-			});
-      		document.getElementById("generate-btn-with-date-span").disabled = false;
-		});
 	</script>
 </body>
 </html>

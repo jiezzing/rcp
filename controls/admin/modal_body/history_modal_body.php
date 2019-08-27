@@ -36,7 +36,7 @@
       echo '
         <tr>
           <td class="text-center">'.$row['rcp_no'].'</td>
-          <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+          <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
           <td>'.$row['rcp_payee'].'</td>
           <td>'.$row['comp_name'].'</td>
           <td>'.$row['proj_name'].'</td>
@@ -44,7 +44,7 @@
           <td>'.number_format($row['rcp_total_amt'], 2).'</td>
           <td>'.$row['updated_at'].'</td>
           <td class="text-center">
-            <a href="#" value="'.$row['rcp_id'].'" data-toggle="modal" data-target="#rcp-particulars-history-modal" class="show-particulars-history">
+            <a href="#" value="'.$row['rcp_no'].':'.$row['rcp_rush'].'" data-toggle="modal" data-target="#rcp-particulars-history-modal" class="show-particulars-history">
             <u><i class="fa fa-location-arrow" aria-hidden="true"></i> More Details</u>
             </a>
           </td>
@@ -63,13 +63,17 @@
 <script>
     $(document).on('click', '.show-particulars-history', function(e){
         e.preventDefault();
-        var rcp_id = $(this).attr('value');
+        var data = $(this).attr('value');
+        var value = data.split(':');
+        var rcp_no = value[0];
+        var rush = value[1];
 
         $.ajax({
           type: "POST",
-          url: "../controls/univ/particulars_history_modal_body.php",
+          url: "../controls/univ/particulars_history_modal_bodys.php",
           data: {
-            rcp_id: rcp_id
+            rcp_no: rcp_no,
+            rush: rush
           },
           cache: false,
           success: function(html)

@@ -29,11 +29,12 @@
 
   <?php
   $index = 0;
+  $total = 0.0;
     $sel->rcp_file_id = $_POST['rcp_id'];
     $query = $sel->getRcpParticularsHistory();
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-      $total = $row['rcp_total_amount'];
       extract($row);
+      $total = $row['rcp_total_amount'];
       echo '
         <tr>
           <td>'.$row['rcp_particulars'].'</td>

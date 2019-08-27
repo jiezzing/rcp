@@ -85,12 +85,12 @@
 					          	while ($row2 = $select2->fetch(PDO::FETCH_ASSOC)) {
 					            if($row['approver_prmy_id'] == $apprvr_id){
 					              	echo '
-					                  	<option value="'.$row['approver_prmy_id'].'" selected>'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_prmy_id'].'" selected>'.$row2['APP_NAME'].' - PRIMARY</option>
 					              	';
 					            }
 					            else{
 					              	echo '
-					                  	<option value="'.$row['approver_prmy_id'].'">'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_prmy_id'].'">'.$row2['APP_NAME'].' - PRIMARY</option>
 					              	';
 					            }
 					          }
@@ -107,12 +107,12 @@
 					          	while ($row2 = $select2->fetch(PDO::FETCH_ASSOC)) {
 					            if($row['approver_alt_prmy_id'] == $apprvr_id){
 					              	echo '
-					                  	<option value="'.$row['approver_alt_prmy_id'].'" selected>'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_alt_prmy_id'].'" selected>'.$row2['APP_NAME'].' - ALTERNATE PRIMARY</option>
 					              	';
 					            }
 				             	else{
 					              	echo '
-					                  	<option value="'.$row['approver_alt_prmy_id'].'">'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_alt_prmy_id'].'">'.$row2['APP_NAME'].' - ALTERNATE PRIMARY</option>
 					              	';
 					            } 
 					          }
@@ -129,12 +129,12 @@
 					          	while ($row2 = $select2->fetch(PDO::FETCH_ASSOC)) {
 					            if($row['approver_sec_id'] == $apprvr_id){
 					              	echo '
-					                  	<option value="'.$row['approver_sec_id'].'" selected>'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_sec_id'].'" selected>'.$row2['APP_NAME'].' - SECONDARY</option>
 					              	';
 					            }
 				             	else{
 					              	echo '
-					                  	<option value="'.$row['approver_sec_id'].'">'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_sec_id'].'">'.$row2['APP_NAME'].' - ALTERNATE SECONDARY</option>
 					              	';
 					            } 
 					          }
@@ -151,12 +151,12 @@
 					          	while ($row2 = $select2->fetch(PDO::FETCH_ASSOC)) {
 					            if($row['approver_alt_sec_id'] == $apprvr_id){
 					              	echo '
-					                  	<option value="'.$row['approver_alt_sec_id'].'" selected>'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_alt_sec_id'].'" selected>'.$row2['APP_NAME'].' - ALTERNATE SECONDARY</option>
 					              	';
 					            }
 				             	else{
 					              	echo '
-					                  	<option value="'.$row['approver_alt_sec_id'].'">'.$row2['APP_NAME'].'</option>
+					                  	<option value="'.$row['approver_alt_sec_id'].'">'.$row2['APP_NAME'].' - ALTERNATE SECONDARY</option>
 					              ';
 					            }
 					          }
@@ -250,8 +250,8 @@
                               <thead>
                                 <tr>
                                   <th>Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct Code</th>
-                                  <th style="width: 15%">Amount</th>
+                                  <th style="width: 25%">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>

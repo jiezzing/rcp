@@ -142,9 +142,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="date-span-btn" data-toggle="modal" data-target="#span-date-modal" disabled><i class="fa fa-calendar"></i> Add Date Span</button>
+        <button type="button" class="btn btn-primary" id="date-span-btn" data-toggle="modal" data-target="#span-date-modal" data-dismiss="modal" disabled><i class="fa fa-calendar"></i> Add Date Span</button>
         <a href="javascript:;"  target="new" class="pdf_view" type="view" id="generate-href">
-          <button type="button" class="btn btn-success" disabled id="generate-btn"><i class="fa fa-file"></i> Generate Report</button>
+          <button type="button" class="btn btn-success" disabled id="generate-btn"><i class="fa fa-print"></i> Generate Report</button>
         </a>
       </div>
     </div>
@@ -162,29 +162,29 @@
           <div class="col-md-12">
               <div class="col-md-6">
                   <label for="company" class="form-control-label" style="font-weight: normal !important">From</label>
-                  <div class="input-group date" data-provide="datepicker">
+                  <div class="input-group date" id="from-datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                     <span class="fa fa-calendar "></span>
                     </div>
-                    <input type="text" class="form-control col-md-6" id="from" readonly="" style="background-color: white">
+                    <input type="text" class="form-control col-md-6" readonly id="from" style="background-color: white;">
                   </div>
               </div>
               <div class="col-md-6">
                   <label for="company" class=" form-control-label" style="font-weight: normal !important">To</label>
-                  <div class="input-group date" data-provide="datepicker">
+                  <div class="input-group date" id="to-datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                     <span class="fa fa-calendar "></span>
                     </div>
-                    <input type="text" class="form-control col-md-6" id="to" readonly=""  style="background-color: white"> 
+                    <input type="text" class="form-control col-md-6" readonly id="to" style="background-color: white;">
                   </div>
               </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#report-generation-modal">Go Back</button>
         <a href="#" id="generate-report-with-date-span" target="new" class="pdf_view" type="view"  >
-          <button type="button" class="btn btn-success" disabled id="generate-btn-with-date-span"><i class="fa fa-file"></i> Generate Report</button>
+          <button type="button" class="btn btn-success" disabled id="generate-btn-with-date-span"><i class="fa fa-print"></i> Generate Report</button>
         </a>
       </div>
     </div>
@@ -564,7 +564,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="company" class=" form-control-label">MI</label>
-                    <input type="text" class="form-control" placeholder="Payee" id="middle_initial" maxlength="1">
+                    <input type="text" class="form-control" placeholder="MI" id="middle_initial" maxlength="1">
                 </div>
             </div>
           </div>
@@ -646,7 +646,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="add-new-user-btn" disabled="">Add New User</button>
+        <button type="button" class="btn btn-primary" id="add-new-user-btn">Add New User</button>
       </div>
     </div>
   </div>
@@ -1030,13 +1030,11 @@
 
       if(con_password != ""){
         if(password != con_password){
-          document.getElementById("add-new-user-btn").disabled = true;
           $('#add-message-confirm').show();
           $('#add-message-confirm').text("Password does not match");
           $('#add-message-confirm').css("color", "red");
         }
         else{
-          document.getElementById("add-new-user-btn").disabled = false;
           $('#add-message-confirm').show();
           $('#add-message-confirm').text("Password match");
           $('#add-message-confirm').css("color", "green");
@@ -1050,13 +1048,11 @@
     var password = $('#add-password').val();
     var con_password = $('#add-confirm-password').val();
     if(con_password != password){
-      document.getElementById("add-new-user-btn").disabled = true;
       $('#add-message-confirm').show();
       $('#add-message-confirm').text("Password does not match");
       $('#add-message-confirm').css("color", "red");
     }
     else{
-      document.getElementById("add-new-user-btn").disabled = false;
       $('#add-message-confirm').show();
       $('#add-message-confirm').text("Password match");
       $('#add-message-confirm').css("color", "green");

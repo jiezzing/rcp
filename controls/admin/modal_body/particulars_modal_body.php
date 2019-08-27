@@ -10,7 +10,7 @@
 	$sel = new AdminSelect($db);
   $sel2 = new U_Select($db);
 
-  $rcp_rush = $_POST['rush'];
+  $rush = $_POST['rush'];
   $rcp_no = $_POST['rcp_no'];
 
   echo '
@@ -85,7 +85,7 @@
 
 
 <?php
-  if($rcp_rush == "Yes"){
+  if($rush == "Yes"){
     $sel2->rcp_no = $rcp_no;
     $query = $sel2->getRcpRushData();
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {

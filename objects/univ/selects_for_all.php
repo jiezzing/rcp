@@ -11,7 +11,7 @@
 		
 		//Get all departments that are active
 		public function getAllDepartment(){
-			$query = "SELECT * FROM department_file WHERE dept_status='AC'";
+			$query = "SELECT * FROM department_file, approver_file WHERE approver_dept_code=dept_code AND  dept_status='AC'";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -373,7 +373,7 @@
 
         // Get specific RCP history
         public function getRcpHistory(){
-            $query = "SELECT * FROM rcp_file_edit_history, company_file, project_file, user_file WHERE rcp_comp_code=comp_code AND rcp_proj_code=proj_code AND rcp_approver_id=user_id AND rcp_no=?";
+            $query = "SELECT * FROM rcp_file_edit_history, company_file, project_file, user_file, rcp_file WHERE rcp_comp_code=comp_code AND rcp_proj_code=proj_code AND rcp_file.rcp_approver_id=user_id AND rcp_file.rcp_no=rcp_file_edit_history.rcp_no AND rcp_file_edit_history.rcp_no=?";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

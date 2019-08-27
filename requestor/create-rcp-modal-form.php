@@ -22,7 +22,7 @@
                       <?php
                         $select = $sel2->getAllDepartment();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
-                        echo ' <option value="'.$row['dept_code'].'">'.$row['dept_name'].'</option> ';
+                        echo ' <option value="'.$row['dept_code'].':'.$row['approver_prmy_id'].':'.$row['approver_alt_prmy_id'].':'.$row['approver_sec_id'].':'.$row['approver_alt_sec_id'].':'.$row['dept_no_of_rcp'].'">'.$row['dept_name'].'</option> ';
                         }
                       ?>
                     </select>
@@ -77,7 +77,7 @@
             <div class="col-md-12">
                 <div class="col-md-12">
                   <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
-                  <input type="text" class="form-control" maxlength="100" placeholder="Amount in words" id="amount-in-words" style="text-align: center">
+                  <i><input type="text" class="form-control" maxlength="100" placeholder="Amount in words" id="amount-in-words" style="text-align: center"></i>
                 </div>
             </div>
           </div>
@@ -287,170 +287,158 @@
 </script>
 
 <script>
+  var email;
+  var total_rcp;
+  var dept_code;
+  var rcp_no;
+  toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000"        
+    }
   $('#department').change(function () {
-    var email;
-    var dept_code = $('#department').val();
+    var data = $('#department').val();
+    var id = data.split(':');
+    dept_code = id[0];
+    var prmy_id = id[1];
+    var alt_prmy_id = id[2];
+    var sec_id = id[3];
+    var alt_sec_id = id[4];
+    total_rcp = id[5];
     var hasApprover = false;
-    $.ajax({
+
+    $("#approver").empty();
+    // Get Primary Approvers Data
+      if(prmy_id == 0){
+        $("<option/>",{value:0,text:'NO PRIMARY APPROVER YET'}).appendTo("#approver");
+        $('option[value=0]').prop('disabled', true);
+      }
+      else{
+        $.ajax({
           type: "POST",
-          url: "../controls/univ/cls_get_approvers_id.php",
+          url: "../controls/univ/cls_get_approvers_data.php",
           async: false,
           data: {
-            dept_code:dept_code
+            user_id:prmy_id
           },
           dataType:'json',
           cache: false,
 
           success: function(result){
-            var prmy_id = parseInt(result[0]);
-            var alt_prmy_id = parseInt(approver_prmy_id = result[1]);
-            var sec_id = parseInt(approver_prmy_id = result[2]);
-            var alt_sec_id = parseInt(approver_prmy_id = result[3]);
+            hasApprover = true;
+            var  prmy_name = result[0] + " - PRIMARY";
+            email = result[1];
+            $("<option/>",{value:prmy_id,text:prmy_name}).appendTo("#approver");
+          },
+          error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+          }
+        }); 
+      }
 
-          $("#approver").empty();
-          // Get Primary Approvers Data
-                if(prmy_id == 0){
-                  $("<option/>",{value:0,text:'NO PRIMARY APPROVER YET'}).appendTo("#approver");
-                  $('option[value=0]').prop('disabled', true);
-                }
-                else{
-                  $.ajax({
-                    type: "POST",
-                    url: "../controls/univ/cls_get_approvers_data.php",
-                    async: false,
-                    data: {
-                      user_id:prmy_id
-                    },
-                    dataType:'json',
-                    cache: false,
+      // Get Alternate Primary Approvers Data
+      if(alt_prmy_id == 0){
+        $("<option/>",{value:0,text:'NO ALTERNATE PRIMARY APPROVER YET'}).appendTo("#approver");
+        $('option[value=0]').prop('disabled', true);
+      }
+      else{
+        $.ajax({
+          type: "POST",
+          url: "../controls/univ/cls_get_approvers_data.php",
+          async: false,
+          data: {
+            user_id:alt_prmy_id
+          },
+          dataType:'json',
+          cache: false,
 
-                    success: function(result){
-                      hasApprover = true;
-                      var  prmy_name = result[0];
-                      email = result[1];
-                      $("<option/>",{value:prmy_id,text:prmy_name}).appendTo("#approver");
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
-                    }
-                  }); 
-                }
+          success: function(result){
+            hasApprover = true;
+            var  alt_prmy_name = result[0] + " - ALTERNATE PRIMARY";
+            email = result[1];
+            $("<option/>",{value:alt_prmy_id,text:alt_prmy_name}).appendTo("#approver");
+          },
+          error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+          }
+        }); 
+      }
 
-                // Get Alternate Primary Approvers Data
-                if(alt_prmy_id == 0){
-                  $("<option/>",{value:0,text:'NO ALTERNATE PRIMARY APPROVER YET'}).appendTo("#approver");
-                  $('option[value=0]').prop('disabled', true);
-                }
-                else{
-                  $.ajax({
-                    type: "POST",
-                    url: "../controls/univ/cls_get_approvers_data.php",
-                    async: false,
-                    data: {
-                      user_id:alt_prmy_id
-                    },
-                    dataType:'json',
-                    cache: false,
+      // Get Secondary Approvers Data
+      if(sec_id == 0){
+        $("<option/>",{value:0,text:'NO SECONDARY APPROVER YET'}).appendTo("#approver");
+        $('option[value=0]').prop('disabled', true);
+      }
+      else{
+        $.ajax({
+          type: "POST",
+          url: "../controls/univ/cls_get_approvers_data.php",
+          async: false,
+          data: {
+            user_id:sec_id
+          },
+          dataType:'json',
+          cache: false,
 
-                    success: function(result){
-                      hasApprover = true;
-                      var  alt_prmy_name = result[0];
-                      email = result[1];
-                      $("<option/>",{value:alt_prmy_id,text:alt_prmy_name}).appendTo("#approver");
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
-                    }
-                  }); 
-                }
+          success: function(result){
+            hasApprover = true;
+            var  sec_name = result[0] + " - SECONDARY";
+            email = result[1];
+            $("<option/>",{value:sec_id,text:sec_name}).appendTo("#approver");
+          },
+          error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+          }
+        }); 
+      }
 
-                // Get Secondary Approvers Data
-                if(sec_id == 0){
-                  $("<option/>",{value:0,text:'NO SECONDARY APPROVER YET'}).appendTo("#approver");
-                  $('option[value=0]').prop('disabled', true);
-                }
-                else{
-                  $.ajax({
-                    type: "POST",
-                    url: "../controls/univ/cls_get_approvers_data.php",
-                    async: false,
-                    data: {
-                      user_id:sec_id
-                    },
-                    dataType:'json',
-                    cache: false,
+      // Get alternate secondary approvers data
+      if(alt_sec_id == 0){
+        $("<option/>",{value:0,text:'NO ALTERNATE SECONDARY APPROVER YET'}).appendTo("#approver");
+        $('option[value=0]').prop('disabled', true);
+      }
+      else{
+        $.ajax({
+          type: "POST",
+          url: "../controls/univ/cls_get_approvers_data.php",
+          async: false,
+          data: {
+            user_id:alt_sec_id
+          },
+          dataType:'json',
+          cache: false,
 
-                    success: function(result){
-                      hasApprover = true;
-                      var  sec_name = result[0];
-                      email = result[1];
-                      $("<option/>",{value:sec_id,text:sec_name}).appendTo("#approver");
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
-                    }
-                  }); 
-                }
-
-                // Get alternate secondary approvers data
-                if(alt_sec_id == 0){
-                  $("<option/>",{value:0,text:'NO ALTERNATE SECONDARY APPROVER YET'}).appendTo("#approver");
-                  $('option[value=0]').prop('disabled', true);
-                }
-                else{
-                  $.ajax({
-                    type: "POST",
-                    url: "../controls/univ/cls_get_approvers_data.php",
-                    async: false,
-                    data: {
-                      user_id:alt_sec_id
-                    },
-                    dataType:'json',
-                    cache: false,
-
-                    success: function(result){
-                      hasApprover = true;
-                      var  alt_sec_name = result[0];
-                      email = result[1];
-                      $("<option/>",{value:alt_sec_id,text:alt_sec_name}).appendTo("#approver");
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
-                    }
-                  }); 
-                }
-                if(!hasApprover){
-                  toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
-                  document.getElementById("send-rcp-btn").disabled = true;
-                }
-                else{
-                  document.getElementById("send-rcp-btn").disabled = false;
-                }
-        },
-      error: function(xhr, ajaxOptions, thrownError){
-          alert(thrownError);
-        }
-    }); 
+          success: function(result){
+            hasApprover = true;
+            var  alt_sec_name = result[0] + " - ALTERNATE SECONDARY";
+            email = result[1];
+            $("<option/>",{value:alt_sec_id,text:alt_sec_name}).appendTo("#approver");
+          },
+          error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+          }
+        }); 
+      }
+      if(!hasApprover){
+        toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
+        document.getElementById("send-rcp-btn").disabled = true;
+      }
+      else{
+        document.getElementById("send-rcp-btn").disabled = false;
+      }
   });
 </script>
 
 <script>
-    var rcp_no;
-    toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "progressBar": true,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": true,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000"        
-      }
     $('#send-rcp-btn').click(function () {
       var date_needed;
       var user_id = <?php echo $_SESSION['user_id']; ?>;
-      var dept_code = $('#department').val();
       var apprvr_id = $('#approver').val();
       var comp_code = $('#company').val();
       var proj_code = $('#project').val();
@@ -477,6 +465,7 @@
       var missingIndex = 0;
       var isCompleted = false;
       var rqstr_name = "<?php echo $user_fullname; ?>";
+      rcp_no = dept_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
 
 
       if(dept_code == null || apprvr_id == null || comp_code == null || proj_code == null || 
@@ -551,141 +540,125 @@
         showLoaderOnConfirm: true
       }, function (data) {
         if(data){
-          $.ajax({ // Start of getting department no of rcp
+          $.ajax({ // Start of sending mail
             type: "POST",
-            url: "../controls/requestor/get_no_of_rcp.php",
+            async: false,
+            url: "../controls/mails/new_rcp_mail.php",
             data: {
-              dept_code:dept_code
+              rcp_no:rcp_no, 
+              rqstr_name:rqstr_name,
+              due_date: due_date,
+              justification: reason,
+              rush:rush,
+              email:email
             },
-            dataType:'json',
             cache: false,
-            success: function(result){
-              var total_rcp = parseInt(result[0]) + 1;
-              rcp_no = dept_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-              $.ajax({ // Start of sending mail
+            beforeSend: function(){
+
+            },
+            complete: function(){
+              $('#form').trigger("reset");
+              $('td').empty();
+              $('#load-rcp').load("../controls/requestor/load_rcp.php",{
+                user_id: user_id
+              });
+              swal(rcp_no, "has been successfully sent", "success");
+              console.log("Send to: " + email);
+            },
+            success: function(response){
+              console.log(response);
+              $.ajax({ // Start of creating new rcp
                 type: "POST",
                 async: false,
-                url: "../controls/mails/new_rcp_mail.php",
+                url: "../controls/requestor/create_rcp.php",
                 data: {
-                  rcp_no:rcp_no, 
-                  rqstr_name:rqstr_name,
-                  due_date: due_date,
-                  justification: reason,
-                  rush:rush,
-                  email:email
-                },
-                cache: false,
-                beforeSend: function(){
+                rcp_no:rcp_no, 
+                user_id:user_id, 
+                apprvr_id:apprvr_id, 
+                payee:payee, 
+                comp_code:comp_code, 
+                proj_code:proj_code, 
+                dept_code:dept_code, 
+                current_date:current_date, 
+                amount_in_words:amount_in_words, 
+                currencyNoCommas:currencyNoCommas,
+                rush:rush
+              },
+              success: function(response){
+                for (var i = 0; i < table_length; i++){ // Start of for loop
+                  var arraytd1 = $("#td1"+i+"").text();
+                  var arraytd2 = $("#td2"+i+"").text();
+                  var arraytd3 = $("#td3"+i+"").text();
+                  var currencyNoCommas = arraytd3.replace(/\,/g,'');
+                  currencyNoCommas = Number(currencyNoCommas);
 
-                },
-                complete: function(){
-                  $('#form').trigger("reset");
-                  $('td').empty();
-                  $('#load-rcp').load("../controls/requestor/load_rcp.php",{
-                    user_id: user_id
-                  });
-                  swal(rcp_no, "has been successfully sent", "success");
-                  console.log(email);
-                },
-                success: function(response){
-                  console.log(response);
-                  $.ajax({ // Start of creating new rcp
-                    type: "POST",
-                    async: false,
-                    url: "../controls/requestor/create_rcp.php",
-                    data: {
-                    rcp_no:rcp_no, 
-                    user_id:user_id, 
-                    apprvr_id:apprvr_id, 
-                    payee:payee, 
-                    comp_code:comp_code, 
-                    proj_code:proj_code, 
-                    dept_code:dept_code, 
-                    current_date:current_date, 
-                    amount_in_words:amount_in_words, 
-                    currencyNoCommas:currencyNoCommas,
-                    rush:rush
-                  },
-                  success: function(response){
-                    for (var i = 0; i < table_length; i++){ // Start of for loop
-                      var arraytd1 = $("#td1"+i+"").text();
-                      var arraytd2 = $("#td2"+i+"").text();
-                      var arraytd3 = $("#td3"+i+"").text();
-                      var currencyNoCommas = arraytd3.replace(/\,/g,'');
-                      currencyNoCommas = Number(currencyNoCommas);
-
-                      if(arraytd1 == "" || arraytd2 == "" || arraytd3 && ""){
-                        continue;
-                      }
-                      else{
-                        $.ajax({
-                          type: "POST",
-                          async: false,
-                          url: "../controls/requestor/create_particulars.php",
-                          data: {
-                            rcp_no:rcp_no, 
-                            arraytd1:arraytd1, 
-                            arraytd2:arraytd2, 
-                            arraytd3:currencyNoCommas
-                          },
-                          success: function(response){
-                            isCompleted = true;
-                          },
-                          error: function(xhr, ajaxOptions, thrownError) {
-                              alert(thrownError);
-                          }
-                        });
-                      }
-                    } // End of for loop
-                    if(isCompleted){
-                      $.ajax({ // Start of updating department no of rcp
-                          type: "POST",
-                          async: false,
-                          url: "../controls/requestor/upd_dept_rcp.php",
-                          data: { 
-                          dept_code:dept_code
-                        },
-                        success: function(response){
-                          
-                        },
-                        error: function(xhr, ajaxOptions, thrownError){
-                          alert(thrownError);
-                        }
-                      }); // End of updating department no of rcp
-                      if(rush == "Yes"){ 
-                        $.ajax({ // Start of creating rush rcp data
-                          type: "POST",
-                          async: false,
-                          url: "../controls/requestor/create_rush_data.php",
-                          data: {
-                            rcp_no:rcp_no, 
-                            reason:reason, 
-                            due_date:due_date
-                          },
-                          success: function(response){
-                            
-                          },
-                          error: function(xhr, ajaxOptions, thrownError){
-                            alert(thrownError);
-                          }
-                        }); // End of creating rush rcp data
-                      }
-                    }
-                  },
-                  error: function(xhr, ajaxOptions, thrownError){
-                    swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
+                  if(arraytd1 == "" || arraytd2 == "" || arraytd3 && ""){
+                    continue;
                   }
-                }); // End of creating new rcp
-                },
-                error: function(xhr, ajaxOptions, thrownError){
-                  swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
-                } 
-              }); // End of sending mail
+                  else{
+                    $.ajax({
+                      type: "POST",
+                      async: false,
+                      url: "../controls/requestor/create_particulars.php",
+                      data: {
+                        rcp_no:rcp_no, 
+                        arraytd1:arraytd1, 
+                        arraytd2:arraytd2, 
+                        arraytd3:currencyNoCommas
+                      },
+                      success: function(response){
+                        isCompleted = true;
+                      },
+                      error: function(xhr, ajaxOptions, thrownError) {
+                          alert(thrownError);
+                      }
+                    });
+                  }
+                } // End of for loop
+                if(isCompleted){
+                  $.ajax({ // Start of updating department no of rcp
+                      type: "POST",
+                      async: false,
+                      url: "../controls/requestor/upd_dept_rcp.php",
+                      data: { 
+                      dept_code:dept_code
+                    },
+                    success: function(response){
+                      
+                    },
+                    error: function(xhr, ajaxOptions, thrownError){
+                      alert(thrownError);
+                    }
+                  }); // End of updating department no of rcp
+                  if(rush == "Yes"){ 
+                    $.ajax({ // Start of creating rush rcp data
+                      type: "POST",
+                      async: false,
+                      url: "../controls/requestor/create_rush_data.php",
+                      data: {
+                        rcp_no:rcp_no, 
+                        reason:reason, 
+                        due_date:due_date
+                      },
+                      success: function(response){
+                        
+                      },
+                      error: function(xhr, ajaxOptions, thrownError){
+                        alert(thrownError);
+                      }
+                    }); // End of creating rush rcp data
+                  }
+                }
+              },
+              error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+              }
+            }); // End of creating new rcp
             },
             error: function(xhr, ajaxOptions, thrownError){
-              swal("Failed", "Something went wrong! Please contact the System Administrator.", "error");
-            }
-          }); // End of getting department no of rcp -->
+              alert(thrownError);
+            } 
+          }); // End of sending mail
         }
         else{
           $("#rcp-fillup-modal").modal('show');

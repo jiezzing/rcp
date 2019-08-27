@@ -66,7 +66,7 @@
 							<div class="row">
 								<div class="col-md-3">
 									<div class="metric">
-										<span class="icon"><i class="fa fa-download"></i></span>
+										<span class="icon"><i class="fa fa-question"></i></span>
 										<p>
 											<span class="number"><?php echo $pendingCtr ?></span>
 											<span class="title">Pending</span>
@@ -75,7 +75,7 @@
 								</div>
 								<div class="col-md-3">
 									<div class="metric">
-										<span class="icon"><i class="fa fa-shopping-bag"></i></span>
+										<span class="icon"><i class="fa fa-check"></i></span>
 										<p>
 											<span class="number"><?php echo $approvedCtr ?></span>
 											<span class="title">Approved</span>
@@ -84,7 +84,7 @@
 								</div>
 								<div class="col-md-3">
 									<div class="metric">
-										<span class="icon"><i class="fa fa-eye"></i></span>
+										<span class="icon"><i class="fa fa-trash"></i></span>
 										<p>
 											<span class="number"><?php echo $declinedCtr ?></span>
 											<span class="title">Declined</span>
@@ -549,7 +549,7 @@
 						console.log(current_appr_email);
 		            },
 		          	success: function(response){
-		          		for (var i = 0; i < table_length; i++) { // Start of for loop
+		          		for (var i = 0; i < table_length; i++) { // Start of foSr loop
 			                var particulars = $("#show-td1"+i+"").text(); 
 			                var ref_codes = $("#show-td2"+i+"").text(); 
 			                var amounts = $("#show-td3"+i+"").text(); 
@@ -652,26 +652,6 @@
 		        $('#rcp-fillup-modal').scroll(function (){
 		          $('#mDatePicker').datepicker('place');
 	        	});
-			});
-		});
-	</script>
-
-	<script>
-		$(document).ready(function (){
-	        $('#mDatePicker').datepicker({
-	        	startDate: "today"
-	        });
-	        $('#from-datepicker').datepicker();
-         	$('#to-datepicker').datepicker();
-		});
-	</script>
-
-	<script>
-		$('#from-datepicker').change(function(){
-			var selected_date = $('#from').val();
-			$('#to').val("");
-			$('#to').datepicker({
-				startDate: selected_date
 			});
 		});
 	</script>
