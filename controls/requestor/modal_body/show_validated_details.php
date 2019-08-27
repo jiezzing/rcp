@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="col-md-4">
-                  <label for="company" class=" form-control-label tooltiptext">APPROVED BY</label>
+                  <label for="company" class=" form-control-label tooltiptext">DECLINED BY</label>
                   <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly id="department">
                 </div>
             </div>
@@ -116,8 +116,8 @@
                               <thead>
                                 <tr>
                                   <th>Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct Code</th>
-                                  <th style="width: 15%">Amount</th>
+                                  <th style="width: 25%">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -151,24 +151,24 @@
 								 		';
 									}
 								?>
-                                <?php
-                                echo '
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="panel-footer">
-                            <div class="row">
-                              <div class="col-md-6"></div>
-                              <div class="input-group">
-                                <span class="input-group-addon">₱</span>
-                                <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="total_amount">
-                                <span class="input-group-addon">Total Amount Due</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- END RECENT PURCHASES -->
+                        <?php
+                        echo '
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="panel-footer">
+                    <div class="row">
+                      <div class="col-md-6"></div>
+                      <div class="input-group">
+                        <span class="input-group-addon">₱</span>
+                        <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="total_amount">
+                        <span class="input-group-addon">Total Amount Due</span>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END RECENT PURCHASES -->
+              </div>
             </div>
           </div>
 	';
@@ -183,7 +183,7 @@
                   <label class=" form-control-label">Date needed:</label>
                   <div class="input-group date" data-provide="datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                      <span class="fa fa-calendar"></span>
                     </div>
                     <input type="text" class="form-control col-md-6" id="mDatePicker" readonly disabled style="background-color: white" value="'.date("m/d/Y", strtotime($rcp_due_date)).'">
                   </div>
@@ -191,7 +191,7 @@
             <div class="col-md-12">
                   <br>
                   <label class=" form-control-label">Reason / Justification</label>
-                  <textarea class="form-control" placeholder="Your text here. . ." rows="4" id="justification" readonly>'.$rcp_justify.'</textarea>
+                  <textarea class="form-control" placeholder="Your text here. . ." rows="4" id="justification" readonly style="background-color: white">'.$rcp_justify.'</textarea>
             </div>
           </div>
         </div>

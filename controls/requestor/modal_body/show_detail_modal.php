@@ -372,8 +372,7 @@
 <script>
   	function forTableRowMethod(){
       	$(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-	        $(this).val($(this).val().replace(/[^0-9\.]/g,''));
-	            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+	            if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
 	                event.preventDefault();
 	            }
 	        });

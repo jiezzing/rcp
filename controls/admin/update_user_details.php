@@ -19,8 +19,15 @@
 	$sel->username = $_POST['username'];
 	$sel->password = base64_encode($_POST['password']);
 
- 	$query = $sel->updateUserDetails();
- 	$query2 = $sel->updateUserAccountDetails();
+	if($_POST['password'] == ""){
+ 		$query = $sel->updateUserDetails();
+	 	$query2 = $sel->updateUserAccountDetailsUpdate();
+	}
+	else{
+	 	$query = $sel->updateUserDetails();
+	 	$query2 = $sel->updateUserAccountDetails();
+	}
+	
 	if($query && $query2){
 		echo 'Success';
 	}

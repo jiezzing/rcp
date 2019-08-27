@@ -109,7 +109,7 @@
               },
               success: function(response){
                 $('#set-prmy-approver-modal').modal('toggle');
-                $('#rcp-update-modal').modal('show');
+                swal("Success", "Successfully updated", "success");
               },
               error: function(xhr, ajaxOptions, thrownError){
                   alert(thrownError);
@@ -133,7 +133,7 @@
             },
             success: function(response){
               $("#update-prmy-approver-modal").modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -196,7 +196,7 @@
             },
             success: function(response){
               $("#update-alt-prmy-approver-modal").modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -220,7 +220,7 @@
             },
             success: function(response){
               $('#set-alt-prmy-approver-modal').modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);

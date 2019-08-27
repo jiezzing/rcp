@@ -123,7 +123,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl = '
             <table  cellpadding="4">
             <tr nobr="true">
-                <th colspan="7"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+                <th colspan="7"><strong>'.$dept_name.'</strong></th>
                 <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
              </tr>
              <tr nobr="true">
@@ -162,7 +162,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl .= '
         <tr nobr="true" style="font-size: 9px;">
             <td style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center"><strong>'.$row['rcp_no'].'</strong></td>
-            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$mApprvr[$index].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['rcp_payee'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['dept_name'].'</td>
@@ -192,7 +192,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl = '
             <table  cellpadding="4">
             <tr nobr="true">
-                <th colspan="7"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+                <th colspan="7"><strong>'.$dept_name.'</strong></th>
                 <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
              </tr>
              <tr nobr="true">
@@ -230,7 +230,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl .= '
         <tr nobr="true" style="font-size: 9px;">
             <td style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center"><strong>'.$row['rcp_no'].'</strong></td>
-            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$mApprvr[$index].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['rcp_payee'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['dept_name'].'</td>
@@ -260,7 +260,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl = '
             <table  cellpadding="4">
             <tr nobr="true">
-                <th colspan="7"><strong>'.$dept_name.' DEPARTMENT</strong></th>
+                <th colspan="7"><strong>'.$dept_name.'</strong></th>
                 <th rowspan="2" colspan="3" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
              </tr>
              <tr nobr="true">
@@ -297,7 +297,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         $tbl .= '
         <tr nobr="true" style="font-size: 9px;">
             <td style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center"><strong>'.$row['rcp_no'].'</strong></td>
-            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+            <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$mApprvr[$index].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['rcp_payee'].'</td>
             <td style="border-right: 1px solid black;border-bottom: 1px solid black;">'.$row['dept_name'].'</td>
@@ -330,7 +330,7 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
 ob_end_clean();
-$pdf->Output('example_001.pdf', 'I');
+$pdf->Output('Reports.pdf', 'I');
 
 //============================================================+
 // END OF FILE

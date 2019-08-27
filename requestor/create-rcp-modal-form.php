@@ -93,8 +93,8 @@
                               <thead>
                                 <tr>
                                   <th>Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct Code</th>
-                                  <th style="width: 15%">Amount</th>
+                                  <th style="width: 25%">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -209,9 +209,8 @@
   function forTableRowMethod(){
 
     $(document).ready(function() {
-      $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-        $(this).val($(this).val().replace(/[^0-9\.]/g,''));
-            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+         $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
+            if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
         });
@@ -586,6 +585,7 @@
                     user_id: user_id
                   });
                   swal(rcp_no, "has been successfully sent", "success");
+                  console.log(email);
                 },
                 success: function(response){
                   console.log(response);

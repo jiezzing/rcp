@@ -65,7 +65,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 $sel->user_id = $apprvr_id;
 $query = $sel->getApproversData();
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-  $apprvr_name = $row['user_firstname'] . " " . $row['user_middle_initial'] . ". " . $row['user_lastname'];
+  $apprvr_name = $row['APP_NAME'];
 }
 
 $sel->rcp_no = $rcp_no;

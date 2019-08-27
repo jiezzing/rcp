@@ -118,8 +118,8 @@
                               <thead>
                                 <tr>
                                   <th>Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct Code</th>
-                                  <th style="width: 15%">Amount</th>
+                                  <th style="width: 25%">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>

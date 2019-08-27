@@ -154,7 +154,7 @@
 
 		public function GetRqstrName()
 		{
-			$query = "SELECT CONCAT(user_firstname, ' ', user_middle_initial, '. ', user_lastname) as approver_name FROM user_file WHERE user_id=?";
+			$query = "SELECT CONCAT(user_firstname, ' ', user_lastname) as approver_name FROM user_file WHERE user_id=?";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -660,7 +660,7 @@
 
 		public function GetApproverName()
 		{
-			$query = "SELECT CONCAT(user_firstname, ' ', user_middle_initial, '. ', user_lastname) as approver_name FROM rcp_file, user_file WHERE rcp_department=? AND user_id=rcp_approver_id";
+			$query = "SELECT CONCAT(user_firstname, ' ', user_lastname) as approver_name FROM rcp_file, user_file WHERE rcp_department=? AND user_id=rcp_approver_id";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

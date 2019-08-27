@@ -52,11 +52,11 @@
 														<td>'.$row['rcp_no'].'</td>
 														<td>'.$row['rcp_payee'].'</td>
 														<td>'.$row['dept_name'].'</td>
-														<td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+														<td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
 														<td>'.$row['rcp_reason'].'</td>
 														<td>'.$row['rcp_date_declined'].'</td>
 														<td>
-															<button type="button" class="btn btn-success form-control show-rcp-details" value="'.$row['rcp_no'].'" style="margin-left: -8px"><i class="fa fa-eye"></i> Show</button>
+															<button type="button" class="btn btn-warning form-control show-rcp-details" value="'.$row['rcp_no'].'" style="margin-left: -8px"><i class="fa fa-file"></i> Details</button>
 														</td>
 													</tr>
 												';

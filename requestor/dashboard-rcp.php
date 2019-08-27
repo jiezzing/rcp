@@ -147,7 +147,7 @@
 											<div class="panel-footer show-more-details" value="'.$row['rcp_no'].':'.$row['rcp_approver_id'].':'.$row['rcp_rush'].':'.$row['rcp_id'].':'.$row['user_email'].'">
 												<h5>
 													<ul class="list-unstyled list-justify">
-														<li><small>Created: '.$row['created_at'].'<i class="fa fa-pencil pull-right"></i> </small></li>
+														<li>Created: '.$row['created_at'].'<i class="fa fa-pencil pull-right"></i></li>
 													</ul>
 												</h5>
 											</div>
@@ -351,7 +351,6 @@
 	      	}   
 
 	      	if(!isReady){
-		        toastr.options.closeButton = true;
 		        toastr.error('Please fill-up all the fields required in row ' + missingIndex, 'Required');
 		        return;
 	      	}
@@ -383,7 +382,8 @@
 			                    complete: function(){
 			                    	setTimeout(function () {
                   						swal(rcp_no, "has been successfully updated", "success");
-									}, 3000);
+									}, 2000);
+									console.log(current_appr_email);
 			                    },
 			                    success: function(response){
 			                      	// Send an email notification to approver
@@ -401,6 +401,7 @@
 			                          	},
 			                          	cache: false,
 			                          	success: function(response){
+											console.log(new_email);
 			                          	},
 			                          	error: function(xhr, ajaxOptions, thrownError){
 			                              alert(thrownError);
@@ -538,6 +539,15 @@
 		                amount_in_words:amount_in_words, 
 		                currencyNoCommas:currencyNoCommas
 		            },
+		            beforeSend: function(){ 
+
+		            },
+		            complete: function() {
+    					$("#rcp-modal-details").modal('toggle');
+    					swal(rcp_no, "has been successfully updated", "success");
+
+						console.log(current_appr_email);
+		            },
 		          	success: function(response){
 		          		for (var i = 0; i < table_length; i++) { // Start of for loop
 			                var particulars = $("#show-td1"+i+"").text(); 
@@ -608,8 +618,6 @@
 			            	}
 	    				} // End of for loop
 	    				if(rush == "Yes"){
-	    					$("#rcp-modal-details").modal('toggle');
-	    					swal(rcp_no, "has been successfully updated", "success");
 	    					$.ajax({ // Start of updating RCP Rush file
 	                            type: "POST",
 					            async: false,

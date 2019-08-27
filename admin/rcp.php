@@ -52,7 +52,7 @@
 			}
 		?>
 		<div class="main">
-			<div class="main-content"  style="width: 130%">
+			<div class="main-content"  style="width: 160%">
 				<div class="container-fluid" >
 				<div class="row">
 						<div class="col-md-12">
@@ -105,9 +105,25 @@
 								                                <td>'.$row['rcp_rush'].'</td>
 								                                <td>'.$row['rcp_status'].'</td>
 								                                <td>
-								                                    <button type="button" class="btn btn-success show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-eye"></i> Show</button>
-															        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> History
-														          	</button>
+								                                    <button type="button" class="btn btn-warning show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
+								                                    ';
+							                                    ?>
+								                                <?php
+								                                	if($row['edited_by_app'] == "Yes"){
+								                                		echo '
+																	        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
+																          	</button>
+								                                		';
+								                                	}
+								                                	else{
+								                                		echo '
+								                                			<button type="button" class="btn btn-primary view-history" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
+																          	</button>
+								                                		';
+								                                	}							                                
+								                                ?>    
+							                                    <?php
+								                                    echo '
 								                                </td>
 								                            </tr>
 								                        ';
@@ -130,13 +146,7 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-        $('#allRcpTbl').DataTable({
-			    "bPaginate": true,
-			    "bLengthChange": true,
-			    "bFilter": true,
-			    "bInfo": true,
-			    "bSort": false,
-			    "bAutoWidth": true });
+        $('#allRcpTbl').DataTable();
         $('.dataTables_length').addClass('bs-select');
         });
     </script>

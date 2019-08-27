@@ -216,7 +216,7 @@
                   <label class=" form-control-label">Date needed:</label>
                   <div class="input-group date" data-provide="datepicker">
                     <div class="input-group-addon">
-                      <span class="glyphicon glyphicon-th"></span>
+                      <span class="fa fa-calendar"></span>
                     </div>
                     <input type="text" class="form-control col-md-6" id="mDatePicker" readonly disabled style="background-color: white" value="'.date("m/d/Y", strtotime($rcp_due_date)).'">
                   </div>
@@ -224,7 +224,7 @@
             <div class="col-md-12">
                   <br>
                   <label class=" form-control-label">Reason / Justification</label>
-                  <textarea class="form-control" placeholder="Your text here. . ." rows="4" id="justification" readonly>'.$rcp_justify.'</textarea>
+                  <textarea class="form-control" placeholder="Your text here. . ." rows="4" id="justification" readonly style="background-color: white">'.$rcp_justify.'</textarea>
             </div>
           </div>
         </div>
@@ -239,7 +239,7 @@
 <script>
   $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
         $(this).val($(this).val().replace(/[^0-9\.]/g,''));
-            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
         });

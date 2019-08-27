@@ -19,7 +19,7 @@
 	$query = $sel->getAltPrmyApproversData();
 	while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 		$dept_name = $row['dept_name'];
-		$fullname = $row['user_firstname'] . " " . $row['user_middle_initial'] . ". " . $row['user_lastname'];
+		$fullname = $row['user_firstname'] . " " . $row['user_lastname'];
 		$comp_name = $row['comp_name'];
 	}
 	echo '
@@ -37,12 +37,12 @@
 		        while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
 		        	if($row['user_id'] == $_POST['alt_prmy_id']){ 
 		        		echo ' 
-				        	<option value="'.$row['user_id'].'" selected>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+				        	<option value="'.$row['user_id'].'" selected>'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
 				        ';
 		        	}
 		        	else{
 		        		echo ' 
-				        	<option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+				        	<option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
 				        ';
 		        	}
 		        }

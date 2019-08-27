@@ -98,7 +98,7 @@
             },
             success: function(response){
               $("#update-sec-approver-modal").modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -132,7 +132,7 @@
               },
               success: function(response){
                 $('#set-sec-approver-modal').modal('toggle');
-                $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
               },
               error: function(xhr, ajaxOptions, thrownError){
                   alert(thrownError);
@@ -194,7 +194,7 @@
             },
             success: function(response){
               $('#update-alt-sec-approver-modal').modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -218,7 +218,7 @@
             },
             success: function(response){
               $('#set-alt-sec-approver-modal').modal('toggle');
-              $('#rcp-update-modal').modal('show');
+              swal("Success", "Successfully updated", "success");
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);

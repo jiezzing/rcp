@@ -151,7 +151,7 @@
 											<div class="panel-footer show-more-details" value="'.$row['rcp_id'].':'.$row['rcp_no'].':'.$row['rcp_employee_id'].':'.$row['rcp_rush'].':'.$row['user_email'].'">
 												<h5>
 													<ul class="list-unstyled list-justify">
-														<li>VIEW / PRINT <i class="fa fa-print pull-right"></i> </li>
+														<li>View / Print <i class="fa fa-print pull-right"></i> </li>
 													</ul>
 												</h5>
 											</div>
@@ -161,22 +161,22 @@
 							';
 						}
 					?>
-				</div>
-				<?php 
-				if(!$hasRcp){
-					echo '
-						<div class="container-fluid text-center">
-							<div class="panel panel-headline">
-								<div class="panel-heading">
-									<i class="fa fa-exclamation-circle fa-5x" style="color: #D9534F"></i>
-									<br>
-									<small>YOU HAVE NO PENDING RCP</small>
+					<?php 
+					if(!$hasRcp){
+						echo '
+							<div class="container-fluid text-center">
+								<div class="panel panel-headline">
+									<div class="panel-heading">
+										<i class="fa fa-exclamation-circle fa-5x" style="color: #D9534F"></i>
+										<br>
+										<small>YOU HAVE NO PENDING RCP</small>
+									</div>
 								</div>
 							</div>
-						</div>
-					';
-					}
-				?>
+						';
+						}
+					?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -232,191 +232,220 @@
     </script>
 
     <script>
-    	function saveChangesBtn() {
+		var approver_name = "<?php echo $user_fullname ?>";
+    	$('#save-changes-btn').click(function (){
+			var rcp_no = $('#rcp-no').val();
 			var payee = $('#payee').val();
 			var amount_in_words = $('#amount-in-words').val();
 			var table_length = $('td[name=app-td1]').length;
             var isMissingField = false;
-            var row = 1;
-
-			for(var i = 0; i < table_length; i++){
-                var particulars = $("#td1"+i+"").text(); 
-                var ref_codes = $("#td2"+i+"").text(); 
-                var amounts = $("#td3"+i+"").text(); 
-                if(particulars == "" || ref_codes == "" || amounts == ""){
-                	isMissingField = true;
-                	break;
-                } 
-                else{
-                	row++;
-                }
-			}
-			if(payee == "" || amount_in_words == ""){
-				$("#rcp-modal-details-approver").modal('toggle');
-	          	swal({
-		            title: "Info",
-		            text: "Some fields are missing",
-		            type: "warning",
-		            closeOnConfirm: true
-	          	},
-		          function(data){
-		            if(data){
-						$("#rcp-modal-details-approver").modal('toggle');
-		              	return false;
-		            }
-	          	});
-				return;
-			}
-			else if(isMissingField){
-				$.ajax({
-              	type: "POST",
-              	url: "../controls/approver/modal_body/missing_field_modal_body.php",
-              	data: {
-              		row:row
-              	},
-              	cache: false,
-              	success: function(html){
-                	$("#row-fields-modal-body").html(html);
-                	$("#row-fields-modal").modal('show');
-              	},
-              	error: function(xhr, ajaxOptions, thrownError){
-                  alert(thrownError);
-              	}
-          	});
-			}
-			else{
-				$('#save-changes-modal').modal('show');
-    		}
-    	}
-    </script>
-
-    <script>
-		var approver_name = "<?php echo $user_fullname ?>";
-		function saveChangesBtnClick() {
-			var rcp_no = $('#rcp-no').val();
+            var missingIndex = 1;
+	      	var isReady = true;
+	      	var isEmpty = false;
 			var apprvr_id = "<?php echo $_SESSION['user_id']; ?>";
 			var comp_code = $('#company').val();
 			var proj_code = $('#project').val();
-			var payee = $('#payee').val();
-			var amount_in_words = $('#amount-in-words').val();
 			var total_amount = $('#total_amount').val();
 		    var currencyNoCommas = total_amount.replace(/\,/g,'');
 		    currencyNoCommas = Number(currencyNoCommas);
-
 		    var date_changed = new Date().toLocaleString();
 			var isSuccess = false;
-			var table_length = $('td[name=app-td1]').length;
 
-			$.ajax({ // Start of updating RCP File
-	            type: "POST",
-	            async: false,
-	            url: "../controls/approver/update_rcp_file.php",
-	            data: {
-	                rcp_id: rcp_id, 
-	                comp_code: comp_code, 
-	                proj_code: proj_code, 
-	                payee: payee, 
-	                amount_in_words:amount_in_words, 
-	                currencyNoCommas:currencyNoCommas
-	            },
-	          	success: function(response){
-      		        $.ajax({ // Start of updating particulars file
-			            type: "POST",
-			            async: false,
-			            url: "../controls/approver/insert_rcp_file_history.php",
-			            data: {
-			                rcp_no: rcp_no, 
-			                comp_code: comp_code, 
-			                proj_code: proj_code, 
-			                payee: payee, 
-			                amount_in_words:amount_in_words, 
-			                currencyNoCommas:currencyNoCommas,
-			                apprvr_id:apprvr_id, 
-			                updated_at:date_changed
-			            },
-			          	success: function(response){
-							$('#rcp-modal-details-approver').modal('toggle');
-							$('#save-changes-modal').modal('toggle');
-							$('#rcp-update-modal').modal('show');
-	          		  		for (var i = 0; i < table_length; i++) {
-				                var particulars = $("#td1"+i+"").text(); 
-				                var ref_codes = $("#td2"+i+"").text(); 
-				                var amounts = $("#td3"+i+"").text(); 
-				                var rcp_id = $("#td4"+i+"").text(); 
-				                var currencyNoCommas = amounts.replace(/\,/g,'');
-			    				currencyNoCommas = Number(currencyNoCommas);
+		    toastr.options = {
+		        "closeButton": true,
+		        "debug": false,
+		        "progressBar": true,
+		        "positionClass": "toast-top-right",
+		        "preventDuplicates": true,
+		        "onclick": null,
+		        "showDuration": "300",
+		        "hideDuration": "1000",
+		        "timeOut": "5000"        
+		  	}
+			if(payee == "" || amount_in_words == ""){
+        		toastr.error('Some fields are missing.', 'Required');
+				return;
+			}
 
-				                $.ajax({ // Start of updating particulars file
-						            type: "POST",
-						            async: false,
-						            url: "../controls/approver/update_rcp_particulars.php",
-						            data: {
-						                rcp_id: rcp_id, 
-						                particulars: particulars, 
-						                ref_codes: ref_codes, 
-						                currencyNoCommas: currencyNoCommas
-						            },
-						          	success: function(response){
-						          		$.ajax({ // Start of updating particulars file
-								            type: "POST",
-								            async: false,
-								            url: "../controls/approver/insert_rcp_particulars_edit_history.php",
-								            data: {
-								                rcp_no: rcp_no, 
-								                particulars: particulars, 
-								                ref_codes: ref_codes, 
-								                currencyNoCommas: currencyNoCommas,
-								                updated_at:date_changed
-								            },
-								          	success: function(response){
-								          		isSuccess = true;
-								          	},
-						                    error: function(xhr, ajaxOptions, thrownError)
-						                    {
-						                        alert(thrownError);
-						                    }
-						                }); // End of updating particulars file
-						          	},
-				                    error: function(xhr, ajaxOptions, thrownError)
-				                    {
-				                        alert(thrownError);
-				                    }
-				                }); // End of updating particulars file
-				            }
-			          	},
-	                    error: function(xhr, ajaxOptions, thrownError)
-	                    {
-	                        alert(thrownError);
-	                    }
-	                }); // End of updating particulars file
-		            if(isSuccess){
-						$.ajax({
-                              type: "POST",
-                              async: false,
-                              url: "../controls/mails/rcp_update_mail.php",
-                              data: {
-                                rcp_no:rcp_no, 
-                                approver_name:approver_name,
-                                email:email
-                              },
-                              cache: false,
-                              success: function(response){
-                              	console.log(response);
-                              	console.log(rcp_no);
-                              	console.log(approver_name);
-                              	console.log(email);
-                              },
-                              error: function(xhr, ajaxOptions, thrownError){
-                                  alert(thrownError);
-                              } 
-                          });
-		            }
-	          	},
-                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
-                {
-                    alert(thrownError);
-                }
-            }); // End of updating RCP File
+            for (var i = 0; i < table_length; i++){ // Start of for loop
+	          	var arraytd1 = $("#td1"+i+"").text();
+          		var arraytd2 = $("#td2"+i+"").text();
+          		var arraytd3 = $("#td3"+i+"").text();
+            		if (arraytd1 == "" && arraytd2 == "" && arraytd3 == "") {
+		              isEmpty = true;
+            		}
+            		else{
+              		isEmpty = false;
+              		break;
+            		}
+      		}
+
+	      	if(isEmpty){
+		        toastr.error('Please specify the particulars, BOM Ref/Acct Code and amount.', 'Required');
+		        isReady = false;
+		        return;
+	      	}
+			else{
+				 for(var i = 0; i < table_length; i++){
+		          	var arraytd1 = $("#td1"+i+"").text();
+		          	var arraytd2 = $("#td2"+i+"").text();
+		          	var arraytd3 = $("#td3"+i+"").text();
+		          	if(arraytd1 == "" && arraytd2 == "" && arraytd3 == "")
+		            	continue;
+		          	else{
+		              	if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
+			                missingIndex = i + 1;
+			                isReady = false;
+			                break;
+		            	}
+		          	}
+		        }
+			}
+
+			if(!isReady){
+		        toastr.error('Please fill-up all the fields required in row ' + missingIndex, 'Required');
+		        return;
+	      	}
+	      	else{
+	      		$('#rcp-modal-details-approver').modal('toggle');
+      			swal({
+			        title: "Confirmation",
+			        text: "Would you like to save its changes?",
+			        type: "info",
+			        showCancelButton: true,
+			        closeOnConfirm: false,
+			        confirmButtonText: "Yes",
+			        showLoaderOnConfirm: true
+		      	}, function (data) {
+		      		if(data){
+		      			$.ajax({
+			              type: "POST",
+			              async: false,
+			              url: "../controls/mails/rcp_update_mail.php",
+			              data: {
+			                rcp_no:rcp_no, 
+			                approver_name:approver_name,
+			                email:email
+			              },
+			              cache: false,
+			              beforeSend: function(){
+
+			              },
+			              complete: function(){
+	                    	setTimeout(function () {
+          						swal(rcp_no, "has been successfully updated", "success");
+							}, 2000);
+			              	console.log(rcp_no);
+			              	console.log(approver_name);
+			              	console.log(email);
+
+			              },
+			              success: function(response){
+			              	$.ajax({ // Start of updating RCP File
+					            type: "POST",
+					            async: false,
+					            url: "../controls/approver/update_rcp_file.php",
+					            data: {
+					                rcp_id: rcp_id, 
+					                comp_code: comp_code, 
+					                proj_code: proj_code, 
+					                payee: payee, 
+					                amount_in_words:amount_in_words, 
+					                currencyNoCommas:currencyNoCommas
+					            },
+					          	success: function(response){
+					          		$.ajax({ // Start of updating particulars file
+							            type: "POST",
+							            async: false,
+							            url: "../controls/approver/insert_rcp_file_history.php",
+							            data: {
+							                rcp_no: rcp_no, 
+							                comp_code: comp_code, 
+							                proj_code: proj_code, 
+							                payee: payee, 
+							                amount_in_words:amount_in_words, 
+							                currencyNoCommas:currencyNoCommas,
+							                apprvr_id:apprvr_id, 
+							                updated_at:date_changed
+							            },
+							          	success: function(response){
+					          		  		for (var i = 0; i < table_length; i++) {
+								                var particulars = $("#td1"+i+"").text(); 
+								                var ref_codes = $("#td2"+i+"").text(); 
+								                var amounts = $("#td3"+i+"").text(); 
+								                var rcp_id = $("#td4"+i+"").text(); 
+								                var currencyNoCommas = amounts.replace(/\,/g,'');
+							    				currencyNoCommas = Number(currencyNoCommas);
+
+							    				$.ajax({ // Start of updating particulars file
+										            type: "POST",
+										            async: false,
+										            url: "../controls/approver/update_rcp_particulars.php",
+										            data: {
+										                rcp_id: rcp_id, 
+										                particulars: particulars, 
+										                ref_codes: ref_codes, 
+										                currencyNoCommas: currencyNoCommas
+										            },
+										          	success: function(response){
+										          		$.ajax({ // Start of updating particulars file
+												            type: "POST",
+												            async: false,
+												            url: "../controls/approver/insert_rcp_particulars_edit_history.php",
+												            data: {
+												                rcp_no: rcp_no, 
+												                particulars: particulars, 
+												                ref_codes: ref_codes, 
+												                currencyNoCommas: currencyNoCommas,
+												                updated_at:date_changed
+												            },
+												          	success: function(response){
+												          		isSuccess = true;
+												          	},
+										                    error: function(xhr, ajaxOptions, thrownError)
+										                    {
+										                        alert(thrownError);
+										                    }
+										                }); // End of updating particulars file
+										          	},
+								                    error: function(xhr, ajaxOptions, thrownError)
+								                    {
+								                        alert(thrownError);
+								                    }
+								                }); // End of updating particulars file
+							    			}
+							          	},
+					                    error: function(xhr, ajaxOptions, thrownError)
+					                    {
+					                        alert(thrownError);
+					                    }
+					                }); // End of updating particulars file
+					          	},
+				                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
+				                {
+				                    alert(thrownError);
+				                }
+				            }); // End of updating RCP File
+			              },
+			              error: function(xhr, ajaxOptions, thrownError){
+			                  alert(thrownError);
+			              } 
+                      	});
+
+		      		}
+		      		else{
+		      			$('#rcp-modal-details-approver').modal('show');
+		      			return false;
+		      		}
+		      	});
+	      	}
+    	});
+    </script>
+
+    <script>
+		function saveChangesBtnClick() {
+
+			
 		}
 	</script>
 
@@ -430,7 +459,7 @@
 
 	      $('#rcp-modal-details-approver').modal('toggle');
 	      swal({
-	        title: "Disapproval",
+	        title: "Decline",
 	        text: "Reason for declining: ",
 	        type: "input",
 	        showCancelButton: true,
@@ -450,67 +479,69 @@
 	        }
 	        else{
 	        	if(inputValue.length > 100){
-	          swal.showInputError("The number of characters exceeds to 100.");
+	          		swal.showInputError("The number of characters exceeds to 100.");
 	        		return;
 	        	}
-	          $.ajax({ // Start of inserting data to decline file
-	              type: "POST",
-	              async: false,
-	              url: "../controls/approver/insert_decline_file.php",
-	              data: {
-	                rcp_no: rcp_no, 
-	                justification: inputValue 
-	              },
-	              cache: false,
-	              success: function(response){
-	                $.ajax({ // Start of declining status of rcp file
-	                  type: "POST",
-	                  async: false,
-	                  url: "../controls/approver/decline_rcp_status.php",
-	                  data: {
-	                    rcp_no: rcp_no,
-	                    rush: rush
-	                  },
-	                  cache: false,
-	                  success: function(response){
-	                    $.ajax({
-	                        type: "POST",
-	                        url: "../controls/mails/rcp_declined_mail.php",
-	                        data: {
-	                          rcp_no: rcp_no, 
-	                          approver_name: approver_name, 
-	                          reason: inputValue,
-	                          email: email
-	                        },
-	                        cache: false,
-	                      	beforeSend: function(){
+	        	else{
+	        		$.ajax({
+                        type: "POST",
+                        url: "../controls/mails/rcp_declined_mail.php",
+                        data: {
+                          rcp_no: rcp_no, 
+                          approver_name: approver_name, 
+                          reason: inputValue,
+                          email: email
+                        },
+                        cache: false,
+                      	beforeSend: function(){
 
-	                      	},
-	                      	complete: function(){
-	                      		console.log(email);
-		                    	setTimeout(function () {
-	                          		swal("" + rcp_no, "has been successfully declined", "error");
-								}, 2000);
-	                      	},
-	                        success: function(response){
-                          		$('#load-rcp').load("../controls/approver/load_rcp.php",{
-		                            user_id: apprvr_id
-	                          	});
-	                        },
-	                        error: function(xhr, ajaxOptions, thrownError){
-	                            alert(thrownError);
-	                        } // end of rush file status
-	                    });
-	                  },
-	                  error: function(xhr, ajaxOptions, thrownError){
-	                      alert(thrownError);
-	                  } 
-	              }); // End of declining status of rcp file
-	              },
-	              error: function(xhr, ajaxOptions, thrownError){
-	                  alert(thrownError);
-	              } 
-	          }); // End of inserting data to decline file
+                      	},
+                      	complete: function(){
+	                    	setTimeout(function () {
+                          		swal("" + rcp_no, "has been successfully declined", "error");
+							}, 2000);
+                      		$('#load-rcp').load("../controls/approver/load_rcp.php",{
+	                            user_id: apprvr_id
+                          	});
+                      	},
+                        success: function(response){
+				          	$.ajax({ // Start of inserting data to decline file
+				              	type: "POST",
+				              	async: false,
+				             	url: "../controls/approver/insert_decline_file.php",
+				              	data: {
+				                rcp_no: rcp_no, 
+				                justification: inputValue 
+				              	},
+				              	cache: false,
+				              	success: function(response){
+				                $.ajax({ // Start of declining status of rcp file
+				                  	type: "POST",
+				                  	async: false,
+				                 	url: "../controls/approver/decline_rcp_status.php",
+				                  	data: {
+				                    	rcp_no: rcp_no,
+				                    	rush: rush
+				                  	},
+				                  	cache: false,
+				                  	success: function(response){
+				                    	console.log(email);
+				                  	},
+				                  	error: function(xhr, ajaxOptions, thrownError){
+				                      	alert(thrownError);
+				                  	} 
+				              	}); // End of declining status of rcp file
+				              	},
+				              	error: function(xhr, ajaxOptions, thrownError){
+				                  	alert(thrownError);
+				              	} 
+				          	}); // End of inserting data to decline file
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            alert(thrownError);
+                        } // end of rush file status
+                    });
+	        	}
 	        }
 	      });
 	  });
@@ -533,59 +564,61 @@
 	      },
 	      function(data){
 	        if(data){
-	          $.ajax({ // Start of inserting data to approved file
-	            type: "POST",
-	            async: false,
-	            url: "../controls/approver/insert_approve_file.php",
-	            data: {
-	              rcp_no: rcp_no
-	            },
-	            cache: false,
-	            success: function(response){
-	              $.ajax({ // Start of declining status of rcp file
-	                type: "POST",
-	                async: false,
-	                url: "../controls/approver/approve_rcp_status.php",
-	                data: {
-	                  rcp_no: rcp_no,
-	                  rush: rush
-	                },
-	                success: function(response){
-	                  	$.ajax({
-	                        type: "POST",
-	                        url: "../controls/mails/mail_approval.php",
-	                      	data: {
-	                        rcp_no: rcp_no, 
-	                        approver_name: approver_name, 
-	                        rush: rush,
-	                        email: email
-	                      	},
-	                      	cache: false,
-	                      	beforeSend: function(){
+	        	$.ajax({
+                    type: "POST",
+                    url: "../controls/mails/mail_approval.php",
+                  	data: {
+                    rcp_no: rcp_no, 
+                    approver_name: approver_name, 
+                    rush: rush,
+                    email: email
+                  	},
+                  	cache: false,
+                  	beforeSend: function(){
 
-	                      	},
-	                      	complete: function(){
-	                          	swal("" + rcp_no, "has been approved.", "success");
-	                      	},
-	                      	success: function(response){
-	                          $('#load-rcp').load("../controls/approver/load_rcp.php",{
-	                            user_id: apprvr_id
-	                          });
-	                        },
-	                        error: function(xhr, ajaxOptions, thrownError){
-	                            alert(thrownError);
-	                        } // end of rush file status
-	                    });
-	                },
-	                error: function(xhr, ajaxOptions, thrownError){
-	                    alert(thrownError);
-	                } 
-	            }); // End of declining status of rcp file
-	            },
-	            error: function(xhr, ajaxOptions, thrownError){
-	                alert(thrownError);
-	            } 
-	          }); // End of inserting data to approved file
+                  	},
+                  	complete: function(){
+                      	swal("" + rcp_no, "has been successfully approved", "success");
+                      	$('#load-rcp').load("../controls/approver/load_rcp.php",{
+	                        user_id: apprvr_id
+                      	});
+                  	},
+                  	success: function(response){
+		          	$.ajax({ // Start of inserting data to approved file
+			            type: "POST",
+			            async: false,
+			            url: "../controls/approver/insert_approve_file.php",
+			            data: {
+			              rcp_no: rcp_no
+			            },
+			            cache: false,
+			            success: function(response){
+
+			              $.ajax({ // Start of declining status of rcp file
+			                type: "POST",
+			                async: false,
+			                url: "../controls/approver/approve_rcp_status.php",
+			                data: {
+			                  rcp_no: rcp_no,
+			                  rush: rush
+			                },
+			                success: function(response){
+		                    	console.log(email);
+			                },
+			                error: function(xhr, ajaxOptions, thrownError){
+			                    alert(thrownError);
+			                } 
+			            }); // End of declining status of rcp file
+		            },
+		            error: function(xhr, ajaxOptions, thrownError){
+		                alert(thrownError);
+		            } 
+		          }); // End of inserting data to approved file
+                    },
+                    error: function(xhr, ajaxOptions, thrownError){
+                        alert(thrownError);
+                    } // end of rush file status
+                });
 	        }
 	        else{
 	          	$('#rcp-modal-details-approver').modal('show');
@@ -600,6 +633,27 @@
       		var myData = "rcp_no=" + rcp_no;
 			document.getElementById("hrefBtn").href="../tcpdf/rcp_pdf.php?" + myData;
 		}
+	</script>
+
+	<script>
+		$(document).ready(function (){
+	        $('#mDatePicker').datepicker({
+	        	startDate: "today"
+	        });
+	        $('#from-datepicker').datepicker();
+         	$('#to-datepicker').datepicker();
+		});
+	</script>
+
+	<script>
+		$('#from-datepicker').change(function(){
+			var selected_date = $('#from').val();
+			$('#to').val("");
+			$('#to').datepicker({
+				startDate: selected_date
+			});
+      		document.getElementById("generate-btn-with-date-span").disabled = false;
+		});
 	</script>
 </body>
 </html>

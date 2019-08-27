@@ -20,7 +20,7 @@
 			include '../requestor/menu.php';
 		?>
 		<div class="main">
-			<div class="main-content" style="width: 130%">
+			<div class="main-content" style="width: 150%">
 				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
@@ -56,27 +56,26 @@
 														<td>'.$row['proj_name'].'</td>
 														<td>'.$row['dept_name'].'</td>
 														<td>'.$row['rcp_date_approved'].'</td>
-														<td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'
+														<td>'.$row['user_firstname'].' '.$row['user_lastname'].'
 														</td>
 														<td>
-															<button type="button" class="btn btn-success show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-eye"></i> Show</button>
+															<button type="button" class="btn btn-warning show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
 												          	';
 												          	?>
 												          	<?php
 												          		if($row['edited_by_app'] == 'Yes'){
 												          			echo '
-																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> History
+												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-copy"></i> Original Details</button>
+																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
-
-												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-eye"></i> Old Data</button>
 												          			';	
 												          		}
 												          		else{
 												          			echo '
-																        <button type="button" class="btn btn-primary" disabled><i class="fa fa-history" aria-hidden="true"></i> History
+												          				<button type="button" class="btn btn-danger" disabled><i class="fa fa-copy"></i> Original Details</button>
+																        <button type="button" class="btn btn-primary" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 															          	
-												          				<button type="button" class="btn btn-danger" disabled><i class="fa fa-eye"></i> Old Data</button>
 												          			';	
 												          		}
 												          	?>

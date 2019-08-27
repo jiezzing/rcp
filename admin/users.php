@@ -102,7 +102,7 @@
 							                                <td>'.$row['user_type'].'</td>
 							                                <td>'.$row['user_status'].'</td>
 							                                <td>
-							                                    <button type="button" class="btn btn-primary form-control user-details" value="'.$row['user_id'].'" style="margin-left: -8px" data-toggle="modal" data-target="#user-detail-modal"><i class="fa fa-pencil"></i> Edit</button>
+							                                    <button type="button" class="btn btn-primary form-control user-details" value="'.$row['user_id'].'" style="margin-left: -8px" data-toggle="modal" data-target="#user-detail-modal"><i class="fa fa-pencil"></i> Update</button>
 							                                </td>
 							                            </tr>
 							                        ';
@@ -128,6 +128,17 @@
 
 	<script>
     var user_id;
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000"        
+  	}
     $(document).on('click', '.user-details', function(e){
         e.preventDefault();
         var id = $(this).attr('value');
@@ -167,9 +178,9 @@
 
         
 
-        if(firstname == "" || lastname == "" || user_type == null || dept_code == null || comp_code == null || email == "" || password == ""){
-	        	$('#missing-fields-modal').modal('show');
-	    		return;
+        if(firstname == "" || lastname == "" || user_type == null || dept_code == null || comp_code == null || email == "" || username == "" || password == ""){
+              	toastr.error("Some fields are missing.", "Error", "error");
+              	return;
         }
         else{
 	        $.ajax({
@@ -188,12 +199,9 @@
 	            },
 	            cache: false,
 	            success: function(response){
-	            	alert(email);
-	            	alert(username);
-	            	alert(password);
                     $('#form').trigger("reset");
 	            	$('#add-user-modal').modal('toggle');
-	            	$('#success-added-modal').modal('show');
+	            	swal("Success", "Successfully added", "success");
 	            },
 	            error: function(xhr, ajaxOptions, thrownError){
 	                alert(thrownError);
@@ -213,10 +221,44 @@
             id.push($(this).val())
         });
         if(id.length == 0){
-        	$('#no-select-modal').modal('show');
+          	toastr.info("Please select a user to be deactivated.", "Info", "info");
+          	return;
         }
         else{
-        	$('#confirmation-modal').modal('show');
+        	swal({
+		        title: "Information",
+		        text: "Would you like to activate selected company?",
+		        type: "info",
+		        showCancelButton: true,
+		        closeOnConfirm: false,
+		        confirmButtonText: "Yes"
+	      	}, function (data) {
+	      		if(data){
+			    	for(var i=0; i < id.length; i++ ){
+			            var ids = id[i];
+			            $.ajax({
+			              	type: "POST",
+			              	url: "../controls/admin/deactivate_user.php",
+			              	async: false,
+			              	data: {
+				              	ids:ids
+			              	},
+			              	success: function(response){
+								$('tbody tr td input[type="checkbox"').attr('checked', false); 
+								$('#checkboxall').attr('checked', false); 
+			                	swal("Success", "Successfully deactivated", "success");
+			                },
+			                error: function(xhr, ajaxOptions, thrownError){
+			                    alert(thrownError);
+			                }
+			            });
+			        }
+	      		}
+	      		else{
+	      			id = [];
+	      			return false;
+	      		}
+      		});
         }
     });
 </script>
@@ -229,58 +271,45 @@
             id.push($(this).val())
         });
         if(id.length == 0){
-        	$('#no-select-modal').modal('show');
+          	toastr.info("Please select a company to be activated.", "Info", "info");
+          	return;
         }
         else{
-        	$('#confirmation-modal').modal('show');
-        }
-    });
-</script>
-
-<script>
-    $('#confirm-yes-btn').click(function(){
-    	var isSuccess = false;
-    	if(isAction == "Deactivate"){
-	    	for(var i=0; i < id.length; i++ ){
-	            var ids = id[i];
-	            $.ajax({
-	              	type: "POST",
-	              	url: "../controls/admin/deactivate_user.php",
-	              	async: false,
-	              	data: {
-		              	ids:ids
-	              	},
-	              	success: function(response){
-	                	isSuccess = true;
-	                },
-	                error: function(xhr, ajaxOptions, thrownError){
-	                    alert(thrownError);
-	                }
-	            });
-	        }
-    	}
-    	else{
-	    	for(var i=0; i < id.length; i++ ){
-	            var ids = id[i];
-	            $.ajax({
-	              	type: "POST",
-	              	url: "../controls/admin/activate_user.php",
-	              	async: false,
-	              	data: {
-		              	ids:ids
-	              	},
-	              	success: function(response){
-	                	isSuccess = true;
-	                },
-	                error: function(xhr, ajaxOptions, thrownError){
-	                    alert(thrownError);
-	                }
-	            });
-	        }
-    	}
-        if(isSuccess){
-        	$('#confirmation-modal').modal('toggle');
-        	$('#success-modal').modal('show');
+        	
+        	swal({
+		        title: "Information",
+		        text: "Would you like to activate selected company?",
+		        type: "info",
+		        showCancelButton: true,
+		        closeOnConfirm: false,
+		        confirmButtonText: "Yes"
+	      	}, function (data) {
+	      		if(data){
+			    	for(var i=0; i < id.length; i++ ){
+			            var ids = id[i];
+			            $.ajax({
+			              	type: "POST",
+			              	url: "../controls/admin/activate_user.php",
+			              	async: false,
+			              	data: {
+				              	ids:ids
+			              	},
+			              	success: function(response){
+								$('tbody tr td input[type="checkbox"').attr('checked', false); 
+								$('#checkboxall').attr('checked', false); 
+			                	swal("Success", "Successfully activated", "success");
+			                },
+			                error: function(xhr, ajaxOptions, thrownError){
+			                    alert(thrownError);
+			                }
+			            });
+			        }
+	      		}
+	      		else{
+	      			id = [];
+	      			return false;
+	      		}
+      		});
         }
     });
 </script>
@@ -297,8 +326,6 @@
         {
             $('tbody tr td input[type="checkbox"]').each(function(){
                 $(this).prop('checked', false);
-                $('#edit').show();
-                $('#delete').show();
             });
         }
     });
@@ -316,9 +343,9 @@
 	    var username = $('#upd-username').val();
 	    var password = $('#new-pass').val();
 
-	    if(firstname == "" || lastname == "" || mi == "" || email == "" || username == ""){
-	    	$('#missing-fields-modal').modal('show');
-    		return;
+	    if(firstname == "" || lastname == "" || email == "" || username == ""){
+          	toastr.error("Some fields are missing.", "Error", "error");
+          	return;
 	    }
 	    else{
 	        $.ajax({ 
@@ -338,7 +365,7 @@
 	          	},
 	          	success: function(response){
 		            $('#user-detail-modal').modal('toggle');
-		            $('#rcp-update-modal').modal('show');
+                	swal("Success", "Successfully updated", "success");
 	          	},
 	          	error: function(xhr, ajaxOptions, thrownError){
 	              alert(thrownError);
@@ -361,12 +388,6 @@
       	$('#new-message').hide();
     }
 });
-</script>
-
-<script>
-	$('#confirmation-modal').on('hidden.bs.modal', function (e) {
-        id = [];
-	});
 </script>
 
 <script type="text/javascript">

@@ -18,10 +18,10 @@
                         echo '
                             <tr>
                                 <td>'.$row['dept_name'].'</td>
-                                <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+                                <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
                                 <td>'.$row['comp_name'].'</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary form-control show-prmy-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_prmy_id'].'" data-toggle="modal" data-target="#update-prmy-approver-modal"><i class="lnr lnr-pencil"></i> Edit</button>
+                                    <button type="button" class="btn btn-primary form-control show-prmy-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_prmy_id'].'" data-toggle="modal" data-target="#update-prmy-approver-modal"><i class="fa fa-pencil"></i> Update</button>
                                 </td>
                             </tr>
                         ';
@@ -32,10 +32,10 @@
                         echo '
                             <tr>
                                 <td>'.$row['dept_name'].'</td>
-                                <td>No primary approvers yet</td>
-                                <td>No primary approvers yet</td>
+                                <td>No primary approver yet</td>
+                                <td>No primary approver yet</td>
                                 <td>
-                                    <button type="button" class="btn btn-success form-control set-prmy-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-prmy-approver-modal" value="'.$row['approver_dept_code'].'"><i class="lnr lnr-question-circle"></i> Set</button>
+                                    <button type="button" class="btn btn-success form-control set-prmy-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-prmy-approver-modal" value="'.$row['approver_dept_code'].'"><i class="fa fa-user-plus"></i> Assign</button>
                                 </td>
                             </tr>
                         ';
@@ -64,10 +64,10 @@
                     echo '
                         <tr>
                             <td>'.$row['dept_name'].'</td>
-                            <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+                            <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
                             <td>'.$row['comp_name'].'</td>
                             <td>
-                                <button type="button" class="btn btn-primary form-control show-alt-prmy-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_alt_prmy_id'].'" data-toggle="modal" data-target="#update-alt-prmy-approver-modal"><i class="fa fa-pencil"></i> Edit</button>
+                                <button type="button" class="btn btn-primary form-control show-alt-prmy-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_alt_prmy_id'].'" data-toggle="modal" data-target="#update-alt-prmy-approver-modal"><i class="fa fa-pencil"></i> Update</button>
                             </td>
                         </tr>
                     ';
@@ -81,7 +81,7 @@
                             <td>No alternate primary approvers yet</td>
                             <td>No alternate primary approvers yet</td>
                             <td>
-                                <button type="button" class="btn btn-success form-control set-alt-prmy-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-alt-prmy-approver-modal" value="'.$row['approver_dept_code'].'"><i class="lnr lnr-question-circle"></i> Set</button>
+                                <button type="button" class="btn btn-success form-control set-alt-prmy-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-alt-prmy-approver-modal" value="'.$row['approver_dept_code'].'"><i class="fa fa-user-plus"></i> Assign</button>
                             </td>
                         </tr>
                     ';

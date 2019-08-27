@@ -143,7 +143,7 @@
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" id="date-span-btn" data-dismiss="modal" data-toggle="modal" data-target="#span-date-modal" disabled><i class="fa fa-calendar"></i> Add Date Span</button>
         <a href="javascript:;"  target="new" class="pdf_view" type="view" id="generate-href">
-          <button type="button" class="btn btn-success" disabled id="generate-btn"><i class="fa fa-file"></i> Generate Report</button>
+          <button type="button" class="btn btn-success" disabled id="generate-btn"><i class="fa fa-print"></i> Generate Report</button>
         </a>
       </div>
     </div>
@@ -183,7 +183,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#report-generation-modal">Go Back</button>
         <a href="#" id="generate-report-with-date-span" target="new" class="pdf_view" type="view"  >
-          <button type="button" class="btn btn-success" disabled id="generate-btn-with-date-span"><i class="fa fa-file"></i> Generate Report</button>
+          <button type="button" class="btn btn-success" disabled id="generate-btn-with-date-span"><i class="fa fa-print"></i> Generate Report</button>
         </a>
       </div>
     </div>

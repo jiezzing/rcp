@@ -187,7 +187,7 @@
 				                        extract($row);
 				                        echo '
 											<li>
-												<span class="icon pull-left"><i class="fa fa-user-circle fa-3x" style="color: #0081C2"></i></span>
+												<span class="icon pull-left"><i class="fa fa-file fa-3x" style="color: #0081C2"></i></span>
 												<p>RCP # <strong><a href="#" class="show-rcp-details" value="'.$row['rcp_no'].'">'.$row['rcp_no'].'</a></strong> has been created by '.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</a> of '.$row['comp_name'].'<span class="timestamp">Created at: '.$row['created_at'].'</span></p>
 											</li>
 				                        ';

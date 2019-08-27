@@ -59,20 +59,9 @@
 							                                <td>'.$row['dept_code'].'</td>
 							                                <td>'.$row['dept_name'].'</td>
 							                                <td class="text-center">'.$row['dept_no_of_rcp'].'</td>
-							                                ';
-						                                ?>
-						                                
-						                                <?php
-						                                	if($row['dept_status'] == 'AC')
-						                                		echo ' <td class="text-center">ACTIVE</td> ';
-						                                	else
-						                                		echo ' <td class="text-center">INACTIVE</td> ';
-						                                ?>
-
-						                                <?php
-							                                echo '
+							                                <td class="text-center">'.$row['dept_status'].'</td>
 							                                <td>
-							                                    <button type="button" class="btn btn-primary dept-details form-control" data-toggle="modal" data-target="#update-dept-details-modal" value="'.$row['dept_code'].'" style="margin-left: -8px"><i class="fa fa-pencil"></i> Edit</button> 
+							                                    <button type="button" class="btn btn-primary dept-details" data-toggle="modal" data-target="#update-dept-details-modal" value="'.$row['dept_code'].'" style="margin-left: -8px"><i class="fa fa-pencil"></i> Update</button> 
 							                                </td>
 							                            </tr>
 							                        ';
@@ -98,6 +87,17 @@
 
     <script>
 		var dept_code;
+	    toastr.options = {
+	        "closeButton": true,
+	        "debug": false,
+	        "progressBar": true,
+	        "positionClass": "toast-top-right",
+	        "preventDuplicates": true,
+	        "onclick": null,
+	        "showDuration": "300",
+	        "hideDuration": "1000",
+	        "timeOut": "5000"        
+      	}
         $(document).on('click', '.dept-details', function(e){
             e.preventDefault();
             dept_code = $(this).attr('value');
@@ -126,8 +126,8 @@
             var dept_name = $('#upd-dept-name').val();
 
             if(code == "" || dept_name == ""){
-	        	$('#missing-fields-modal').modal('show');
-	    		return;
+              	toastr.error("Some fields are missing.", "Error", "error");
+              	return;
 	        }
 	        else{
 	            $.ajax({
@@ -140,8 +140,8 @@
 		              dept_name: dept_name
 		            },
 		            success: function(response){
-		              $('#update-dept-details-modal').modal('toggle');
-		              $('#rcp-update-modal').modal('show');
+		              	$('#update-dept-details-modal').modal('toggle');
+	                	swal("Success", "Successfully updated", "success");
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);
@@ -163,8 +163,6 @@
 	        {
 	            $('tbody tr td input[type="checkbox"]').each(function(){
 	                $(this).prop('checked', false);
-	                $('#edit').show();
-	                $('#delete').show();
 	            });
 	        }
 	    });
@@ -178,10 +176,46 @@
 	            id.push($(this).val())
 	        });
 	        if(id.length == 0){
-	        	$('#no-select-modal').modal('show');
+              	toastr.info("Please select a department to be activated.", "Info", "info");
+              	return;
 	        }
 	        else{
-	        	$('#confirmation-modal').modal('show');
+	        	swal({
+			        title: "Information",
+			        text: "Would you like to activate selected department?",
+			        type: "info",
+			        showCancelButton: true,
+			        closeOnConfirm: false,
+			        confirmButtonText: "Yes"
+		      	}, function (data) {
+		      		if(data){
+		      			if(isAction == "Activate"){
+					    	for(var i=0; i < id.length; i++ ){
+					            var ids = id[i];
+					            $.ajax({
+					              	type: "POST",
+					              	url: "../controls/admin/activate_department.php",
+					              	async: false,
+					              	data: {
+						              	ids:ids
+					              	},
+					              	success: function(response){
+										$('tbody tr td input[type="checkbox"').attr('checked', false); 
+										$('#check-all').attr('checked', false); 
+					                	swal("Success", "Successfully activated", "success");
+					                },
+					                error: function(xhr, ajaxOptions, thrownError){
+					                    alert(thrownError);
+					                }
+					            });
+					        }
+				    	}
+		      		}
+		      		else{
+		      			id = [];
+		      			return false;
+		      		}
+		      	});
 	        }
 	    });
 	</script>
@@ -195,60 +229,46 @@
 	            id.push($(this).val())
 	        });
 	        if(id.length == 0){
-	        	$('#no-select-modal').modal('show');
+              	toastr.info("Please select a department to be deactivated.", "Info", "info");
+              	return;
 	        }
 	        else{
-	        	$('#confirmation-modal').modal('show');
-	        }
-	    });
-	</script>
-
-	<script>
-	    $('#confirm-yes-btn').click(function(){
-	    	var isSuccess = false;
-	    	if(isAction == "Deactivate"){
-		    	for(var i=0; i < id.length; i++ ){
-		            var ids = id[i];
-		            $.ajax({
-		              	type: "POST",
-		              	url: "../controls/admin/deactivate_department.php",
-		              	async: false,
-		              	data: {
-			              	ids:ids
-		              	},
-		              	success: function(response){
-		                	isSuccess = true;
-		                },
-		                error: function(xhr, ajaxOptions, thrownError){
-		                    alert(thrownError);
-		                }
-		            });
-		        }
-	    	}
-	    	else{
-		    	for(var i=0; i < id.length; i++ ){
-		            var ids = id[i];
-		            $.ajax({
-		              	type: "POST",
-		              	url: "../controls/admin/activate_department.php",
-		              	async: false,
-		              	data: {
-			              	ids:ids
-		              	},
-		              	success: function(response){
-		                	isSuccess = true;
-		                },
-		                error: function(xhr, ajaxOptions, thrownError){
-		                    alert(thrownError);
-		                }
-		            });
-		        }
-	    	}
-	        if(isSuccess){
-	        	$('#confirmation-modal').modal('toggle');
-	        	$('#rcp-update-modal').modal('show');
-				$('tbody tr td input[type="checkbox"').attr('checked', false); 
-				$('#check-all').attr('checked', false); 
+	        	swal({
+			        title: "Information",
+			        text: "Would you like to deactivate selected department?",
+			        type: "info",
+			        showCancelButton: true,
+			        closeOnConfirm: false,
+			        confirmButtonText: "Yes"
+		      	}, function (data) {
+		      		if(data){
+		      			if(isAction == "Deactivate"){
+					    	for(var i=0; i < id.length; i++ ){
+					            var ids = id[i];
+					            $.ajax({
+					              	type: "POST",
+					              	url: "../controls/admin/deactivate_department.php",
+					              	async: false,
+					              	data: {
+						              	ids:ids
+					              	},
+					              	success: function(response){
+									$('tbody tr td input[type="checkbox"').attr('checked', false); 
+									$('#check-all').attr('checked', false); 
+					                	swal("Success", "Successfully deactivated", "success");
+					                },
+					                error: function(xhr, ajaxOptions, thrownError){
+					                    alert(thrownError);
+					                }
+					            });
+					        }
+				    	}
+		      		}
+		      		else{
+		      			id = [];
+		      			return false;
+		      		}
+		      	});
 	        }
 	    });
 	</script>
@@ -259,8 +279,8 @@
 	    	var name = $('#new-dept-name').val();
 
 	    	if(code == "" || name == ""){
-	    		$('#missing-fields-modal').modal('show');
-	    		return;
+              	toastr.error("Some fields are missing.", "Error", "error");
+              	return;
 	    	}
 	    	else{
 		        $.ajax({
@@ -273,7 +293,7 @@
 		          	},
 		          	success: function(response){
 		            	$('#add-department-modal').modal('toggle');
-		            	$('#success-added-modal').modal('show');
+		            	swal("Success", "Successfully added", "success");
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);
@@ -281,12 +301,6 @@
 		        });
 	    	}
 	    });
-	</script>
-
-	<script>
-		$('#confirmation-modal').on('hidden.bs.modal', function (e) {
-	        id = [];
-		});
 	</script>
 
 	<script type="text/javascript">

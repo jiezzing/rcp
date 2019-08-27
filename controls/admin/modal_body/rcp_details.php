@@ -57,7 +57,7 @@
  	$sel->user_id = $apprvr_id;
 	$query = $sel->getApproversData();
 	while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-	  $apprvr_name = $row['user_firstname'] . " " . $row['user_middle_initial'] . ". " . $row['user_lastname'];
+	  $apprvr_name = $row['APP_NAME'];
 	}
  ?>
 
@@ -116,8 +116,8 @@
                               <thead>
                                 <tr>
                                   <th>Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct Code</th>
-                                  <th style="width: 15%">Amount</th>
+                                  <th style="width: 25%">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>

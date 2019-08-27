@@ -18,10 +18,10 @@
                         echo '
                             <tr>
                                 <td>'.$row['dept_name'].'</td>
-                                <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+                                <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
                                 <td>'.$row['comp_name'].'</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary form-control show-sec-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_sec_id'].'" data-toggle="modal" data-target="#update-sec-approver-modal"><i class="lnr lnr-pencil"></i> Edit</button>
+                                    <button type="button" class="btn btn-primary form-control show-sec-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_sec_id'].'" data-toggle="modal" data-target="#update-sec-approver-modal"><i class="fa fa-pencil"></i> Update</button>
                                 </td>
                             </tr>
                         ';
@@ -35,7 +35,7 @@
                                 <td>No secondary approvers yet</td>
                                 <td>No secondary approvers yet</td>
                                 <td>
-                                    <button type="button" class="btn btn-success form-control set-sec-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-sec-approver-modal" value="'.$row['approver_dept_code'].'"><i class="lnr lnr-question-circle"></i> Set</button>
+                                    <button type="button" class="btn btn-success form-control set-sec-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-sec-approver-modal" value="'.$row['approver_dept_code'].'"><i class="fa fa-user-plus"></i> Assign</button>
                                 </td>
                             </tr>
                         ';
@@ -64,10 +64,10 @@
                     echo '
                         <tr>
                             <td>'.$row['dept_name'].'</td>
-                            <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+                            <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
                             <td>'.$row['comp_name'].'</td>
                             <td>
-                                <button type="button" class="btn btn-primary form-control show-alt-sec-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_alt_sec_id'].'" data-toggle="modal" data-target="#update-alt-sec-approver-modal"><i class="lnr lnr-pencil"></i> Edit</button>
+                                <button type="button" class="btn btn-primary form-control show-alt-sec-details" style="margin-left: -8px" value="'.$row['approver_dept_code'].':'.$row['approver_alt_sec_id'].'" data-toggle="modal" data-target="#update-alt-sec-approver-modal"><i class="fa fa-pencil"></i> Update</button>
                             </td>
                         </tr>
                     ';
@@ -81,7 +81,7 @@
                             <td>No secondary approvers yet</td>
                             <td>No secondary approvers yet</td>
                             <td>
-                                <button type="button" class="btn btn-success form-control set-alt-sec-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-alt-sec-approver-modal" value="'.$row['approver_dept_code'].'"><i class="lnr lnr-question-circle"></i> Set</button>
+                                <button type="button" class="btn btn-success form-control set-alt-sec-approver" style="margin-left: -8px" data-toggle="modal" data-target="#set-alt-sec-approver-modal" value="'.$row['approver_dept_code'].'"><i class="fa fa-user-plus"></i> Assign</button>
                             </td>
                         </tr>
                     ';

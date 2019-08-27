@@ -254,7 +254,7 @@
               $select = $sel2->getAllPrmyApprover();
               while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
                 echo ' 
-                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
                 ';
               }
             ?>
@@ -284,7 +284,7 @@
               $select = $sel2->getAllAltPrmyApprover();
               while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
                 echo ' 
-                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
                 ';
               }
             ?>
@@ -330,7 +330,7 @@
               $select = $sel2->getAllSecApprover();
               while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
                 echo ' 
-                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
                 ';
               }
             ?>
@@ -376,7 +376,7 @@
               $select = $sel2->getAllAltSecApprover();
               while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
                 echo ' 
-                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</option> 
+                  <option value="'.$row['user_id'].'">'.$row['user_firstname'].' '.$row['user_lastname'].'</option> 
                 ';
               }
             ?>

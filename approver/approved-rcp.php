@@ -20,7 +20,7 @@
 			include '../approver/menu.php';
 		?>
 		<div class="main">
-			<div class="main-content"  style="width: 130%">
+			<div class="main-content"  style="width: 135%">
 				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
@@ -51,7 +51,7 @@
 												echo '
 													<tr>
 														<td>'.$row['rcp_no'].'</td>
-														<td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+														<td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
 														<td>'.$row['rcp_payee'].'</td>
 														<td>'.$row['comp_name'].'</td>
 														<td>'.$row['proj_name'].'</td>
@@ -59,11 +59,27 @@
 														<td>'.$row['rcp_date_approved'].'</td>
 						                                <td>
 													        <a href="../tcpdf/rcp_pdf.php?rcp_no='.$row['rcp_no'].'" target="new" class="pdf_view" type="view">
-													          <button type="button" class="btn btn-warning view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> View Print
+													          <button type="button" class="btn btn-warning view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> View / Print
 													          </button>
 													        </a>
-													        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> History
-												          	</button>
+												        ';
+												        ?>
+												        <?php
+												        	if($row['edited_by_app'] == "Yes"){
+											        			echo '
+															        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> History
+														          	</button>
+											        			';
+												        	}
+												        	else{
+												        		echo '
+															        <button type="button" class="btn btn-primary view-history" disabled><i class="fa fa-history" aria-hidden="true"></i> History
+														          	</button>
+											        			';
+												        	}
+												        ?>
+												        <?php
+												        echo '
 						                                </td>
 													</tr>
 												';

@@ -122,6 +122,23 @@
 			return $upd;
 		}
 
+		// Update first login attempt password
+        public function updateUserAccountDetailsUpdate(){
+			$query = "UPDATE user_account_file SET user_username='".$this->username."', user_email='".$this->email."' WHERE user_id=?";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$upd = $this->conn->prepare($query);
+
+			$upd->bindParam(1, $this->user_id);
+
+			if($upd->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $upd;
+		}
+
 		public function updatePrmyApprover(){
 			$query = "UPDATE approver_file SET approver_prmy_id='".$this->id."' WHERE approver_dept_code=?";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

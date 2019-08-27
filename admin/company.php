@@ -59,7 +59,7 @@
 								                            <td>'.$row['comp_name'].'</td>
 								                            <td>'.$row['comp_status'].'</td>
 								                            <td>
-								                                <button type="button" class="btn btn-primary form-control comp-details" style="margin-left: -8px" value="'.$row['comp_code'].'"><i class="lnr lnr-pencil"></i> Edit</button>
+								                                <button type="button" class="btn btn-primary form-control comp-details" style="margin-left: -8px" value="'.$row['comp_code'].'"><i class="fa fa-pencil"></i> Update</button>
 								                            </td>
 								                        </tr>
 								                    ';
@@ -86,6 +86,17 @@
 
 	<script>
 		var comp_code;
+	    toastr.options = {
+	        "closeButton": true,
+	        "debug": false,
+	        "progressBar": true,
+	        "positionClass": "toast-top-right",
+	        "preventDuplicates": true,
+	        "onclick": null,
+	        "showDuration": "300",
+	        "hideDuration": "1000",
+	        "timeOut": "5000"        
+      	}
         $(document).on('click', '.comp-details', function(e){
             e.preventDefault();
             comp_code = $(this).attr('value');
@@ -115,8 +126,8 @@
             var name = $('#upd-comp-name').val();
 
 	        if(code == "" || name == ""){
-	        	$('#missing-fields-modal').modal('show');
-	    		return;
+              	toastr.error("Some fields are missing.", "Error", "error");
+              	return;
 	        }
 	        else{
 	            $.ajax({
@@ -130,7 +141,7 @@
 	            },
 	            success: function(response){
 	              	$('#update-comp-details-modal').modal('toggle');
-	              	$('#rcp-update-modal').modal('show');
+	            	swal("Success", "Successfully updated", "success");
 	            },
 	            error: function(xhr, ajaxOptions, thrownError){
 	                alert(thrownError);
@@ -167,10 +178,44 @@
 	            id.push($(this).val())
 	        });
 	        if(id.length == 0){
-	        	$('#no-select-modal').modal('show');
+              	toastr.info("Please select a company to be activated.", "Info", "info");
+              	return;
 	        }
 	        else{
-	        	$('#confirmation-modal').modal('show');
+	        	swal({
+			        title: "Information",
+			        text: "Would you like to activate selected company?",
+			        type: "info",
+			        showCancelButton: true,
+			        closeOnConfirm: false,
+			        confirmButtonText: "Yes"
+		      	}, function (data) {
+		      		if(data){
+				    	for(var i=0; i < id.length; i++ ){
+				            var ids = id[i];
+				            $.ajax({
+				              	type: "POST",
+				              	url: "../controls/admin/activate_company.php",
+				              	async: false,
+				              	data: {
+					              	ids:ids
+				              	},
+				              	success: function(response){
+									$('tbody tr td input[type="checkbox"').attr('checked', false); 
+									$('#check-all').attr('checked', false); 
+				                	swal("Success", "Successfully activated", "success");
+				                },
+				                error: function(xhr, ajaxOptions, thrownError){
+				                    alert(thrownError);
+				                }
+				            });
+				        }
+		      		}
+		      		else{
+		      			id = [];
+		      			return false;
+		      		}
+	      		});
 	        }
 	    });
 	</script>
@@ -184,61 +229,45 @@
 	            id.push($(this).val())
 	        });
 	        if(id.length == 0){
-	        	$('#no-select-modal').modal('show');
+              	toastr.info("Please select a company to be deactivated.", "Info", "info");
+              	return;
 	        }
 	        else{
-	        	$('#confirmation-modal').modal('show');
-	        }
-	    });
-	</script>
-
-	<script>
-	    $('#confirm-yes-btn').click(function(){
-	    	var isSuccess = false;
-	    	if(isAction == "Deactivate"){
-		    	for(var i=0; i < id.length; i++ ){
-		            var ids = id[i];
-		            $.ajax({
-		              	type: "POST",
-		              	url: "../controls/admin/deactivate_company.php",
-		              	async: false,
-		              	data: {
-			              	ids:ids
-		              	},
-		              	success: function(response){
-		                	isSuccess = true;
-		                },
-		                error: function(xhr, ajaxOptions, thrownError){
-		                    alert(thrownError);
-		                }
-		            });
-		        }
-	    	}
-	    	else{
-		    	for(var i=0; i < id.length; i++ ){
-		            var ids = id[i];
-		            $.ajax({
-		              	type: "POST",
-		              	url: "../controls/admin/activate_company.php",
-		              	async: false,
-		              	data: {
-			              	ids:ids
-		              	},
-		              	success: function(response){
-		                	isSuccess = true;
-		                },
-		                error: function(xhr, ajaxOptions, thrownError){
-		                    alert(thrownError);
-		                }
-		            });
-		        }
-	    	}
-	        if(isSuccess){
-	        	$('#confirmation-modal').modal('toggle');
-	        	$('#rcp-update-modal').modal('show');
-	        	$('#rcp-update-modal').modal('show');
-				$('tbody tr td input[type="checkbox"').attr('checked', false); 
-				$('#check-all').attr('checked', false); 
+	        	
+	        	swal({
+			        title: "Information",
+			        text: "Would you like to activate selected company?",
+			        type: "info",
+			        showCancelButton: true,
+			        closeOnConfirm: false,
+			        confirmButtonText: "Yes"
+		      	}, function (data) {
+		      		if(data){
+				    	for(var i=0; i < id.length; i++ ){
+				            var ids = id[i];
+				            $.ajax({
+				              	type: "POST",
+				              	url: "../controls/admin/deactivate_company.php",
+				              	async: false,
+				              	data: {
+					              	ids:ids
+				              	},
+				              	success: function(response){
+									$('tbody tr td input[type="checkbox"').attr('checked', false); 
+									$('#check-all').attr('checked', false); 
+				                	swal("Success", "Successfully deactivated", "success");
+				                },
+				                error: function(xhr, ajaxOptions, thrownError){
+				                    alert(thrownError);
+				                }
+				            });
+				        }
+		      		}
+		      		else{
+		      			id = [];
+		      			return false;
+		      		}
+	      		});
 	        }
 	    });
 	</script>
@@ -249,8 +278,8 @@
 	    	var name = $('#new-comp-name').val();
 	        
 	        if(code == "" || name == ""){
-	        	$('#missing-fields-modal').modal('show');
-	    		return;
+              	toastr.error("Some fields are missing.", "Error", "error");
+              	return;
 	        }
 	        else{
 		        $.ajax({
@@ -263,7 +292,7 @@
 		          	},
 		          	success: function(response){
 		            	$('#add-company-modal').modal('toggle');
-		            	$('#success-added-modal').modal('show');
+		            	swal("Success", "Successfully added", "success");
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);
@@ -271,12 +300,6 @@
 		        });
 	        }
 	    });
-	</script>
-
-	<script>
-		$('#confirmation-modal').on('hidden.bs.modal', function (e) {
-	        id = [];
-		});
 	</script>
 
 	<script type="text/javascript">

@@ -99,7 +99,7 @@
 
 		// Get all users information
 		public function getAllUsers(){
-			$query = "SELECT CONCAT(user_lastname, ', ' ,user_firstname, ' ' ,user_middle_initial, '.') as name, user_file.user_id, user_comp_code, user_dept_code, user_type_file.user_type, user_file.user_status, comp_name, dept_name, user_username, user_email, user_password FROM user_file, company_file, department_file, user_type_file, user_account_file WHERE comp_code=user_comp_code AND dept_code=user_dept_code AND user_type_file.user_id=user_file.user_type AND user_file.user_id=user_account_file.user_id";
+			$query = "SELECT CONCAT(user_lastname, ', ' ,user_firstname) as name, user_file.user_id, user_comp_code, user_dept_code, user_type_file.user_type, user_file.user_status, comp_name, dept_name, user_username, user_email, user_password FROM user_file, company_file, department_file, user_type_file, user_account_file WHERE comp_code=user_comp_code AND dept_code=user_dept_code AND user_type_file.user_id=user_file.user_type AND user_file.user_id=user_account_file.user_id";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
