@@ -27,27 +27,6 @@
 		<?php
 			include '../navbar.php';
 			include '../requestor/menu.php';
-
-			$count->rcp_employee_id = $_SESSION['user_id'];
-			$pending_ctr = $count->countPendingRcp();
-			while ($row = $pending_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$pendingCtr = $row['TOTAL'];
-			}
-
-			$approved_ctr = $count->countApprovedRcp();
-			while ($row = $approved_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$approvedCtr = $row['TOTAL'];
-			}
-
-			$declined_ctr = $count->countDeclinedRcp();
-			while ($row = $declined_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$declinedCtr = $row['TOTAL'];
-			}
-
-			$total_rcp = $pendingCtr + $approvedCtr + $declinedCtr;
 		?>
 		<div class="main">
 			<div class="main-content">
@@ -61,46 +40,6 @@
 							  </ol>
 							</nav>
 							<h3 class="panel-title">Request for Check Payment Overview</h3>
-						</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-question"></i></span>
-										<p>
-											<span class="number"><?php echo $pendingCtr ?></span>
-											<span class="title">Pending</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-check"></i></span>
-										<p>
-											<span class="number"><?php echo $approvedCtr ?></span>
-											<span class="title">Approved</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-trash"></i></span>
-										<p>
-											<span class="number"><?php echo $declinedCtr ?></span>
-											<span class="title">Declined</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-bar-chart"></i></span>
-										<p>
-											<span class="number"><?php echo $total_rcp ?></span>
-											<span class="title">TOTAL</span>
-										</p>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -186,67 +125,35 @@
 	<?php
 		include '../scripts/js.php';
 		include '../requestor/create-rcp-modal-form.php';
-		include '../modal/error-modal.php';
-		include '../modal/success-modal.php';
 	?>
-
-    <script>
-    	var  email;
-    	function approverChange() {
-    		var apprvr_id = $('#approver').val();
-    		$.ajax({
-	          	type: "POST",
-	          	url: "../controls/univ/cls_get_approvers_data.php",
-	          	data: {
-	          		user_id:apprvr_id
-	          	},
-	          	dataType:'json',
-	          	cache: false,
-
-	          	success: function(result){
-	            	email = result[1];
-	          	},
-	          	error: function(xhr, ajaxOptions, thrownError){
-	            	alert(thrownError);
-	          	}
-	        }); 
-    	}
-    </script>
-
-    <script>
-    	var new_email;
-    	function editApprover() {
-    		var apprvr_id = $('#show-approver').val();
-    		$.ajax({
-	          	type: "POST",
-	          	url: "../controls/univ/cls_get_approvers_data.php",
-	          	data: {
-	          		user_id:apprvr_id
-	          	},
-	          	dataType:'json',
-	          	cache: false,
-
-	          	success: function(result){
-	            	new_email = result[1];
-	          	},
-	          	error: function(xhr, ajaxOptions, thrownError){
-	            	alert(thrownError);
-	          	}
-	        }); 
-    	}
-    </script>
-
+	<!-- Global variables -->
 	<script>
-		var rcp_no;
 		var rcp_id;
 		var prev_apprvr_id;
 		var rush;
 		var current_appr_email;
+	  	var rcp_no;
+	  	toastr.options = {
+	      "closeButton": true,
+	      "debug": false,
+	      "progressBar": true,
+	      "positionClass": "toast-top-right",
+	      "preventDuplicates": true,
+	      "onclick": null,
+	      "showDuration": "300",
+	      "hideDuration": "1000",
+	      "timeOut": "5000"        
+	    }
+    </script>
+	<!-- End -->
+
+    <!-- Get RCP Details -->
+	<script>
         $(document).on('click', '.show-more-details', function(e){
             e.preventDefault();
 			var split = $(this).attr('value');
     		var mValues = split.split(":");   
-            rcp_no = mValues[0]
+            rcp_no = mValues[0];
             prev_apprvr_id = mValues[1];
             rush = mValues[2];
             id = mValues[3];
@@ -271,9 +178,48 @@
           });
         });
     </script>
+    <!-- End -->
 
+    <!-- Add new row in the particulars table -->
 	<script>
-		function saveChangesBtnClick() {
+	  $('#rcp-add-row').click(function(event) {
+	    event.preventDefault();
+	    var  tbl_row = $(document).find('#create-rcp-table').find('tr');
+	    var tbl = '';
+	    var i = $('td[name=rcp-td1]').length;
+	    if(i == 8){
+	        return;
+	    }
+	    else{
+	      if(i == 7){
+	          $('#rcp-no-of-rows').css("color", "red");
+	      }
+	      $('#rcp-no-of-rows').text((i + 1) + " out of 8 rows /");
+	      if((i + 1) % 2 != 0){
+	        tbl += '<tr role="row" class="odd">';
+	          tbl += '<td class="particulars" contenteditable="true" name="rcp-td1" id="td1'+i+'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>';
+	          tbl += '<td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'+i+'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>';
+	          tbl += '<td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'+i+'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>';
+	        tbl += '</tr>';
+	      }
+	      else{
+	        tbl += '<tr role="row" class="even">';
+	          tbl += '<td class="particulars" contenteditable="true" name="rcp-td1" id="td1'+i+'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>';
+	          tbl += '<td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'+i+'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>';
+	          tbl += '<td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'+i+'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>';
+	        tbl += '</tr>';
+	      }
+	      tbl_row.last().after(tbl);
+	      $(document).find('#create-rcp-table').find('tr').last().find('.particulars').focus();
+	      forTableRowMethod();
+	    }
+	  });
+	</script>
+	<!-- End -->
+
+	<!-- Update of RCP data -->
+	<script>
+		$('#save-changes-btn').click(function (){
 			var rcp_no = $('#rcp-no').val();
 			var new_apprvr_id = $('#show-approver').val();
 			var comp_code = $('#company').val();
@@ -283,7 +229,7 @@
 			var total_amount = $('#show_total_amount').val();
 		    var currencyNoCommas = total_amount.replace(/\,/g,'');
 		    currencyNoCommas = Number(currencyNoCommas);
-			var due_date = $('#mDatePicker2').val();
+			var due_date = $('#mDate-needed').val();
 			var justification = $('#justification').val();
 			var isSuccess = false;
 			var table_length = $('td[name=show-td1]').length;
@@ -381,9 +327,20 @@
 			                    },
 			                    complete: function(){
 			                    	setTimeout(function () {
-                  						swal(rcp_no, "has been successfully updated", "success");
-									}, 2000);
-									console.log(current_appr_email);
+						                swal({
+						                  title: rcp_no,
+						                  text: "has been successfully updated",
+						                  type: "success",
+						                  closeOnConfirm: false,
+						                  confirmButtonText: "Okay",
+						                  allowEscapeKey: false
+						                }, function (data) {
+						                  if(data){
+						                    location.reload();
+						                  }
+						                });
+					              	}, 2000);
+									console.log("Current approver: " + current_appr_email);
 			                    },
 			                    success: function(response){
 			                      	// Send an email notification to approver
@@ -401,7 +358,7 @@
 			                          	},
 			                          	cache: false,
 			                          	success: function(response){
-											console.log(new_email);
+											console.log("New approver: " + new_email);
 			                          	},
 			                          	error: function(xhr, ajaxOptions, thrownError){
 			                              alert(thrownError);
@@ -544,7 +501,18 @@
 		            },
 		            complete: function() {
     					$("#rcp-modal-details").modal('toggle');
-    					swal(rcp_no, "has been successfully updated", "success");
+		                swal({
+		                  title: rcp_no,
+		                  text: "has been successfully updated",
+		                  type: "success",
+		                  closeOnConfirm: false,
+		                  confirmButtonText: "Okay",
+		                  allowEscapeKey: false
+		                }, function (data) {
+		                  if(data){
+		                    location.reload();
+		                  }
+		                });
 
 						console.log(current_appr_email);
 		            },
@@ -642,18 +610,31 @@
 	            }); // End of updating RCP File
 				}
 			}
-		}
-	</script>
-
-
-	<script>
-		$(document).ready(function (){
-			$('#dummy').click(function () {
-		        $('#rcp-fillup-modal').scroll(function (){
-		          $('#mDatePicker').datepicker('place');
-	        	});
-			});
 		});
 	</script>
+	<!-- End -->
+
+	<!-- Other functios -->
+	<script>
+		forTableRowMethod();
+		$('#mDatePicker').click(function (){
+    		$('#rcp-fillup-modal').scroll(function (){
+		      $('#mDatePicker').datepicker('place');
+		    });
+		});
+
+		$('#rcp-fillup-modal').on('hidden.bs.modal', function (e) {
+		  	$('#rcp-fillup-modal').scroll(function (){
+		      	$('#mDatePicker').datepicker('place');
+		    });
+		});
+		
+		$('#rcp-modal-details').on('hidden.bs.modal', function (e) {
+		  	$('#rcp-modal-details').scroll(function (){
+		      	$('#date-needed').datepicker('place');
+		    });
+		});
+	</script>
+	<!-- End -->
 </body>
 </html>

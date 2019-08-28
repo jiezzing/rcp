@@ -18,7 +18,7 @@
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
                     <select class="form-control" id="department">
-                      <option selected disabled>Select Department </option>
+                      <option selected disabled>SELECT DEPARTMENT</option>
                       <?php
                         $select = $sel2->getAllDepartment();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -30,15 +30,15 @@
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
-                    <select class="form-control" id="approver" onchange="approverChange()">
-                      <option selected disabled>Select Department First</option>
+                    <select class="form-control" id="approver">
+                      <option selected disabled>SELECT DEPARTMENT FIRST</option>
                     </select>
                 </div>
 
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label>
                     <select class="form-control" id="project">
-                      <option selected disabled>Select Project</option>
+                      <option selected disabled>SELECT PROJECT</option>
                       <?php
                         $select = $sel2->getAllProject();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -56,7 +56,7 @@
                 <div class="col-md-6">
                   <label for="company" class=" form-control-label tooltiptext">COMPANY</label>
                   <select class="form-control" id="company">
-                    <option selected disabled>Select Company</option>
+                    <option selected disabled>SELECT COMPANY</option>
                     <?php
                       $select = $sel2->getAllCompany();
                       while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -170,138 +170,12 @@
   </div>
 </div>
 
+
+
+<!-- Department change -->
 <script>
-  $('#rcp-add-row').click(function(event) {
-    event.preventDefault();
-    var  tbl_row = $(document).find('#create-rcp-table').find('tr');
-    var tbl = '';
-    var i = $('td[name=rcp-td1]').length;
-    if(i == 8){
-        return;
-    }
-    else{
-      if(i == 7){
-          $('#rcp-no-of-rows').css("color", "red");
-      }
-      $('#rcp-no-of-rows').text((i + 1) + " out of 8 rows /");
-      if((i + 1) % 2 != 0){
-        tbl += '<tr role="row" class="odd">';
-          tbl += '<td class="particulars" contenteditable="true" name="rcp-td1" id="td1'+i+'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>';
-          tbl += '<td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'+i+'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>';
-          tbl += '<td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'+i+'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>';
-        tbl += '</tr>';
-      }
-      else{
-        tbl += '<tr role="row" class="even">';
-          tbl += '<td class="particulars" contenteditable="true" name="rcp-td1" id="td1'+i+'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>';
-          tbl += '<td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'+i+'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>';
-          tbl += '<td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'+i+'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>';
-        tbl += '</tr>';
-      }
-      tbl_row.last().after(tbl);
-      $(document).find('#create-rcp-table').find('tr').last().find('.particulars').focus();
-      forTableRowMethod();
-    }
-  });
-</script>
-
-<script>
-  function forTableRowMethod(){
-
-    $(document).ready(function() {
-         $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-            if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
-        });
-
-        $(".particulars").on("keyup",function () {
-          var sum = 0.0;
-          var table_length = $('td[name=rcp-td1]').length;
-          for(var i = 0; i < table_length; i++){
-              if($("#td1"+i+"").text() == "" && $("#td2"+i+"").text() == "" && $("#td3"+i+"").text() == ""){
-                continue;
-            }
-            else{
-              if($("#td1"+i+"").text() != "" && $("#td2"+i+"").text() != "" && $("#td3"+i+"").text() != ""){
-                var amount = $("#td3"+i+"").text();
-                currencyRemoveCommas(amount);
-                sum += currencyRemoveCommas(amount);
-              }
-            }
-          }
-            $("#total_amount").val(currencyWithCommas(sum));
-        });
-
-        $(".ref_code").on("keyup",function () {
-          var sum = 0.0;
-          var table_length = $('td[name=rcp-td1]').length;
-          for(var i = 0; i < table_length; i++){
-              if($("#td1"+i+"").text() == "" && $("#td2"+i+"").text() == "" && $("#td3"+i+"").text() == ""){
-              continue;
-            }
-          else{
-              if($("#td1"+i+"").text() != "" && $("#td2"+i+"").text() != "" && $("#td3"+i+"").text() != ""){
-                var amount = $("#td3"+i+"").text();
-                currencyRemoveCommas(amount);
-                sum += currencyRemoveCommas(amount);
-              }
-            }
-          }
-            $("#total_amount").val(currencyWithCommas(sum));
-        });
-
-        $(".amount").on("keyup",function () {
-        var sum = 0.0;
-        var table_length = $('td[name=rcp-td1]').length;
-        for(var i = 0; i < table_length; i++){
-            if($("#td1"+i+"").text() == "" && $("#td2"+i+"").text() == "" && $("#td3"+i+"").text() == ""){
-            continue;
-          }
-          else{
-            if($("#td1"+i+"").text() != "" && $("#td2"+i+"").text() != "" && $("#td3"+i+"").text() != ""){
-                var amount = $("#td3"+i+"").text();
-                currencyRemoveCommas(amount);
-                sum += currencyRemoveCommas(amount);
-              }
-            }
-        }
-          $("#total_amount").val(currencyWithCommas(sum));
-      });
-
-      $("td[contenteditable]").keypress(function (evt) {
-
-      var keycode = evt.charCode || evt.keyCode;
-      if (keycode  == 13) { //Enter key's keycode
-        return false;
-      }
-    });
-  });
-}
-</script>
-
-<script>
-  $(document).ready(function() {
-    forTableRowMethod();
-  });
-</script>
-
-<script>
-  var email;
   var total_rcp;
   var dept_code;
-  var rcp_no;
-  toastr.options = {
-      "closeButton": true,
-      "debug": false,
-      "progressBar": true,
-      "positionClass": "toast-top-right",
-      "preventDuplicates": true,
-      "onclick": null,
-      "showDuration": "300",
-      "hideDuration": "1000",
-      "timeOut": "5000"        
-    }
   $('#department').change(function () {
     var data = $('#department').val();
     var id = data.split(':');
@@ -310,136 +184,58 @@
     var alt_prmy_id = id[2];
     var sec_id = id[3];
     var alt_sec_id = id[4];
-    total_rcp = id[5];
+    total_rcp = parseInt(id[5]) + 1;
     var hasApprover = false;
 
-    $("#approver").empty();
-    // Get Primary Approvers Data
-      if(prmy_id == 0){
-        $("<option/>",{value:0,text:'NO PRIMARY APPROVER YET'}).appendTo("#approver");
-        $('option[value=0]').prop('disabled', true);
-      }
-      else{
-        $.ajax({
-          type: "POST",
-          url: "../controls/univ/cls_get_approvers_data.php",
-          async: false,
-          data: {
-            user_id:prmy_id
-          },
-          dataType:'json',
-          cache: false,
-
-          success: function(result){
-            hasApprover = true;
-            var  prmy_name = result[0] + " - PRIMARY";
-            email = result[1];
-            $("<option/>",{value:prmy_id,text:prmy_name}).appendTo("#approver");
-          },
-          error: function(xhr, ajaxOptions, thrownError){
-            alert(thrownError);
+      // $("#approver").empty();
+      $.ajax({
+        type: "POST",
+        url: "../controls/univ/cls_get_approvers_data.php",
+        async: false,
+        data: {
+          prmy_id: prmy_id,
+          alt_prmy_id: alt_prmy_id,
+          sec_id: sec_id,
+          alt_sec_id: alt_sec_id
+        },
+        cache: false,
+        success: function(html){
+          hasApprover = true;
+          $('#approver').html(html);
+          $('#approver option[name="0"]').prop("disabled", true);
+          var prop = $('#approver option[name="0"]');
+          if(prop.length == 4){
+            toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
           }
-        }); 
-      }
-
-      // Get Alternate Primary Approvers Data
-      if(alt_prmy_id == 0){
-        $("<option/>",{value:0,text:'NO ALTERNATE PRIMARY APPROVER YET'}).appendTo("#approver");
-        $('option[value=0]').prop('disabled', true);
-      }
-      else{
-        $.ajax({
-          type: "POST",
-          url: "../controls/univ/cls_get_approvers_data.php",
-          async: false,
-          data: {
-            user_id:alt_prmy_id
-          },
-          dataType:'json',
-          cache: false,
-
-          success: function(result){
-            hasApprover = true;
-            var  alt_prmy_name = result[0] + " - ALTERNATE PRIMARY";
-            email = result[1];
-            $("<option/>",{value:alt_prmy_id,text:alt_prmy_name}).appendTo("#approver");
-          },
-          error: function(xhr, ajaxOptions, thrownError){
-            alert(thrownError);
-          }
-        }); 
-      }
-
-      // Get Secondary Approvers Data
-      if(sec_id == 0){
-        $("<option/>",{value:0,text:'NO SECONDARY APPROVER YET'}).appendTo("#approver");
-        $('option[value=0]').prop('disabled', true);
-      }
-      else{
-        $.ajax({
-          type: "POST",
-          url: "../controls/univ/cls_get_approvers_data.php",
-          async: false,
-          data: {
-            user_id:sec_id
-          },
-          dataType:'json',
-          cache: false,
-
-          success: function(result){
-            hasApprover = true;
-            var  sec_name = result[0] + " - SECONDARY";
-            email = result[1];
-            $("<option/>",{value:sec_id,text:sec_name}).appendTo("#approver");
-          },
-          error: function(xhr, ajaxOptions, thrownError){
-            alert(thrownError);
-          }
-        }); 
-      }
-
-      // Get alternate secondary approvers data
-      if(alt_sec_id == 0){
-        $("<option/>",{value:0,text:'NO ALTERNATE SECONDARY APPROVER YET'}).appendTo("#approver");
-        $('option[value=0]').prop('disabled', true);
-      }
-      else{
-        $.ajax({
-          type: "POST",
-          url: "../controls/univ/cls_get_approvers_data.php",
-          async: false,
-          data: {
-            user_id:alt_sec_id
-          },
-          dataType:'json',
-          cache: false,
-
-          success: function(result){
-            hasApprover = true;
-            var  alt_sec_name = result[0] + " - ALTERNATE SECONDARY";
-            email = result[1];
-            $("<option/>",{value:alt_sec_id,text:alt_sec_name}).appendTo("#approver");
-          },
-          error: function(xhr, ajaxOptions, thrownError){
-            alert(thrownError);
-          }
-        }); 
-      }
-      if(!hasApprover){
-        toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
-        document.getElementById("send-rcp-btn").disabled = true;
-      }
-      else{
-        document.getElementById("send-rcp-btn").disabled = false;
-      }
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+          alert(thrownError);
+        }
+      }); 
   });
 </script>
+<!-- End -->
 
+<!-- Create RCP Approver -->
+  <script>
+    var apprvr_id;
+    var email;
+    $('#approver').change(function() {
+      var data = $('#approver').val();
+      var values = data.split(':');
+      apprvr_id = values[0];
+      email = values[1];
+    });
+  </script>
+<!-- End -->
+
+
+
+<!-- Send of RCP -->
 <script>
     $('#send-rcp-btn').click(function () {
       var date_needed;
       var user_id = <?php echo $_SESSION['user_id']; ?>;
-      var apprvr_id = $('#approver').val();
       var comp_code = $('#company').val();
       var proj_code = $('#project').val();
       var payee = $('#payee').val();
@@ -557,12 +353,20 @@
 
             },
             complete: function(){
-              $('#form').trigger("reset");
-              $('td').empty();
-              $('#load-rcp').load("../controls/requestor/load_rcp.php",{
-                user_id: user_id
-              });
-              swal(rcp_no, "has been successfully sent", "success");
+              setTimeout(function () {
+                swal({
+                  title: rcp_no,
+                  text: "has been successfully sent",
+                  type: "success",
+                  closeOnConfirm: false,
+                  confirmButtonText: "Okay",
+                  allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+                });
+              }, 2000);
               console.log("Send to: " + email);
             },
             success: function(response){
@@ -667,3 +471,4 @@
       });
     });
 </script>
+<!-- End -->

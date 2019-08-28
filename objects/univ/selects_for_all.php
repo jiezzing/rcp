@@ -290,7 +290,7 @@
 
 		// Get approvers data
 		public function getApproversData(){
-			$query = "SELECT CONCAT(user_firstname, ' ' ,user_lastname) as APP_NAME, user_email FROM user_file, user_account_file WHERE user_file.user_id=user_account_file.user_id AND user_file.user_id=?";
+			$query = "SELECT CONCAT(user_firstname, ' ' ,user_lastname) as APP_NAME, user_email, user_file.user_id FROM user_file, user_account_file WHERE user_file.user_id=user_account_file.user_id AND user_file.user_id=?";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

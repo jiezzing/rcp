@@ -146,7 +146,7 @@
         <a href="#" id="hrefBtn" target="new" class="pdf_view" type="view">
           <button type="button" class="btn btn-warning" onclick="printBtnClick()"><i class="fa fa-print" aria-hidden="true"></i> View Print</button>
         </a>
-        <button type="button" class="btn btn-primary" id="save-changes-btn" disabled=""><i class="fa fa-floppy-o" aria-hidden="true"></i> Save Changes</button>
+        <button type="button" class="btn btn-primary" id="save-changes-btn" disabled=""><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
         <button type="button" class="btn btn-danger" id="decline-btn"><i class="fa fa-trash" aria-hidden="true"></i> Decline</button>
         <button type="button" class="btn btn-success" id="approve-btn"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Approve</button>
       </div>

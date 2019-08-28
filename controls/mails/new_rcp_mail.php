@@ -16,7 +16,7 @@
                                   <h3 style='padding: 0; margin: 0;'>Notice: </h3>
                               </div>
                               <div style='border: 1px solid #e1e1e1; padding: 5px'>    
-                                  Hi, <br><br> You have a new pending RCP request for approval with an RCP No. of <strong>".$rcp_no."</strong> from ".$requestor_name.".<br><br>
+                                  Hi, <br><br> You have a new pending RCP for approval with an RCP No. of <strong>".$rcp_no."</strong> from ".$requestor_name.".<br><br>
                                   Thank you. <br><br> Best Regards, <br>System Administrator
                               </div>
                               <br/>
@@ -36,7 +36,7 @@
                                   <h3 style='padding: 0; margin: 0;'>Notice: Rush RCP Request for Approval</h3>
                               </div>
                               <div style='border: 1px solid #e1e1e1; padding: 5px'>    
-                                  Hi, <br><br> You have a new pending RCP request for approval with an RCP No. of <strong>".$rcp_no."</strong> from ".$requestor_name.".<br><br>
+                                  Hi, <br><br> You have a new pending RCP for approval with an RCP No. of <strong>".$rcp_no."</strong> from ".$requestor_name.".<br><br>
                                   Date Needed: ".$due_date."<br>
                                   Justification: ".$justification."<br><br>
                                   Thank you. <br><br> Best Regards, <br>System Administrator

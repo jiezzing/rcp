@@ -8,7 +8,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save-changes-btn" onclick="saveChangesBtnClick()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save Changes</button>
+        <button type="button" class="btn btn-primary" id="save-changes-btn"><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
       </div>
     </div>
   </div>

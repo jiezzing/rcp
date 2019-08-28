@@ -20,7 +20,7 @@
 			include '../approver/menu.php';
 		?>
 		<div class="main">
-			<div class="main-content"  style="width: 135%">
+			<div class="main-content"  style="width: 150%">
 				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
@@ -65,18 +65,21 @@
 												        ';
 												        ?>
 												        <?php
-												        	if($row['edited_by_app'] == "Yes"){
-											        			echo '
-															        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> History
-														          	</button>
-											        			';
-												        	}
-												        	else{
-												        		echo '
-															        <button type="button" class="btn btn-primary view-history" disabled><i class="fa fa-history" aria-hidden="true"></i> History
-														          	</button>
-											        			';
-												        	}
+												        	if($row['edited_by_app'] == 'Yes'){
+												          			echo '
+												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-copy"></i> Original Details</button>
+																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
+															          	</button>
+												          			';	
+												          		}
+												          		else{
+												          			echo '
+												          				<button type="button" class="btn btn-danger" disabled><i class="fa fa-copy"></i> Original Details</button>
+																        <button type="button" class="btn btn-primary" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
+															          	</button>
+															          	
+												          			';	
+												          		}
 												        ?>
 												        <?php
 												        echo '
@@ -119,6 +122,31 @@
               {
                 $("#rcp-history-modal-body").html(html);
                 $("#rcp-history-modal").modal('show');
+              },
+              error: function(xhr, ajaxOptions, thrownError)
+              {
+                  alert(thrownError);
+              }
+          });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).on('click', '.show-old-details', function(e){
+            e.preventDefault();
+			var rcp_no = $(this).attr('value');
+
+            $.ajax({
+              type: "POST",
+              url: "../controls/requestor/modal_body/show_old_data.php",
+              data: {
+              	rcp_no:rcp_no
+              },
+              cache: false,
+              success: function(html)
+              {
+                $("#show-rcp-details-body").html(html);
+                $("#show-rcp-details").modal('show');
               },
               error: function(xhr, ajaxOptions, thrownError)
               {

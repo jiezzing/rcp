@@ -36,7 +36,7 @@
       echo '
         <tr>
           <td class="text-center">'.$row['rcp_no'].'</td>
-          <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+          <td>'.$row['user_lastname'].', '.$row['user_firstname'].'</td>
           <td>'.$row['rcp_payee'].'</td>
           <td>'.$row['comp_name'].'</td>
           <td>'.$row['proj_name'].'</td>

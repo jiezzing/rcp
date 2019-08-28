@@ -20,7 +20,7 @@
 			include '../requestor/menu.php';
 		?>
 		<div class="main">
-			<div class="main-content" style="width: 130%">
+			<div class="main-content" style="width: 150%">
 				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
@@ -132,7 +132,7 @@
         });
     </script>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
         $(document).on('click', '.show-old-details', function(e){
             e.preventDefault();
 			var rcp_no = $(this).attr('value');

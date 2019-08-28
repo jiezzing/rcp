@@ -67,7 +67,7 @@
 
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
-                  <select class="form-control" id="show-approver" onchange="editApprover()">
+                  <select class="form-control" id="show-approver">
                     ';
                 ?>
                     <?php
@@ -313,13 +313,13 @@
         <div class="row" style="font-size: 14px">
           <div class="col-md-12">
             <div class="col-md-6">
-                  <label class=" form-control-label">Date needed:</label>
-                  	<div class="input-group date" id="mDatePicker">
-                      	<div class="input-group-addon">
-                       		<span class="fa fa-calendar "></span>
-                      	</div>
-                      	<input type="text" class="form-control col-md-6" id="mDatePicker2" readonly value="'.date("m/d/Y", strtotime($rcp_due_date)).'" style="background-color: white;">
-                    </div>
+              	<label class=" form-control-label">Date needed:</label>
+              	<div class="input-group date" id="date-needed">
+                  	<div class="input-group-addon">
+                   		<span class="fa fa-calendar "></span>
+                  	</div>
+                  	<input type="text" class="form-control col-md-6" id="mDate-needed" readonly value="'.date("m/d/Y", strtotime($rcp_due_date)).'" style="background-color: white;">
+                </div>
             </div>
             <div class="col-md-12">
           		<br>
@@ -331,6 +331,17 @@
     ';
   }
 ?>
+<script>
+	$(document).ready(function (){
+    	forTableRowMethod2();
+        $('#date-needed').datepicker();
+		$('#date-needed').click(function (){
+    		$('#rcp-modal-details').scroll(function (){
+		      $('#date-needed').datepicker('place');
+		    });
+		});
+	});
+</script>
 
 <script>
   $('#show-add-row').click(function(event) {
@@ -364,93 +375,34 @@
       }
       tbl_row.last().after(tbl);
       $(document).find('#show-rcp-details-table').find('tr').last().find('.show-particulars').focus();
-      forTableRowMethod();
+      forTableRowMethod2();
     }
   });
 </script>
 
-<script>
-  	function forTableRowMethod(){
-      	$(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-	            if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-	                event.preventDefault();
+	<!-- Show RCP approver -->
+	<script>
+		var new_email;
+	  $('#show-approver').change(function(){
+	  	alert();
+	    var apprvr_id = $('#show-approver').val();
+	    $.ajax({
+	            type: "POST",
+	            url: "../controls/univ/get_approvers_data.php",
+	            data: {
+	              user_id:apprvr_id
+	            },
+	            dataType:'json',
+	            cache: false,
+
+	            success: function(result){
+	              new_email = result[1];
+	              alert(new_email);
+	            },
+	            error: function(xhr, ajaxOptions, thrownError){
+	              alert(thrownError);
 	            }
-	        });
-
-	        $(".show-particulars").on("keyup",function () {
-	          var sum_total = 0.0;
-	          var table_length = $('td[name=show-td1]').length;
-	          for(var i = 0; i < table_length; i++){
-	            if($("#show-td1"+i+"").text() == "" && $("#show-td2"+i+"").text() == "" && $("#show-td3"+i+"").text() == ""){
-	              continue;
-	            }
-	            else{
-	              if($("#show-td1"+i+"").text() != "" && $("#show-td2"+i+"").text() != "" && $("#show-td3"+i+"").text() != ""){
-	                  var amount = $("#show-td3"+i+"").text();
-	                  currencyRemoveCommas(amount);
-	                  sum_total += currencyRemoveCommas(amount);
-	              }
-	            }
-	          }
-        		$("#show_total_amount").val(currencyWithCommas(sum_total));
-	        });
-
-	        $(".show-ref_code").on("keyup",function () {
-	          var sum_total = 0.0;
-	          var table_length = $('td[name=show-td1]').length;
-	          for(var i = 0; i < table_length; i++){
-	            if($("#show-td1"+i+"").text() == "" && $("#show-td2"+i+"").text() == "" && $("#show-td3"+i+"").text() == ""){
-	              continue;
-	            }
-	            else{
-	              if($("#show-td1"+i+"").text() != "" && $("#show-td2"+i+"").text() != "" && $("#show-td3"+i+"").text() != ""){
-	                var amount = $("#show-td3"+i+"").text();
-	                currencyRemoveCommas(amount);
-	                sum_total += currencyRemoveCommas(amount);
-	              }
-	            }
-	          }
-	            $("#show_total_amount").val(currencyWithCommas(sum_total));
-	        });
-
-	        $(".show-amount").on("keyup",function () {
-	        var sum_total = 0.0;
-	        var table_length = $('td[name=show-td1]').length;
-	        for(var i = 0; i < table_length; i++){
-	            if($("#show-td1"+i+"").text() == "" && $("#show-td2"+i+"").text() == "" && $("#show-td3"+i+"").text() == ""){
-	            continue;
-	          }
-	          else{
-	            if($("#show-td1"+i+"").text() != "" && $("#show-td2"+i+"").text() != "" && $("#show-td3"+i+"").text() != ""){
-	                var amount = $("#show-td3"+i+"").text();
-	                  currencyRemoveCommas(amount);
-	                  sum_total += currencyRemoveCommas(amount);
-	              }
-	            }
-	        }
-	          $("#show_total_amount").val(currencyWithCommas(sum_total));
-	      });
-
-	      $("td[contenteditable]").keypress(function (evt) {
-
-	      var keycode = evt.charCode || evt.keyCode;
-	        if (keycode  == 13) { //Enter key's keycode
-	          return false;
-	        }
-      	});
-  	}
-</script>
-
-<script>
-    forTableRowMethod();
-</script>
-
-
-<script>
-	$(document).ready(function (){
-        $('#rcp-modal-details').scroll(function (){
-        	$('#mDatepicker_v2').datepicker('place');
-          	$('#mDatePicker').datepicker();
-		});
-	});
-</script>
+	        }); 
+	  });
+	</script>
+	<!-- End -->

@@ -27,31 +27,6 @@
 		<?php
 			include '../navbar.php';
 			include '../approver/menu.php';
-
-			$count->rcp_approver_id = $_SESSION['user_id'];
-			$pending_ctr = $count->countPendingRcp();
-			while ($row = $pending_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$pendingCtr = $row['TOTAL'];
-			}
-
-			$approved_ctr = $count->countApprovedRcp();
-			while ($row = $approved_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$approvedCtr = $row['TOTAL'];
-			}
-
-			$declined_ctr = $count->countDeclinedRcp();
-			while ($row = $declined_ctr->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$declinedCtr = $row['TOTAL'];
-			}
-
-			$total = $count->totalRcp();
-			while ($row = $total->fetch(PDO::FETCH_ASSOC)) {
-				extract($row);
-				$totalRcp = $row['TOTAL'];
-			}
 		?>
 		<div class="main">
 			<div class="main-content">
@@ -66,46 +41,7 @@
 							</nav>
 							<h3 class="panel-title">Request for Check Payment Overview</h3>
 						</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-download"></i></span>
-										<p>
-											<span class="number"><?php echo $pendingCtr ?></span>
-											<span class="title">Pending</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-shopping-bag"></i></span>
-										<p>
-											<span class="number"><?php echo $approvedCtr ?></span>
-											<span class="title">Approved</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-eye"></i></span>
-										<p>
-											<span class="number"><?php echo $declinedCtr ?></span>
-											<span class="title">Declined</span>
-										</p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="metric">
-										<span class="icon"><i class="fa fa-bar-chart"></i></span>
-										<p>
-											<span class="number"><?php echo $totalRcp ?></span>
-											<span class="title">TOTAL</span>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 				<div id="load-rcp">
@@ -182,9 +118,6 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-		include '../modal/confirmation-modal.php';
-		include '../modal/error-modal.php';
-		include '../modal/success-modal.php';
 	?>
 
 	<script type="text/javascript">
