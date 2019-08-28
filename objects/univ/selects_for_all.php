@@ -373,11 +373,37 @@
 
         // Get specific RCP history
         public function getRcpHistory(){
-            $query = "SELECT * FROM rcp_file_edit_history, company_file, project_file, user_file, rcp_file WHERE rcp_comp_code=comp_code AND rcp_proj_code=proj_code AND rcp_file.rcp_approver_id=user_id AND rcp_file.rcp_no=rcp_file_edit_history.rcp_no AND rcp_file_edit_history.rcp_no=?";
+            $query = "SELECT rcp_file.rcp_no, user_lastname, user_firstname, rcp_date_issued, rcp_file_edit_history.updated_at, rcp_file_edit_history.rcp_id FROM rcp_file_edit_history, user_file, rcp_file WHERE rcp_file.rcp_approver_id=user_id AND rcp_file.rcp_no=rcp_file_edit_history.rcp_no AND rcp_file_edit_history.rcp_no=?";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
 			$sel->bindParam(1, $this->rcp_no);
+
+			$sel->execute();
+
+			return $sel;
+		}
+
+		// Get specific RCP history
+        public function getRcpHistoryDetails(){
+            $query = "SELECT * FROM rcp_file_edit_history, department_file, company_file, project_file, user_file, rcp_file WHERE rcp_comp_code=comp_code AND rcp_proj_code=proj_code AND rcp_department=dept_code AND rcp_file.rcp_approver_id=user_id AND rcp_file.rcp_no=rcp_file_edit_history.rcp_no AND rcp_file_edit_history.rcp_id=?";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_id);
+
+			$sel->execute();
+
+			return $sel;
+		}
+
+		// Get specific RCP history
+        public function getRcpHistoryParticularDetails(){
+            $query = "SELECT * FROM rcp_particulars_edit_history WHERE rcp_file_id=?";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_file_id);
 
 			$sel->execute();
 

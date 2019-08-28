@@ -208,22 +208,6 @@
   </div>
 </div>
 
-<div class="modal fade bd-example-modal-sm" id="logout-dialog-modal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-keyboard="false">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Information</h5>
-      </div>
-      <div class="modal-body">
-        Please logout to complete the process.
-      </div>
-      <div class="modal-footer">
-        <a href="../controls/auth/logout.php" onclick="logout()"><button type="button" class="btn btn-danger" id="update-password-btn"><i class="lnr lnr-exit"></i> Logout</button></a>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
     $('#first-password').keyup(function () {
     var password = $('#first-password').val();

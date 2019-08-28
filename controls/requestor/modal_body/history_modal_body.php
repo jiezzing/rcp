@@ -14,12 +14,8 @@
             <tr>
               <th>RCP No.</th>
               <th>Edited by</th>
-              <th>Payee</th>
-              <th>Company</th>
-              <th>Project</th>
-              <th>Amount in words</th>
-              <th>Total Amt</th>
-              <th>Update at</th>
+              <th>Issued at</th>
+              <th>Edited on</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -37,16 +33,10 @@
         <tr>
           <td class="text-center">'.$row['rcp_no'].'</td>
           <td>'.$row['user_lastname'].', '.$row['user_firstname'].'</td>
-          <td>'.$row['rcp_payee'].'</td>
-          <td>'.$row['comp_name'].'</td>
-          <td>'.$row['proj_name'].'</td>
-          <td>'.$row['rcp_amt_in_words'].'</td>
-          <td>'.number_format($row['rcp_total_amt'], 2).'</td>
+          <td>'.$row['rcp_date_issued'].'</td>
           <td>'.$row['updated_at'].'</td>
           <td class="text-center">
-            <a href="#" value="'.$row['rcp_id'].'" data-toggle="modal" data-target="#rcp-particulars-history-modal" class="show-particulars-history">
-            <u><i class="fa fa-location-arrow" aria-hidden="true"></i> More Details</u>
-            </a>
+            <button type="button" class="btn btn-warning history form-control" value="'.$row['rcp_id'].'"><i class="fa fa-file"></i> Details</button>
           </td>
         </tr>
       ';
@@ -59,31 +49,6 @@
       </table>
     ';
   ?>
-
-<script>
-    $(document).on('click', '.show-particulars-history', function(e){
-        e.preventDefault();
-        var rcp_id = $(this).attr('value');
-
-        $.ajax({
-          type: "POST",
-          url: "../controls/univ/particulars_history_modal_body.php",
-          data: {
-            rcp_id: rcp_id
-          },
-          cache: false,
-          success: function(html)
-          {
-            $("#rcp-particulars-history-modal-body").html(html);
-            $("#rcp-particulars-history-modal").modal('show');
-          },
-          error: function(xhr, ajaxOptions, thrownError)
-          {
-              alert(thrownError);
-          }
-      });
-    });
-</script>
 
 <script type="text/javascript">
   $(document).ready(function() {

@@ -31,7 +31,7 @@
         	startDate: "today"
         });
         $('#from-datepicker').datepicker();
-     	$('#to-datepicker').datepicker();
+     	// $('#to-datepicker').datepicker();
 	});
 </script>
 
@@ -39,8 +39,8 @@
 	$('#from-datepicker').change(function(){
 		var selected_date = $('#from').val();
 		$('#to').val("");
-		$('#to').datepicker({
-			startDate: selected_date
-		});
+		$('#to').datepicker({ startDate: selected_date });
+		$('#generate-btn-with-date-span').attr('disabled', false);
+		alert(selected_date);
 	});
 </script>
