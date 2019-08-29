@@ -71,12 +71,12 @@
                 </div>
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly id="department">
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly>
                 </div>
 
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">APPROVED BY</label>
-                  <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly id="department">
+                  <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly>
                 </div>
             </div>
       	</div>
@@ -84,12 +84,12 @@
             <div class="col-md-12">
                 <div class="col-md-8">
                     <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly id="department">
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly>
                 </div>
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" id="department" readonly>
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" readonly>
                 </div>
             </div>
       	</div>

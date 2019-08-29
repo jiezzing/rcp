@@ -31,16 +31,18 @@
         	startDate: "today"
         });
         $('#from-datepicker').datepicker();
-     	// $('#to-datepicker').datepicker();
+     	$('#to-datepicker').datepicker();
 	});
 </script>
 
 <script>
 	$('#from-datepicker').change(function(){
-		var selected_date = $('#from').val();
+		var start = $('#from').val();
 		$('#to').val("");
-		$('#to').datepicker({ startDate: selected_date });
+        $('#to-datepicker').datepicker('destroy');
+        $('#to-datepicker').datepicker({
+        	startDate: start
+        });
 		$('#generate-btn-with-date-span').attr('disabled', false);
-		alert(selected_date);
 	});
 </script>

@@ -32,36 +32,31 @@
                 </div>
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly id="department">
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly>
                 </div>
-
-                <div class="col-md-4">
-                  <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
-                  <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly id="department">
-                </div>
-            </div>
-      	</div>
-      	<div class="row" style="margin-top: 15px">
-            <div class="col-md-12">
-                <div class="col-md-8">
-                    <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly id="department">
-                </div>
-                <!-- End of get all department -->
-                <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" id="department" readonly>
-                </div>
-            </div>
-      	</div>
-
-      	<div class="row" style="margin-top: 15px">
-            <div class="col-md-12">
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">PAYEE</label><span class="pull-right" style="color: red; display: none" id="required3"> required**</span>
                   <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$rcp_payee.'" id="payee" readonly>
                 </div>
-                <div class="col-md-8">
+            </div>
+      	</div>
+      	<div class="row" style="margin-top: 15px">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly >
+                </div>
+                <!-- End of get all department -->
+                <div class="col-md-6">
+                    <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" readonly>
+                </div>
+            </div>
+      	</div>
+
+      	<div class="row" style="margin-top: 15px">
+            <div class="col-md-12">
+                <div class="col-md-12">
                     <label for="company" class=" form-control-label tooltiptext">AMOUNT IN WORDS</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
                     <i><input type="text" style="background-color: white" class="form-control text-center" placeholder="Amount in words field" value="'.$rcp_words_amt.'" id="amount-in-words" readonly></i>
                 </div>

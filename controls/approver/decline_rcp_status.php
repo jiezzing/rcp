@@ -15,8 +15,10 @@
 		$query = $sel->declineRcpFileStatus();
 		$query2 = $sel->declineParticularStatus();
 		$query3 = $sel->declineRushStatus();
+		$query4 = $sel->declineOrigRcpFileStatus();
+		$query5 = $sel->declineOrigParticularStatus();
 
-		if($query && $query2 && $query3){
+		if($query && $query2 && $query3 && $query4 && $query5){
 			echo 'Success';
 		}
 		else{
@@ -26,8 +28,10 @@
 	else{
 		$query = $sel->declineRcpFileStatus();
 		$query2 = $sel->declineParticularStatus();
+		$query3 = $sel->declineOrigRcpFileStatus();
+		$query4 = $sel->declineOrigParticularStatus();
 		
-		if($query && $query2){
+		if($query && $query2 && $query3 && $query4){
 			echo 'Success';
 		}
 		else{

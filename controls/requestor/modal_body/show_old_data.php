@@ -10,23 +10,6 @@
 	$sel = new U_Select($db);
   $sel2 = new Select($db);
 
-	$rcp_no = "";
-	$rcp_dept_code = "";
-	$rcp_comp_code = "";
-	$rcp_proj_code = "";
-	$rcp_apprvr = "";
-	$rcp_payee = "";
-	$rcp_words_amt = "";
-	$rcp_amt = "";
-	$rcp_due_date = "";
-	$rcp_justify = "";
-	$dept_name = "";
-	$apprvr_id = "";
-	$comp_name = "";
-	$proj_name = "";
-	$apprvr_name = "";
-  $rcp_rush = "";
-
 	$sel2->rcp_no = $_POST['rcp_no'];
 	$query = $sel2->getOldRcpDetails();
  	while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -73,12 +56,12 @@
                 </div>
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly id="department">
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly>
                 </div>
 
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">APPROVED BY</label>
-                  <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly id="department">
+                  <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly>
                 </div>
             </div>
       	</div>
@@ -86,12 +69,12 @@
             <div class="col-md-12">
                 <div class="col-md-8">
                     <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly id="department">
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly>
                 </div>
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" id="department" readonly>
+                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" readonly>
                 </div>
             </div>
       	</div>
@@ -131,13 +114,24 @@
 									$sel2->rcp_no = $rcp_no;
 									$query3 = $sel2->getOldRcpParticularDetails();
 								 	while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
-								 		echo '
-								 			<tr value="'.$row['rcp_id'].'">
-												<td class="particulars" name="td1" id="td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
-												<td class="ref_code" name="td2" id="td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
-												<td class="allownumericwithdecimal amount" name="td3" id="td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()">'.number_format($row['rcp_amount'], 2).'</td>
-											</tr>
-								 		';
+                    if($row['rcp_status'] == 'Removed'){
+                      echo '
+                        <tr style="background-color: #f2dede">
+                          <td class="particulars" name="td1" id="td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
+                          <td class="ref_code" name="td2" id="td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
+                          <td class="allownumericwithdecimal amount" name="td3" id="td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()">'.number_format($row['rcp_amount'], 2).'</td>
+                        </tr>
+                      ';
+                    }
+                    else{
+                      echo '
+                        <tr>
+                          <td class="particulars" name="td1" id="td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
+                          <td class="ref_code" name="td2" id="td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
+                          <td class="allownumericwithdecimal amount" name="td3" id="td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()">'.number_format($row['rcp_amount'], 2).'</td>
+                        </tr>
+                      ';
+                    }
 							 			$index++;
 								 	}
 								?>

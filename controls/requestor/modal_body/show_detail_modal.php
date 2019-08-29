@@ -383,8 +383,7 @@
 	<!-- Show RCP approver -->
 	<script>
 		var new_email;
-	  $('#show-approver').change(function(){
-	  	alert();
+	  	$('#show-approver').change(function(){
 	    var apprvr_id = $('#show-approver').val();
 	    $.ajax({
 	            type: "POST",
@@ -397,7 +396,6 @@
 
 	            success: function(result){
 	              new_email = result[1];
-	              alert(new_email);
 	            },
 	            error: function(xhr, ajaxOptions, thrownError){
 	              alert(thrownError);

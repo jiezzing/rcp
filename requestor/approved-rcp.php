@@ -101,12 +101,6 @@
 		include '../scripts/js.php';
 	?>
 
-	<script type="text/javascript">
-        $(document).ready(function() {
-			$('#approveTable').DataTable();
-		} );
-    </script>
-
     <script type="text/javascript">
         $(document).on('click', '.show-rcp-details', function(e){
             e.preventDefault();
@@ -206,5 +200,13 @@
 	        });
 	    });
 	</script>
+
+	<script type="text/javascript">
+        $(document).ready(function() {
+			$('#approveTable').DataTable({
+				sort: false
+			});
+		} );
+    </script>
 </body>
 </html>

@@ -8,6 +8,7 @@
 
 	$sel = new ApproverInsert($db);
 
+	date_default_timezone_set('Asia/Manila');
 	$sel->rcp_no = $_POST['rcp_no'];
 	$sel->rcp_particulars = $_POST['particulars'];
 	$sel->rcp_ref_code = $_POST['ref_codes'];

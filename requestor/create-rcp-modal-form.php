@@ -186,8 +186,7 @@
     var alt_sec_id = id[4];
     total_rcp = parseInt(id[5]) + 1;
     var hasApprover = false;
-
-      // $("#approver").empty();
+    
       $.ajax({
         type: "POST",
         url: "../controls/univ/cls_get_approvers_data.php",
@@ -367,10 +366,9 @@
                   }
                 });
               }, 2000);
-              console.log("Send to: " + email);
+              console.log("Sending RCP to: " + email);
             },
             success: function(response){
-              console.log(response);
               $.ajax({ // Start of creating new rcp
                 type: "POST",
                 async: false,

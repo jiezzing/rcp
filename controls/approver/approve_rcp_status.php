@@ -15,8 +15,10 @@
 		$query = $sel->approveRcpFileStatus();
 		$query2 = $sel->approveParticularStatus();
 		$query3 = $sel->approveRushStatus();
+		$query4 = $sel->approveOrigParticularStatus();
+		$query5 = $sel->approveOrigRcpFileStatus();
 
-		if($query && $query2 && $query3){
+		if($query && $query2 && $query3 && $query4 && $query5){
 			echo 'Success';
 		}
 		else{
@@ -26,8 +28,11 @@
 	else{
 		$query = $sel->approveRcpFileStatus();
 		$query2 = $sel->approveParticularStatus();
+		$query3 = $sel->approveOrigParticularStatus();
+		$query4 = $sel->approveOrigRcpFileStatus();
+
 		
-		if($query && $query2){
+		if($query && $query2 && $query3 && $query4){
 			echo 'Success';
 		}
 		else{

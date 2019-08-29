@@ -35,7 +35,7 @@
 
 		// Method in creating RCP original
 		public function createOrigRcp(){
-			$query = "INSERT INTO rcp_orig_file VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO rcp_orig_file VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -74,7 +74,7 @@
 
 		// Method in creating orig particulars 
 		public function createOrigRcpParticulars(){
-			$query = "INSERT INTO rcp_orig_particulars_file(rcp_no, rcp_particulars, rcp_ref_code, rcp_amount, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO rcp_orig_particulars_file(rcp_no, rcp_particulars, rcp_ref_code, rcp_amount, created_at, updated_at, rcp_status) VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

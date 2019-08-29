@@ -119,7 +119,7 @@
 
 		// Remove RCP backup particulars
 		public function removeRcpBackupParticulars(){
-			$query = "UPDATE rcp_backup_particulars_file SET rcp_status='Removed' WHERE rcp_id=?";
+			$query = "UPDATE rcp_orig_particulars_file SET rcp_status='Removed' WHERE rcp_id=?";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

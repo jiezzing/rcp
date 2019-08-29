@@ -237,6 +237,7 @@
       		var removedData = [];
 	      	var isReady = true;
 	      	var isEmpty = false;
+	      	var isSent;
 
 	      	toastr.options = {
 		        "closeButton": true,
@@ -254,12 +255,12 @@
 				toastr.error('Some fields are missing.', 'Required');
 	    		return;
 			}
-			else{
+			if(rush == "Yes"){
 				if(due_date != "" && justification == ""){
 	        		toastr.info('Please specify your reason or justification.', 'Info');
 		    		return;
 				} 
-			} 
+			}
 
   			for (var i = 0; i < table_length; i++){ // Start of for loop
 	          	var arraytd1 = $("#show-td1"+i+"").text();
@@ -312,8 +313,8 @@
 				        confirmButtonText: "Yes",
 				        showLoaderOnConfirm: true
 			      	}, function (data) {
-		      			if(data){
-							$.ajax({
+			      		if(data){
+			      			$.ajax({
 			                    type: "POST",
 			                    async: false,
 			                    url: "../controls/mails/new_approver_mail.php",
@@ -340,10 +341,11 @@
 						                  }
 						                });
 					              	}, 2000);
+					              	isSent = true;
 									console.log("Current approver: " + current_appr_email);
 			                    },
 			                    success: function(response){
-			                      	// Send an email notification to approver
+			                    	// Send an email notification to approver
 			                      	$.ajax({
 			                          	type: "POST",
 			                          	async: false,
@@ -359,6 +361,95 @@
 			                          	cache: false,
 			                          	success: function(response){
 											console.log("New approver: " + new_email);
+								      		$.ajax({ // Start of updating RCP File
+									            type: "POST",
+							                  	async: false,
+									            url: "../controls/requestor/update_rcp_file.php",
+									            data: {
+									                rcp_no: rcp_no, 
+									                rcp_approver_id: new_apprvr_id, 
+									                comp_code: comp_code, 
+									                proj_code: proj_code, 
+									                payee: payee, 
+									                amount_in_words:amount_in_words, 
+									                currencyNoCommas:currencyNoCommas
+									            },
+									            cache: false,
+									          	success: function(response){
+									          		for (var i = 0; i < table_length; i++) { // Start of for loop
+										                var particulars = $("#show-td1"+i+"").text(); 
+										                var ref_codes = $("#show-td2"+i+"").text(); 
+										                var amounts = $("#show-td3"+i+"").text(); 
+										                var rcp_id = $("#show-td4"+i+"").text(); 
+										                var currencyNoCommas = amounts.replace(/\,/g,'');
+									    				currencyNoCommas = Number(currencyNoCommas);
+
+									    				if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
+									    					continue;
+									    				}
+									    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
+											                $.ajax({ // Start of changing status to remove
+													            type: "POST",
+													            async: false,
+													            url: "../controls/requestor/remove_rcp_particulars.php",
+													            data: {
+													                rcp_id: rcp_id
+													            },
+													          	success: function(response){
+													          		isSuccess = true;	
+													          	},
+											                    error: function(xhr, ajaxOptions, thrownError)
+											                    {
+											                        alert(thrownError);
+											                    }
+											                }); // End of changing status to remove
+									    				}
+									    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
+								                          	$.ajax({ // Start of adding new rcp particulars
+									                            type: "POST",
+									                            async: false,
+									                            url: "../controls/requestor/create_particulars.php",
+									                            data: {
+									                              	rcp_no:rcp_no, 
+									                              	arraytd1:particulars, 
+									                              	arraytd2:ref_codes, 
+									                              	arraytd3:currencyNoCommas
+									                            },
+									                            success: function(response){
+									                              isSuccess = true;
+									                            },
+									                            error: function(xhr, ajaxOptions, thrownError) {
+									                                alert(thrownError);
+									                            }
+								                          	}); // End of adding new rcp particulars
+									    				}
+									    				else{
+											                $.ajax({ // Start of updating particulars file
+													            type: "POST",
+													            async: false,
+													            url: "../controls/requestor/update_rcp_particulars.php",
+													            data: {
+													                rcp_id: rcp_id, 
+													                particulars: particulars, 
+													                ref_codes: ref_codes, 
+													                amounts: currencyNoCommas
+													            },
+													          	success: function(response){
+													          		isSuccess = true;	
+													          	},
+											                    error: function(xhr, ajaxOptions, thrownError)
+											                    {
+											                        alert(thrownError);
+											                    }
+											                }); // End of updating particulars file
+										            	}
+								    				} // End of for loop
+									          	},
+								                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
+								                {
+								                    alert(thrownError);
+								                }
+								            }); // End of updating RCP File
 			                          	},
 			                          	error: function(xhr, ajaxOptions, thrownError){
 			                              alert(thrownError);
@@ -369,247 +460,140 @@
 			                        alert(thrownError);
 			                    } 
 			                });
-			                $.ajax({ // Start of updating RCP File
-					            type: "POST",
-			                  	async: false,
-					            url: "../controls/requestor/update_rcp_file.php",
-					            data: {
-					                rcp_no: rcp_no, 
-					                rcp_approver_id: new_apprvr_id, 
-					                comp_code: comp_code, 
-					                proj_code: proj_code, 
-					                payee: payee, 
-					                amount_in_words:amount_in_words, 
-					                currencyNoCommas:currencyNoCommas
-					            },
-					            cache: false,
-					          	success: function(response){
-					          		for (var i = 0; i < table_length; i++) { // Start of for loop
-						                var particulars = $("#show-td1"+i+"").text(); 
-						                var ref_codes = $("#show-td2"+i+"").text(); 
-						                var amounts = $("#show-td3"+i+"").text(); 
-						                var rcp_id = $("#show-td4"+i+"").text(); 
-						                var currencyNoCommas = amounts.replace(/\,/g,'');
-					    				currencyNoCommas = Number(currencyNoCommas);
+			      		}
+			      		else{
+							$("#rcp-modal-details").modal('show');
+			      			return false;
+			      		}
+			      	});
+		      	}
+		      	else{
+		      		$.ajax({ // Start of updating RCP File
+			            type: "POST",
+	                  	async: false,
+			            url: "../controls/requestor/update_rcp_file.php",
+			            data: {
+			                rcp_no: rcp_no, 
+			                rcp_approver_id: new_apprvr_id, 
+			                comp_code: comp_code, 
+			                proj_code: proj_code, 
+			                payee: payee, 
+			                amount_in_words:amount_in_words, 
+			                currencyNoCommas:currencyNoCommas
+			            },
+			            cache: false,
+			            beforeSend: function(){
 
-					    				if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
-					    					continue;
-					    				}
-					    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
-							                $.ajax({ // Start of changing status to remove
-									            type: "POST",
-									            async: false,
-									            url: "../controls/requestor/remove_rcp_particulars.php",
-									            data: {
-									                rcp_id: rcp_id
-									            },
-									          	success: function(response){
-									          		isSuccess = true;	
-									          	},
-							                    error: function(xhr, ajaxOptions, thrownError)
-							                    {
-							                        alert(thrownError);
-							                    }
-							                }); // End of changing status to remove
-					    				}
-					    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
-				                          	$.ajax({ // Start of adding new rcp particulars
-					                            type: "POST",
-					                            async: false,
-					                            url: "../controls/requestor/create_particulars.php",
-					                            data: {
-					                              	rcp_no:rcp_no, 
-					                              	arraytd1:particulars, 
-					                              	arraytd2:ref_codes, 
-					                              	arraytd3:currencyNoCommas
-					                            },
-					                            success: function(response){
-					                              isSuccess = true;
-					                            },
-					                            error: function(xhr, ajaxOptions, thrownError) {
-					                                alert(thrownError);
-					                            }
-				                          	}); // End of adding new rcp particulars
-					    				}
-					    				else{
-							                $.ajax({ // Start of updating particulars file
-									            type: "POST",
-									            async: false,
-									            url: "../controls/requestor/update_rcp_particulars.php",
-									            data: {
-									                rcp_id: rcp_id, 
-									                particulars: particulars, 
-									                ref_codes: ref_codes, 
-									                amounts: currencyNoCommas
-									            },
-									          	success: function(response){
-									          		isSuccess = true;	
-									          	},
-							                    error: function(xhr, ajaxOptions, thrownError)
-							                    {
-							                        alert(thrownError);
-							                    }
-							                }); // End of updating particulars file
-						            	}
-				    				} // End of for loop
-				    				if(rush == "Yes"){
-				    					$.ajax({ // Start of updating RCP Rush file
-				                            type: "POST",
-								            async: false,
-				                            url: "../controls/requestor/update_rush_file.php",
-				                            data: {
-				                            	rcp_no:rcp_no, 
-				                            	due_date:due_date, 
-				                            	justification:justification
-				                            },
-				                            success: function(response){
-				                            },
-				                            error: function(xhr, ajaxOptions, thrownError){
-				                                alert(thrownError);
-				                            }
-				                        }); // End of updating RCP Rush file
-				    				}
-					          	},
-				                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
-				                {
-				                    alert(thrownError);
-				                }
-				            }); // End of updating RCP File
-		  				}
-		  				else{
-		            		$("#rcp-modal-details").modal('show');
-		            		return false;
-		  				}	
-	  				});
-				} // End of condition of new approver
-				else{
-					$.ajax({ // Start of updating RCP File
-		            type: "POST",
-                  	async: false,
-		            url: "../controls/requestor/update_rcp_file.php",
-		            data: {
-		                rcp_no: rcp_no, 
-		                rcp_approver_id: new_apprvr_id, 
-		                comp_code: comp_code, 
-		                proj_code: proj_code, 
-		                payee: payee, 
-		                amount_in_words:amount_in_words, 
-		                currencyNoCommas:currencyNoCommas
-		            },
-		            beforeSend: function(){ 
+			            },
+			            complete: function(){
+							$("#rcp-modal-details").modal('toggle');
+			            	swal({
+			                  	title: rcp_no,
+			                  	text: "has been successfully updated",
+			                  	type: "success",
+			                  	closeOnConfirm: false,
+			                  	confirmButtonText: "Okay",
+			                  	allowEscapeKey: false
+			                }, function (data) {
+			                  if(data){
+			                    location.reload();
+			                  }
+			                });
+			            },
+			          	success: function(response){
+			          		for (var i = 0; i < table_length; i++) { // Start of for loop
+				                var particulars = $("#show-td1"+i+"").text(); 
+				                var ref_codes = $("#show-td2"+i+"").text(); 
+				                var amounts = $("#show-td3"+i+"").text(); 
+				                var rcp_id = $("#show-td4"+i+"").text(); 
+				                var currencyNoCommas = amounts.replace(/\,/g,'');
+			    				currencyNoCommas = Number(currencyNoCommas);
 
-		            },
-		            complete: function() {
-    					$("#rcp-modal-details").modal('toggle');
-		                swal({
-		                  title: rcp_no,
-		                  text: "has been successfully updated",
-		                  type: "success",
-		                  closeOnConfirm: false,
-		                  confirmButtonText: "Okay",
-		                  allowEscapeKey: false
-		                }, function (data) {
-		                  if(data){
-		                    location.reload();
-		                  }
-		                });
-
-						console.log(current_appr_email);
-		            },
-		          	success: function(response){
-		          		for (var i = 0; i < table_length; i++) { // Start of foSr loop
-			                var particulars = $("#show-td1"+i+"").text(); 
-			                var ref_codes = $("#show-td2"+i+"").text(); 
-			                var amounts = $("#show-td3"+i+"").text(); 
-			                var rcp_id = $("#show-td4"+i+"").text(); 
-			                var currencyNoCommas = amounts.replace(/\,/g,'');
-		    				currencyNoCommas = Number(currencyNoCommas);
-
-		    				if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
-		    					continue;
-		    				}
-		    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
-				                $.ajax({ // Start of changing status to remove
-						            type: "POST",
-						            async: false,
-						            url: "../controls/requestor/remove_rcp_particulars.php",
-						            data: {
-						                rcp_id: rcp_id
-						            },
-						          	success: function(response){
-						          		isSuccess = true;	
-						          	},
-				                    error: function(xhr, ajaxOptions, thrownError)
-				                    {
-				                        alert(thrownError);
-				                    }
-				                }); // End of changing status to remove
-		    				}
-		    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
-	                          	$.ajax({ // Start of adding new rcp particulars
-		                            type: "POST",
-		                            async: false,
-		                            url: "../controls/requestor/create_particulars.php",
-		                            data: {
-		                              	rcp_no:rcp_no, 
-		                              	arraytd1:particulars, 
-		                              	arraytd2:ref_codes, 
-		                              	arraytd3:currencyNoCommas
-		                            },
-		                            success: function(response){
-		                              isSuccess = true;
-		                            },
-		                            error: function(xhr, ajaxOptions, thrownError) {
-		                                alert(thrownError);
-		                            }
-	                          	}); // End of adding new rcp particulars
-		    				}
-		    				else{
-				                $.ajax({ // Start of updating particulars file
-						            type: "POST",
-						            async: false,
-						            url: "../controls/requestor/update_rcp_particulars.php",
-						            data: {
-						                rcp_id: rcp_id, 
-						                particulars: particulars, 
-						                ref_codes: ref_codes, 
-						                amounts: currencyNoCommas
-						            },
-						          	success: function(response){
-						          		isSuccess = true;	
-						          	},
-				                    error: function(xhr, ajaxOptions, thrownError)
-				                    {
-				                        alert(thrownError);
-				                    }
-				                }); // End of updating particulars file
-			            	}
-	    				} // End of for loop
-	    				if(rush == "Yes"){
-	    					$.ajax({ // Start of updating RCP Rush file
-	                            type: "POST",
-					            async: false,
-	                            url: "../controls/requestor/update_rush_file.php",
-	                            data: {
-	                            	rcp_no:rcp_no, 
-	                            	due_date:due_date, 
-	                            	justification:justification
-	                            },
-	                            success: function(response){
-	                            },
-	                            error: function(xhr, ajaxOptions, thrownError){
-	                                alert(thrownError);
-	                            }
-	                        }); // End of updating RCP Rush file
-	    				}
-		          	},
-	                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
-	                {
-	                    alert(thrownError);
-	                }
-	            }); // End of updating RCP File
+			    				if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
+			    					continue;
+			    				}
+			    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
+					                $.ajax({ // Start of changing status to remove
+							            type: "POST",
+							            async: false,
+							            url: "../controls/requestor/remove_rcp_particulars.php",
+							            data: {
+							                rcp_id: rcp_id
+							            },
+							          	success: function(response){
+							          		isSuccess = true;	
+							          	},
+					                    error: function(xhr, ajaxOptions, thrownError)
+					                    {
+					                        alert(thrownError);
+					                    }
+					                }); // End of changing status to remove
+			    				}
+			    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
+		                          	$.ajax({ // Start of adding new rcp particulars
+			                            type: "POST",
+			                            async: false,
+			                            url: "../controls/requestor/create_particulars.php",
+			                            data: {
+			                              	rcp_no:rcp_no, 
+			                              	arraytd1:particulars, 
+			                              	arraytd2:ref_codes, 
+			                              	arraytd3:currencyNoCommas
+			                            },
+			                            success: function(response){
+			                              isSuccess = true;
+			                            },
+			                            error: function(xhr, ajaxOptions, thrownError) {
+			                                alert(thrownError);
+			                            }
+		                          	}); // End of adding new rcp particulars
+			    				}
+			    				else{
+					                $.ajax({ // Start of updating particulars file
+							            type: "POST",
+							            async: false,
+							            url: "../controls/requestor/update_rcp_particulars.php",
+							            data: {
+							                rcp_id: rcp_id, 
+							                particulars: particulars, 
+							                ref_codes: ref_codes, 
+							                amounts: currencyNoCommas
+							            },
+							          	success: function(response){
+							          		isSuccess = true;	
+							          	},
+					                    error: function(xhr, ajaxOptions, thrownError)
+					                    {
+					                        alert(thrownError);
+					                    }
+					                }); // End of updating particulars file
+				            	}
+		    				} // End of for loop
+			          	},
+		                error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
+		                {
+		                    alert(thrownError);
+		                }
+		            }); // End of updating RCP File
+		      	}
+				if(rush == "Yes"){
+					$.ajax({ // Start of updating RCP Rush file
+                        type: "POST",
+			            async: false,
+                        url: "../controls/requestor/update_rush_file.php",
+                        data: {
+                        	rcp_no:rcp_no, 
+                        	due_date:due_date, 
+                        	justification:justification
+                        },
+                        success: function(response){
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            alert(thrownError);
+                        }
+                    }); // End of updating RCP Rush file
 				}
-			}
+		  	}
 		});
 	</script>
 	<!-- End -->

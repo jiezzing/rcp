@@ -48,11 +48,12 @@
 
 <script>
 	$('#from-datepicker').change(function(){
-		var selected_date = $('#from').val();
+		var start = $('#from').val();
 		$('#to').val("");
-		$('#to').datepicker({
-			startDate: selected_date
-		});
-  		document.getElementById("generate-btn-with-date-span").disabled = false;
+        $('#to-datepicker').datepicker('destroy');
+        $('#to-datepicker').datepicker({
+        	startDate: start
+        });
+		$('#generate-btn-with-date-span').attr('disabled', false);
 	});
 </script>

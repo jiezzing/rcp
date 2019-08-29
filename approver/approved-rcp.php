@@ -68,7 +68,7 @@
 												        	if($row['edited_by_app'] == 'Yes'){
 												          			echo '
 												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-copy"></i> Original Details</button>
-																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#rcp-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
+																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#view-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 												          			';	
 												          		}
@@ -112,7 +112,7 @@
 
             $.ajax({
               type: "POST",
-              url: "../controls/approver/modal_body/history_modal_body.php",
+              url: "../controls/requestor/modal_body/history_modal_body.php",
               data: {
               	rcp_no: rcp_no,
               	apprvr_id: apprvr_id
@@ -120,8 +120,8 @@
               cache: false,
               success: function(html)
               {
-                $("#rcp-history-modal-body").html(html);
-                $("#rcp-history-modal").modal('show');
+                $("#view-history-modal-body").html(html);
+                $("#view-history-modal").modal('show');
               },
               error: function(xhr, ajaxOptions, thrownError)
               {
@@ -155,6 +155,31 @@
           });
         });
     </script>
+
+	<script>
+	    $(document).on('click', '.history', function(e){
+	        e.preventDefault();
+	        var rcp_id = $(this).attr('value');
+
+	        $.ajax({
+	          type: "POST",
+	          url: "../controls/requestor/modal_body/history_details.php",
+	          data: {
+	            rcp_id:rcp_id
+	          },
+	          cache: false,
+	          success: function(html)
+	          {
+	            $("#show-rcp-details-body").html(html);
+	            $("#show-rcp-details").modal('show');
+	          },
+	          error: function(xhr, ajaxOptions, thrownError)
+	          {
+	              alert(thrownError);
+	          }
+	        });
+	    });
+	</script>
 
 	<script type="text/javascript">
         $(document).ready(function() {

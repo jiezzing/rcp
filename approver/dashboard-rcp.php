@@ -182,6 +182,7 @@
 		    currencyNoCommas = Number(currencyNoCommas);
 		    var date_changed = new Date().toLocaleString();
 			var isSuccess = false;
+			var isRemoving = true;
 
 		    toastr.options = {
 		        "closeButton": true,
@@ -198,44 +199,30 @@
         		toastr.error('Some fields are missing.', 'Required');
 				return;
 			}
-
-            for (var i = 0; i < table_length; i++){ // Start of for loop
+			 for(var i = 0; i < table_length; i++){
 	          	var arraytd1 = $("#td1"+i+"").text();
-          		var arraytd2 = $("#td2"+i+"").text();
-          		var arraytd3 = $("#td3"+i+"").text();
-            		if (arraytd1 == "" && arraytd2 == "" && arraytd3 == "") {
-		              isEmpty = true;
-            		}
-            		else{
-              		isEmpty = false;
-              		break;
-            		}
-      		}
-
-	      	if(isEmpty){
-		        toastr.error('Please specify the particulars, BOM Ref/Acct Code and amount.', 'Required');
-		        isReady = false;
-		        return;
-	      	}
-			else{
-				 for(var i = 0; i < table_length; i++){
-		          	var arraytd1 = $("#td1"+i+"").text();
-		          	var arraytd2 = $("#td2"+i+"").text();
-		          	var arraytd3 = $("#td3"+i+"").text();
-		          	if(arraytd1 == "" && arraytd2 == "" && arraytd3 == "")
-		            	continue;
-		          	else{
-		              	if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
-			                missingIndex = i + 1;
-			                isReady = false;
-			                break;
-		            	}
-		          	}
-		        }
-			}
+	          	var arraytd2 = $("#td2"+i+"").text();
+	          	var arraytd3 = $("#td3"+i+"").text();
+	          	var arraytd4 = $("#td4"+i+"").text();
+	          	if(arraytd1 == "" && arraytd2 == "" && arraytd3 == "" && arraytd4 != ""){
+	                isRemoving = false;
+	                break;
+	          	}
+	          	else{
+	              	if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
+		                missingIndex = i + 1;
+		                isReady = false;
+		                break;
+	            	}
+	          	}
+	        }
 
 			if(!isReady){
 		        toastr.error('Please fill-up all the fields required in row ' + missingIndex, 'Required');
+		        return;
+	      	}
+	      	else if(!isRemoving){
+		        toastr.error('You are not allowed to disregard/removed a row of particulars.', 'Error');
 		        return;
 	      	}
 	      	else{
@@ -267,10 +254,7 @@
 	                    	setTimeout(function () {
           						swal(rcp_no, "has been successfully updated", "success");
 							}, 2000);
-			              	console.log(rcp_no);
-			              	console.log(approver_name);
-			              	console.log(email);
-
+			              	console.log("Requestor Email: " + email);
 			              },
 			              success: function(response){
 			              	$.ajax({ // Start of updating RCP File
@@ -366,6 +350,9 @@
 
 		      		}
 		      		else{
+		      			$('#save-changes-btn').attr('disabled', false);
+		      			$('#approve-btn').attr('disabled', true);
+		      			$('#decline-btn').attr('disabled', true);
 		      			$('#rcp-modal-details-approver').modal('show');
 		      			return false;
 		      		}
@@ -535,7 +522,7 @@
 			                  rush: rush
 			                },
 			                success: function(response){
-		                    	console.log(email);
+		                    	console.log("Requestor Email: " + email);
 			                },
 			                error: function(xhr, ajaxOptions, thrownError){
 			                    alert(thrownError);

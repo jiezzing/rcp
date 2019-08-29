@@ -108,7 +108,22 @@
 		}
 
 		public function declineRcpFileStatus(){
-			$query = "UPDATE rcp_file SET rcp_status = 'Declined' WHERE rcp_no=?";
+			$query = "UPDATE rcp_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+			if($sel->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $sel;
+		}
+
+		public function declineOrigRcpFileStatus(){
+			$query = "UPDATE rcp_orig_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -123,7 +138,22 @@
 		}
 
 		public function declineParticularStatus(){
-			$query = "UPDATE rcp_particulars_file SET rcp_status = 'Declined' WHERE rcp_no=?";
+			$query = "UPDATE rcp_particulars_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+			if($sel->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $sel;
+		}
+
+		public function declineOrigParticularStatus(){
+			$query = "UPDATE rcp_orig_particulars_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -167,8 +197,38 @@
 			return $sel;
 		}
 
+		public function approveOrigRcpFileStatus(){
+			$query = "UPDATE rcp_orig_file SET rcp_status = 'Approved' WHERE rcp_no=? AND rcp_status='Pending'";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+			if($sel->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $sel;
+		}
+
 		public function approveParticularStatus(){
-			$query = "UPDATE rcp_particulars_file SET rcp_status = 'Approved' WHERE rcp_no=?";
+			$query = "UPDATE rcp_particulars_file SET rcp_status = 'Approved' WHERE rcp_no=? AND rcp_status='Pending'";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+			if($sel->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $sel;
+		}
+
+		public function approveOrigParticularStatus(){
+			$query = "UPDATE rcp_orig_particulars_file SET rcp_status = 'Approved' WHERE rcp_no=? AND rcp_status='Pending'";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
