@@ -14,6 +14,7 @@
         public $amount;
         public $due_date;
         public $justification;
+        public $updated_at;
         
         // Connect database
 		public function __construct($db){
@@ -108,7 +109,7 @@
 		}
 
 		public function declineRcpFileStatus(){
-			$query = "UPDATE rcp_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
+			$query = "UPDATE rcp_file SET updated_at='".$this->updated_at."', rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -138,7 +139,7 @@
 		}
 
 		public function declineParticularStatus(){
-			$query = "UPDATE rcp_particulars_file SET rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
+			$query = "UPDATE rcp_particulars_file SET updated_at='".$this->updated_at."', rcp_status = 'Declined' WHERE rcp_no=? AND rcp_status = 'Pending'";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -183,7 +184,7 @@
 		}
 
 		public function approveRcpFileStatus(){
-			$query = "UPDATE rcp_file SET rcp_status = 'Approved' WHERE rcp_no=?";
+			$query = "UPDATE rcp_file SET updated_at='".$this->updated_at."', rcp_status = 'Approved' WHERE rcp_no=?";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -244,6 +245,21 @@
 
 		public function approveRushStatus(){
 			$query = "UPDATE rcp_rush_file SET rcp_status = 'Approved' WHERE rcp_no=?";
+			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+			if($sel->execute()){
+				return true;
+			}
+			else{
+				return false;
+			}
+			return $sel;
+		}
+
+		public function readNotification(){
+			$query = "UPDATE notification_file SET notif_status = 'Read' WHERE rcp_no=?";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

@@ -26,6 +26,7 @@
 		$_SESSION['user_fullname'] = $row['user_fullname'];
 		$_SESSION['user_email'] = $row['user_email'];
 		$_SESSION['user_log_count'] = $row['user_log_count'];
+		$_SESSION['user_type'] = $row['user_type'];
 		$_SESSION['isLoggedIn'] = 1;
 	}
 	else{

@@ -26,7 +26,8 @@
 
 	$query = $sel->createRcp();
 	$query2 = $sel->createOrigRcp();
-	if($query && $query2){
+	$query3 = $sel->createNotification();
+	if($query && $query2 && $query3){
 		echo 'Success';
 	}
 	else{

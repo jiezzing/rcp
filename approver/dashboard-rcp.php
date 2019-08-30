@@ -121,45 +121,6 @@
 	?>
 
 	<script type="text/javascript">
-		var rcp_no;
-		var rcp_id;
-		var rqstr_id;
-		var rush;
-		var email;
-		var approver_name = "<?php echo $user_fullname ?>";
-        $(document).on('click', '.show-more-details', function(e){
-            e.preventDefault();
-
-            var split = $(this).attr('value');
-    		var mValues = split.split(":");   
-            var id = mValues[0]
-            rcp_no = mValues[1];
-            rqstr_id = mValues[2];
-            rush = mValues[3];
-            email = mValues[4];
-            rcp_id = id;
-
-            $.ajax({
-              type: "POST",
-              url: "../controls/approver/modal_body/show_detail_modal.php",
-              data: {
-              	rcp_no: rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#rcp-modal-details-approver-body").html(html);
-                $("#rcp-modal-details-approver").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          });
-        });
-    </script>
-
-	<script type="text/javascript">
         $(document).ready(function() {
 			$('#example').DataTable();
 		} );

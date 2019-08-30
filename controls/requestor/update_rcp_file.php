@@ -8,6 +8,7 @@
 
 	$sel = new RequestorUpdate($db);
 
+	date_default_timezone_set('Asia/Manila');
 	$sel->rcp_no = $_POST['rcp_no'];
 	$sel->apprvr_id = $_POST['rcp_approver_id'];
 	$sel->comp_code = $_POST['comp_code'];

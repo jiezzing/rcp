@@ -12,7 +12,7 @@
 		// Login
 		public function login()
 		{
-			$query = "SELECT CONCAT(file.user_firstname, ' ' ,file.user_lastname) as user_fullname, file.user_id, acc.user_email, acc.user_username, acc.user_password, file.user_dept_code, file.user_comp_code, acc.user_log_count FROM user_account_file acc, user_file file WHERE acc.user_id = file.user_id AND acc.user_username=? AND acc.user_password=? AND acc.user_status = 'AC'";
+			$query = "SELECT CONCAT(file.user_firstname, ' ' ,file.user_lastname) as user_fullname, file.user_id, acc.user_email, acc.user_username, acc.user_password, file.user_dept_code, file.user_comp_code, acc.user_log_count, file.user_type FROM user_account_file acc, user_file file, user_type_file type WHERE type.user_id=file.user_type AND acc.user_id = file.user_id AND acc.user_username=? AND acc.user_password=? AND acc.user_status = 'AC'";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -110,6 +110,18 @@
 			$sel = $this->conn->prepare($query);
 
 			$sel->bindParam(1, $this->rcp_no);
+			$sel->execute();
+
+			return $sel;
+		}
+
+		public function getAllRcpNo(){
+            $query = "SELECT * FROM rcp_file, notification_file WHERE rcp_file.rcp_no=notification_file.rcp_no AND rcp_employee_id=? AND rcp_status!='Pending'";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_employee_id);
+
 			$sel->execute();
 
 			return $sel;

@@ -409,5 +409,31 @@
 
 			return $sel;
 		}
+
+		// Get notification
+        public function getNotifications(){
+            $query = "SELECT * FROM rcp_file, user_file, user_account_file WHERE user_file.user_id=user_account_file.user_id AND rcp_employee_id=user_file.user_id AND rcp_approver_id=? AND rcp_status='Pending' ORDER BY created_at DESC";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_approver_id);
+
+			$sel->execute();
+
+			return $sel;
+		}
+
+		// Get notification
+        public function getNotificationsReq(){
+            $query = "SELECT * FROM notification_file, rcp_file, user_file WHERE notification_file.rcp_no=rcp_file.rcp_no AND rcp_approver_id=user_file.user_id AND (rcp_status='Approved' OR rcp_status='Declined') AND rcp_employee_id=? ORDER BY updated_at DESC";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_employee_id);
+
+			$sel->execute();
+
+			return $sel;
+		}
     }
 ?>

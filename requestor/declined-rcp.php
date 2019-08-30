@@ -5,12 +5,14 @@
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/requestor/select_queries.php';
+		include '../objects/univ/count_for_all.php';
 		include '../header/header.php';
 		include '../assets/css/custom.css';
 
 		$con = new connection();
 		$db = $con->connect();
 
+		$count = new Count($db);
 		$sel = new Select($db);
 	?>
 <body>

@@ -8,7 +8,9 @@
 
 	$sel = new ApproverUpdate($db);
 
+	date_default_timezone_set('Asia/Manila');
 	$sel->rcp_no = $_POST['rcp_no'];
+	$sel->updated_at = date("Y-m-d H:i:s");
 
 
 	if($_POST['rush'] == "Yes"){

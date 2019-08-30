@@ -102,5 +102,17 @@
 			$sel->execute();
 			return $sel;
 		}
+
+		// Create Notification
+		public function createNotification(){
+			$query = "INSERT INTO notification_file(rcp_no, notif_status)  VALUES (?, 'Unread')";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->rcp_no);
+
+			$sel->execute();
+			return $sel;
+		}
     }
 ?>

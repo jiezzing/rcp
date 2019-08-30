@@ -5,6 +5,7 @@
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/approver/select_queries.php';
+		include '../objects/approver/count_queries.php';
 		include '../header/header.php';
 		include '../assets/css/custom.css';
 
@@ -12,6 +13,7 @@
 		$db = $con->connect();
 
 		$sel = new ApproverSelect($db);
+		$count = new ApproverCount($db);
 	?>
 <body>
 	<div id="wrapper">
