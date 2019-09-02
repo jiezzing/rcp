@@ -61,22 +61,21 @@
 														<td>'.$row['rcp_date_approved'].'</td>
 						                                <td>
 													        <a href="../tcpdf/rcp_pdf.php?rcp_no='.$row['rcp_no'].'" target="new" class="pdf_view" type="view">
-													          <button type="button" class="btn btn-warning view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> View / Print
+													          <button type="button" class="btn btn-success view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> View / Print
 													          </button>
 													        </a>
+													        <button type="button" class="btn btn-warning show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
 												        ';
 												        ?>
 												        <?php
 												        	if($row['edited_by_app'] == 'Yes'){
 												          			echo '
-												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-copy"></i> Original Details</button>
 																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#view-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 												          			';	
 												          		}
 												          		else{
 												          			echo '
-												          				<button type="button" class="btn btn-danger" disabled><i class="fa fa-copy"></i> Original Details</button>
 																        <button type="button" class="btn btn-primary" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 															          	

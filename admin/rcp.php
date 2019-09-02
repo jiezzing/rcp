@@ -146,32 +146,10 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-        $('#allRcpTbl').DataTable();
-        $('.dataTables_length').addClass('bs-select');
+        $('#allRcpTbl').DataTable({
+        	sort: false
         });
-    </script>
-
-    <script type="text/javascript">
-        $(document).on('click', '.show-rcp-details', function(e){
-            e.preventDefault();
-			var rcp_no = $(this).attr('value');
-            $.ajax({
-              type: "POST",
-              url: "../controls/admin/modal_body/rcp_details.php",
-              data: {
-              	rcp_no:rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#show-rcp-details-body").html(html);
-                $("#show-rcp-details").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          });
+        $('.dataTables_length').addClass('bs-select');
         });
     </script>
 

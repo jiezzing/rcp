@@ -29,5 +29,4 @@
 
 	<!-- Toastr JS -->
 	<link rel="stylesheet" href="../assets/vendor/toastr/build/toastr.css">
-
 </head>

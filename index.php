@@ -55,6 +55,7 @@
 						</div>
 					</div>
 					<div class="right">
+					<div class="overlay"></div>
 						<div class="content text">
 							<h1 class="heading">Request for Check Payment</h1>
 							<p>Innogroup of Companies</p>

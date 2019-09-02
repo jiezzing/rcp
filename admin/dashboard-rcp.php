@@ -103,55 +103,7 @@
 							    <li class="breadcrumb-item active" aria-current="page"><?php echo $user_type; ?></li>
 							  </ol>
 							</nav>
-							<h3 class="panel-title">Total No. of Request for Check Payment</h3>
-						</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-md-3" >
-									<a href="#" data-toggle="modal" data-target="#rcp-pending-modal">
-										<div class="metric e">
-											<span class="icon"><i class="fa fa-question"></i></span>
-											<p>
-												<span class="number"><?php echo $pendingCtr ?></span>
-												<span class="title">Pending</span>
-											</p>
-										</div>
-									</a>
-								</div>
-								<div class="col-md-3">
-									<a href="#" data-toggle="modal" data-target="#rcp-approved-modal">
-										<div class="metric e">
-											<span class="icon"><i class="fa fa-check"></i></span>
-											<p>
-												<span class="number"><?php echo $approvedCtr ?></span>
-												<span class="title">Approved</span>
-											</p>
-										</div>
-									</a>
-								</div>
-								<div class="col-md-3">
-									<a href="#" data-toggle="modal" data-target="#rcp-declined-modal">
-										<div class="metric e">
-											<span class="icon"><i class="fa fa-times"></i></span>
-											<p>
-												<span class="number"><?php echo $declinedCtr ?></span>
-												<span class="title">Declined</span>
-											</p>
-										</div>
-									</a>
-								</div>
-								<div class="col-md-3">
-									<a href="#" data-toggle="modal" data-target="#rcp-all-modal">
-										<div class="metric e">
-											<span class="icon"><i class="fa fa-bar-chart"></i></span>
-											<p>
-												<span class="number"><?php echo $total_rcp ?></span>
-												<span class="title">TOTAL</span>
-											</p>
-										</div>
-									</a>
-								</div>
-							</div>
+							<h3 class="panel-title">Request for Check Payment Overview</h3>
 						</div>
 					</div>
 				</div>
@@ -172,14 +124,14 @@
 				</div>
 				<div class="col-md-6">
 					<!-- TIMELINE -->
-					<div class="panel panel-scrolling">
+					<div class="panel" style="touch-action: none">
 						<div class="panel-heading">
 							<h3 class="panel-title">Recent User Activity</h3>
 							<div class="right">
 								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
 							</div>
 						</div>
-						<div class="panel-body">
+						<div class="panel-body" style="overflow-y: auto; height: 430px">
 							<ul class="list-unstyled activity-list">
 								<?php
 				                    $select = $sel->getAllRcp();
@@ -194,7 +146,6 @@
 				                    }
 				                ?>
 							</ul>
-				                <button type="button" class="btn btn-primary btn-bottom center-block">Load More</button>
 						</div>
 					</div>
 					<!-- END TIMELINE -->
@@ -205,31 +156,6 @@
 	<?php
 		include '../scripts/js.php';
 	?>
-
-	<script type="text/javascript">
-        $(document).on('click', '.show-rcp-details', function(e){
-            e.preventDefault();
-            var rcp_no = $(this).attr('value');
-
-            $.ajax({
-              type: "POST",
-              url: "../controls/admin/modal_body/rcp_details.php",
-              data: {
-              	rcp_no:rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#show-rcp-details-body").html(html);
-                $("#show-rcp-details").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          });
-        });
-    </script>
 
 
 	<script type="text/javascript">

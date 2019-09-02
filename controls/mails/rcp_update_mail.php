@@ -13,7 +13,7 @@
                                 <h3 style='padding: 0; margin: 0;'>Notice: Changes in RCP upon approval</h3>
                             </div>
                             <div style='border: 1px solid #e1e1e1; padding: 5px'>    
-                                Hi, <br><br> Your RCP request for approval with a no. of <strong>".$rcp_no."</strong> has been updated by ".$approver_name.". <br><i>You can download a PDF file format of your previous RCP data in Approved Dashboard.</i><br><br>
+                                Hi, <br><br> Your RCP for approval with a no. of <strong>".$rcp_no."</strong> has been updated by ".$approver_name.". <br>You can check the changes in the RCP System.<br><br>
                                 Thank you. <br><br> Best Regards, <br>System Administrator
                             </div>
                             <br/>

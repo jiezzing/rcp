@@ -668,22 +668,6 @@
   </div>
 </div>
 
-<div class="modal fade bd-example-modal-lg" id="show-rcp-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details<i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
-      </div>
-
-      <div class="modal-body" id="show-rcp-details-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="modal fade bd-example-modal-xl" id="rcp-all-modal" tabindex="-1" role="document" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
   <div class="modal-document modal-xl">
     <div class="modal-content">
@@ -755,32 +739,27 @@
   </div>
 </div>
 
-<div class="modal fade bd-example-modal-xl" id="rcp-pending-modal" tabindex="-1" role="document" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-  <div class="modal-document modal-xl">
+<div class="modal fade bd-example-modal-lg" id="rcp-pending-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Information<i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
+        <h4 class="modal-title" id="exampleModalLabel">Pending Request for Check Payments<i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
       </div>
-      <div class="modal-body" >
+      <div class="modal-body">
         <table id="pending-table" class="table table-striped table-bordered" cellspacing="0" style="font-size: 13px;">
-            <thead>
-                <tr>  
-                    <th class="th-lg">RCP No</th>
-                    <th class="th-sm">Requestor</th>
-                    <th class="th-sm">Approver</th>
-                    <th class="th-sm">Payee</th>
-                    <th class="th-sm">Department</th>
-                    <th class="th-sm">Company</th>
-                    <th class="th-sm">Project</th>
-                    <th class="th-sm">Amount</th>
-                    <th class="th-sm">Rush</th>
-                    <th class="th-sm">Date</th>
-                    <th class="th-sm">Created at</th>
-                    <th class="th-sm">Status</th>
-                    <th class="th-sm">More</th>
-                </tr>
-            </thead>
-            <tbody>
+          <thead>
+              <tr>  
+                  <th class="th-lg">RCP No</th>
+                  <th class="th-sm">Requestor</th>
+                  <th class="th-sm">Approver</th>
+                  <th class="th-sm">Rush</th>
+                  <th class="th-sm">Date</th>
+                  <th class="th-sm">Created at</th>
+                  <th class="th-sm">Status</th>
+                  <th class="th-sm">Action</th>
+              </tr>
+          </thead>
+          <tbody>
                     <?php
                         $index = 0;
                         $mApprvr = array();
@@ -796,21 +775,14 @@
                             echo '
                                 <tr>
                                     <td>'.$row['rcp_no'].'</td>
-                                    <td>'.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</td>
+                                    <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
                                     <td>'.$mApprvr[$index].'</td>
-                                    <td>'.$row['rcp_payee'].'</td>
-                                    <td>'.$row['dept_name'].'</td>
-                                    <td>'.$row['comp_name'].'</td>
-                                    <td>'.$row['proj_name'].'</td>
-                                    <td>'.number_format($row['rcp_total_amount'], 2).'</td>
                                     <td>'.$row['rcp_rush'].'</td>
                                     <td>'.$row['rcp_date_issued'].'</td>
                                     <td>'.$row['created_at'].'</td>
                                     <td>'.$row['rcp_status'].'</td>
-                                    <td class="text-center">
-                                      <a href="#" value="'.$row['rcp_no'].':'.$row['rcp_rush'].'" data-toggle="modal" data-target="#rcp-particulars-history-modal" class="show-particulars-history">
-                                      <u><i class="fa fa-location-arrow" aria-hidden="true"></i> More Details</u>
-                                      </a>
+                                    <td>
+                                      <button type="button" class="btn btn-warning form-control show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
                                     </td>
                                 </tr>
                             ';
@@ -825,6 +797,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div class="modal fade bd-example-modal-xl" id="rcp-approved-modal" tabindex="-1" role="document" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
   <div class="modal-document modal-xl">
@@ -975,6 +949,22 @@
         <h4 class="modal-title" id="exampleModalLabel">Showing All Particulars<i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
       </div>
       <div class="modal-body" id="rcp-particulars-modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="show-rcp-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details<i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
+      </div>
+
+      <div class="modal-body" id="show-rcp-details-body">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

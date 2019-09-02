@@ -2,11 +2,13 @@
 	session_start(); 
 	include '../../../config/connection.php';
 	include '../../../objects/univ/selects_for_all.php';
+  include '../../../objects/requestor/select_queries.php';
 
 	$con = new connection();
 	$db = $con->connect();
 
 	$sel = new U_Select($db);
+  $sel2 = new Select($db);
 
 	$sel->rcp_no = $_POST['rcp_no'];
 	$query = $sel->getRcpDetails();
@@ -22,7 +24,20 @@
 		$comp_name = $row['comp_name'];
 		$proj_name = $row['proj_name'];
     $rcp_rush = $row['rcp_rush'];
+    $rcp_status = $row['rcp_status'];
  	}
+
+  $sel2->rcp_no = $_POST['rcp_no'];
+  $query = $sel2->getOldRcpDetails();
+  while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $old_comp_code = $row['rcp_company'];
+    $old_proj_code = $row['rcp_project'];
+    $old_payee = $row['rcp_payee'];
+    $old_words_amt = $row['rcp_amount_in_words'];
+    $old_amt = $row['rcp_total_amount'];
+    $old_comp_name = $row['comp_name'];
+    $old_proj_name = $row['proj_name'];
+  }
 
  	$sel->dept_code = $rcp_dept_code;
 	$query = $sel->getSpecificDepartment();
@@ -49,16 +64,17 @@
 		<div class="row">
             <div class="col-md-12">
                 <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">RCP NO.</label>
-                    <strong><input type="text" style="background-color: white" class="form-control text-center" placeholder="Payee" value="'.$rcp_no.'" readonly id="rcp-no"></strong>
+                  <label for="company" class=" form-control-label">RCP NO.</label>
+                    
+                    <strong><input type="text" style="background-color: white" class="form-control text-center" placeholder="Payee" value="'.$rcp_no.'" readonly id="rcp-no" ></strong>
                 </div>
                 <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
+                    <label for="company" class=" form-control-label">DEPARTMENT</label>
                     <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$dept_name.'" readonly>
                 </div>
 
                 <div class="col-md-4">
-                  <label for="company" class=" form-control-label tooltiptext">DECLINED BY</label>
+                  <label for="company" class=" form-control-label">APPROVER</label>
                   <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$apprvr_name.'" readonly>
                 </div>
             </div>
@@ -66,13 +82,49 @@
       	<div class="row" style="margin-top: 15px">
             <div class="col-md-12">
                 <div class="col-md-8">
-                    <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
+                ';
+              ?>
+
+              <?php
+                if($rcp_comp_code == $old_comp_code){
+                  echo '<label for="company" class=" form-control-label ">COMPANY</label>';
+                }
+                else{
+                  echo '
+                      <label for="company" class=" form-control-label">COMPANY</label>
+                      <span class="pull-right">
+                        <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_comp_name.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                        </a>
+                      </span>';
+                }
+              ?>
+
+              <?php 
+                echo '
                     <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$comp_name.'" readonly>
                 </div>
-                <!-- End of get all department -->
                 <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$proj_name.'" readonly>
+                ';
+              ?>
+
+              <?php
+                if($rcp_proj_code == $old_proj_code){
+                  echo '<label for="company" class=" form-control-label">PROJECT</label>';
+                }
+                else{
+                  echo '
+                    <label for="project" class=" form-control-label">PROJECT</label>
+                    <span class="pull-right">
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_proj_name.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                  ';
+                }
+              ?>
+
+              <?php
+                echo '
+                    <input type="text" style="background-color: white" class="form-control" value="'.$proj_name.'" readonly>
                 </div>
             </div>
       	</div>
@@ -80,10 +132,52 @@
       	<div class="row" style="margin-top: 15px">
             <div class="col-md-12">
                 <div class="col-md-4">
-                  <label for="company" class=" form-control-label tooltiptext">PAYEE</label><span class="pull-right" style="color: red; display: none" id="required3"> required**</span>
+                ';
+              ?>
+
+              <?php
+                if($rcp_payee == $old_payee){
+                  echo '<label for="payee" class=" form-control-label">PAYEE</label>';
+                }
+                else{
+                  echo '
+                    <label for="payee" class=" form-control-label">PAYEE</label>
+                    <span class="pull-right">
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_payee.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                  ';
+                }
+              ?>
+
+              <?php
+                echo '
+                  
                   <input type="text" style="background-color: white" class="form-control" placeholder="Payee" value="'.$rcp_payee.'" id="payee" readonly>
                 </div>
                 <div class="col-md-8">
+                  ';
+                ?>
+
+                <?php
+                  if($rcp_words_amt == $old_words_amt){
+                    echo '
+                      <label for="words-amount" class="form-control-label">AMOUNT IN WORDS</label>
+                    ';
+                  }
+                  else{
+                    echo '
+                    <label for="words-amount" class="form-control-label">AMOUNT IN WORDS</label>
+                    <span class="pull-right">
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_words_amt.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                  ';
+                  }
+                ?>
+
+                <?php
+                  echo '
                     <label for="company" class=" form-control-label tooltiptext">AMOUNT IN WORDS</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
                     <i><input type="text" style="background-color: white" class="form-control text-center" placeholder="Amount in words field" value="'.$rcp_words_amt.'" id="amount-in-words" readonly></i>
                 </div>
@@ -104,47 +198,105 @@
                                 </tr>
                               </thead>
                               <tbody>
-
                               ';
                               ?>
-                                <?php
-									$index = 0;
-									$sel->rcp_no = $rcp_no;
-									$query3 = $sel->getRcpParticularValidatedDetails();
-								 	while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
-                    if($row['rcp_status'] == 'Removed'){
-                      echo '
-                        <tr style="background-color: #f2dede">
-                          <td class="particulars" name="td1" id="td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
-                          <td class="ref_code" name="td2" id="td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
-                          <td class="allownumericwithdecimal amount" name="td3" id="td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()">'.number_format($row['rcp_amount'], 2).'</td>
-                        </tr>
-                      ';
+                  <?php
+  									$index = 0;
+                    $sel2->rcp_no = $rcp_no;
+                    $old_particulars = array();
+                    $old_ref_code = array();
+                    $old_amt = array();
+                    $particulars = array();
+                    $ref_code = array();
+                    $amt = array();
+
+                    if($rcp_status == "Approved" || $rcp_status == "Pending"){
+                      $query = $sel2->getOldRcpParticularDetails();
+                      while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                        $old_particulars[] = $row['rcp_particulars'];
+                        $old_ref_code[] = $row['rcp_ref_code'];
+                        $old_amt[] = $row['rcp_amount'];
+                      }
+
+                      $sel->rcp_no = $rcp_no;
+                      $query3 = $sel->getRcpParticularValidatedDetails();
+                      while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
+                        $particulars[] = $row['rcp_particulars'];
+                        $ref_code[] = $row['rcp_ref_code'];
+                        $amt[] = $row['rcp_amount'];
+                        $index++;
+                      }
+                      for($i = 0; $i < sizeof($particulars); $i++){
+                        if($particulars[$i] == $old_particulars[$i]){
+                          echo '
+                            <tr>
+                              <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'</td>
+                          ';
+                        }
+                        else{
+                          echo '
+                            <tr>
+                              <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'
+                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_particulars[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                </a>
+                              </td>
+                          ';
+                        }
+                        if($ref_code[$i] == $old_ref_code[$i]){
+                          echo '
+                            <td style="border-right: 2px solid #EEEEEE">'.$ref_code[$i].'</td>
+                          ';
+                        }
+                        else{
+                          echo '
+                            <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$ref_code[$i].'
+                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_ref_code[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                </a>
+                            </td>
+                          ';
+                        }
+                        if($amt[$i] == $old_amt[$i]){
+                          echo '
+                            <td style="border-right: 2px solid #EEEEEE">'.$amt[$i].'</td>
+                          ';
+                        }
+                        else{
+                          echo '
+                            <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$amt[$i].'
+                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_amt[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                </a>
+                            </td>
+                            </tr>
+                          ';
+                        }
+                      }
                     }
                     else{
-                      echo '
-                        <tr>
-                          <td class="particulars" name="td1" id="td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
-                          <td class="ref_code" name="td2" id="td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
-                          <td class="allownumericwithdecimal amount" name="td3" id="td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()">'.number_format($row['rcp_amount'], 2).'</td>
-                        </tr>
-                      ';
+                      $sel->rcp_no = $rcp_no;
+                      $query3 = $sel->getRcpParticularValidatedDetails();
+                      while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
+                          echo '
+                            <tr>
+                              <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$row['rcp_particulars'].'</a></td>
+                              <td style="border-right: 2px solid #EEEEEE">'.$row['rcp_ref_code'].'</td>
+                              <td style="border-right: 2px solid #EEEEEE">'.number_format($row['rcp_amount'], 2).'</td>
+                            </tr>
+                          ';
+                      }
                     }
-							 			$index++;
-								 	}
-								?>
-								<?php
-									for ($i=$index; $i < 8; $i++) { 
-										echo '
-								 			<tr value="'.$row['rcp_id'].'">
-												<td class="particulars" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE; text-align: center" > - - -
-												</td>
-												<td class="ref_code" style="border-right: 2px solid #EEEEEE; text-align: center"> - - -</td>
-												<td class="allownumericwithdecimal amount" style="border-right: 2px solid #EEEEEE; text-align: center"> - - -</td>
-											</tr>
-								 		';
-									}
-								?>
+								  ?>
+  								<?php
+  									for ($i=$index; $i < 8; $i++) { 
+  										echo '
+  								 			<tr value="'.$row['rcp_id'].'">
+  												<td class="particulars" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE; text-align: center" > - - -
+  												</td>
+  												<td class="ref_code" style="border-right: 2px solid #EEEEEE; text-align: center"> - - -</td>
+  												<td class="allownumericwithdecimal amount" style="border-right: 2px solid #EEEEEE; text-align: center"> - - -</td>
+  											</tr>
+  								 		';
+  									}
+  								?>
                         <?php
                         echo '
                       </tbody>
@@ -193,5 +345,10 @@
   }
 ?>
 
-
+    
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
 

@@ -67,14 +67,12 @@
 												          	<?php
 												          		if($row['edited_by_app'] == 'Yes'){
 												          			echo '
-												          				<button type="button" class="btn btn-danger show-old-details" value="'.$row['rcp_no'].'"><i class="fa fa-copy"></i> Original Details</button>
 																        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#view-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 												          			';	
 												          		}
 												          		else{
 												          			echo '
-												          				<button type="button" class="btn btn-danger" disabled><i class="fa fa-copy"></i> Original Details</button>
 																        <button type="button" class="btn btn-primary" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
 															          	</button>
 															          	
@@ -102,56 +100,6 @@
 	<?php
 		include '../scripts/js.php';
 	?>
-
-    <script type="text/javascript">
-        $(document).on('click', '.show-rcp-details', function(e){
-            e.preventDefault();
-			var rcp_no = $(this).attr('value');
-
-            $.ajax({
-              type: "POST",
-              url: "../controls/requestor/modal_body/show_validated_details.php",
-              data: {
-              	rcp_no:rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#show-rcp-details-body").html(html);
-                $("#show-rcp-details").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          	});
-        });
-    </script>
-
-    <script type="text/javascript">
-        $(document).on('click', '.show-old-details', function(e){
-            e.preventDefault();
-			var rcp_no = $(this).attr('value');
-
-            $.ajax({
-              type: "POST",
-              url: "../controls/requestor/modal_body/show_old_data.php",
-              data: {
-              	rcp_no:rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#show-rcp-details-body").html(html);
-                $("#show-rcp-details").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          });
-        });
-    </script>
 
     <script>
         $(document).on('click', '.view-history', function(e){

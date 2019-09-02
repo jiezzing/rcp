@@ -66,14 +66,13 @@
 
 									$sel->rcp_employee_id = $_SESSION['user_id'];
 								  	$select = $sel->getAllRcpNo();
-									
 								  	while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
 									    $notification[] = $row['rcp_no'];
 								  	}
 
 								  	if($pending_rcp != 0){
 									  	echo '
-											<a href="#" class="dropdown-toggle icon-menu read-notification" data-toggle="dropdown">
+											<a href="#" class="dropdown-toggle icon-menu read-notification"  data-toggle="dropdown">
 												<i class="lnr lnr-alarm"></i>
 												<span class="badge bg-danger">'.$pending_rcp.'</span>
 											</a>
@@ -100,7 +99,7 @@
 								  			$isNotif= true;
 								  			if($row['rcp_status'] == 'Pending'){
 								  				echo '
-								  					<li style="background-color: #f5f5fa" class="show-more-details" value="'.$row['rcp_id'].':'.$row['rcp_no'].':'.$row['rcp_employee_id'].':'.$row['rcp_rush'].':'.$row['user_email'].':'.$row['rcp_status'].'"><a href="#" class="notification-item"><span class="dot bg-warning"></span>You have a request from '.$row['user_firstname'].' '.$row['user_lastname'].' - <strong>'.$row['rcp_no'].'</strong></a></li>
+								  					<li style="background-color: #f5f5fa" class="show-more-details-approver" value="'.$row['rcp_id'].':'.$row['rcp_no'].':'.$row['rcp_employee_id'].':'.$row['rcp_rush'].':'.$row['user_email'].':'.$row['rcp_status'].'"><a href="#" class="notification-item"><span class="dot bg-warning"></span>You have a request from '.$row['user_firstname'].' '.$row['user_lastname'].' - <strong>'.$row['rcp_no'].'</strong></a></li>
 								  				';
 								  			}
 									  	}
@@ -124,7 +123,7 @@
 								  			$isNotif= true;
 								  			if($row['rcp_status'] == 'Approved'){
 								  				echo '
-								  					<li>
+								  					<li class="show-rcp-details" value="'.$row['rcp_no'].'">
 								  						<a href="#" class="notification-item">
 								  							<span class="dot bg-success"></span><strong>'.$row['rcp_no'].'</strong> has been approved by '.$row['user_firstname'].' '.$row['user_lastname'].'.
 							  							</a>
@@ -134,7 +133,7 @@
 								  			else{
 								  				if($row['rcp_status'] == 'Declined'){
 									  				echo '
-									  					<li style="background-color: #f2dede" class="show-more-details read">
+									  					<li style="background-color: #f2dede" class="show-rcp-details read" value="'.$row['rcp_no'].'">
 										  					<a href="#" class="notification-item"><span class="dot bg-danger"></span><strong>'.$row['rcp_no'].'</strong> has been declined by '.$row['user_firstname'].' '.$row['user_lastname'].'
 									  						</a>
 									  					</li>
@@ -185,7 +184,7 @@
 
     <script>
         $(document).on('click', '.read-notification', function(e){
-            var data = <?echo json_encode($notification);?>;
+            var data = <?php echo json_encode($notification);?>;
             for (var i = 0; i <data.length; i++) {
             	console.log(data[i]);
             	 	$.ajax({
@@ -215,8 +214,9 @@
 		var rush;
 		var email;
 		var status;
+		var isEdited;
 		var approver_name = "<?php echo $user_fullname ?>";
-        $(document).on('click', '.show-more-details', function(e){
+        $(document).on('click', '.show-more-details-approver', function(e){
             e.preventDefault();
 
             var split = $(this).attr('value');
@@ -226,7 +226,7 @@
             rqstr_id = mValues[2];
             rush = mValues[3];
             email = mValues[4];
-            status = mValues[5];
+            isEdited = mValues[5];
             rcp_id = id;
 
             $.ajax({
@@ -249,3 +249,29 @@
         });
     </script>
 
+    <script type="text/javascript">
+        $(document).on('click', '.show-rcp-details', function(e){
+            e.preventDefault();
+			var rcp_no = $(this).attr('value');
+
+            $.ajax({
+              type: "POST",
+              url: "../controls/requestor/modal_body/show_validated_details.php",
+              data: {
+              	rcp_no:rcp_no
+              },
+              cache: false,
+              success: function(html)
+              {
+                $("#show-rcp-details-body").html(html);
+                $("#show-rcp-details").modal('show');
+              },
+              error: function(xhr, ajaxOptions, thrownError)
+              {
+                  alert(thrownError);
+              }
+          	});
+        });
+    </script>
+
+   

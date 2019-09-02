@@ -83,30 +83,5 @@
 			$('#declinedTable').DataTable();
 		} );
     </script>
-
-    <script type="text/javascript">
-        $(document).on('click', '.show-rcp-details', function(e){
-            e.preventDefault();
-			var rcp_no = $(this).attr('value');
-
-            $.ajax({
-              type: "POST",
-              url: "../controls/requestor/modal_body/show_validated_details.php",
-              data: {
-              	rcp_no:rcp_no
-              },
-              cache: false,
-              success: function(html)
-              {
-                $("#show-rcp-details-body").html(html);
-                $("#show-rcp-details").modal('show');
-              },
-              error: function(xhr, ajaxOptions, thrownError)
-              {
-                  alert(thrownError);
-              }
-          });
-        });
-    </script>
 </body>
 </html>

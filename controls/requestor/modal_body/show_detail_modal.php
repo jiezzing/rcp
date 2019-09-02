@@ -62,7 +62,7 @@
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <input type="text" class="form-control" placeholder="Payee" value="'.$dept_name.'" disabled id="department">
+                    <input type="text" class="form-control" placeholder="Payee" value="'.$dept_name.'" disabled>
                 </div>
 
                 <div class="col-md-4">
