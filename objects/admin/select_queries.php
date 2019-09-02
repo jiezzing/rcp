@@ -19,6 +19,28 @@
 
 			return $sel;
 		}
+
+		//Get all approved RCP
+		public function getAllApprove(){
+			$query = "SELECT * FROM rcp_file, rcp_approved_file, company_file, user_file WHERE rcp_file.rcp_no=rcp_approved_file.rcp_no AND rcp_approver_id=user_id AND user_comp_code=comp_code ORDER BY rcp_date_approved DESC";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->execute();
+
+			return $sel;
+		}
+
+		//Get all approved RCP
+		public function getAllDecline(){
+			$query = "SELECT * FROM rcp_file, rcp_declined_file, company_file, user_file WHERE rcp_file.rcp_no=rcp_declined_file.rcp_no AND rcp_approver_id=user_id AND user_comp_code=comp_code ORDER BY rcp_date_declined DESC";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->execute();
+
+			return $sel;
+		}
 		
 		//Get all pending RCP
 		public function getAllPendingRcp(){

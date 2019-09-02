@@ -105,50 +105,156 @@
 							</nav>
 							<h3 class="panel-title">Request for Check Payment Overview</h3>
 						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-9">
+									<div id="headline-chart" class="ct-chart"></div>
+								</div>
+								<div class="col-md-3">
+									<div class="weekly-summary text-right">
+										<span class="number"><?php echo $pendingCtr ?></span> <span class="percentage"><i class="fa fa-caret-up text-warning"></i></span>
+										<span class="info-label">Pending RCP</span>
+									</div>
+									<div class="weekly-summary text-right">
+										<span class="number"><?php echo $approvedCtr ?></span> <span class="percentage"><i class="fa fa-caret-up text-success"></i></span>
+										<span class="info-label">Approved RCP</span>
+									</div>
+									<div class="weekly-summary text-right">
+										<span class="number"><?php echo $declinedCtr ?></span> <span class="percentage"><i class="fa fa-caret-down text-danger"></i></span>
+										<span class="info-label">Declined RCP</span>
+									</div>
+									<div class="weekly-summary text-right">
+										<span class="number"><?php echo $total_rcp ?></span> <span class="percentage"><i class="fa fa-caret-down text-danger"></i></span>
+										<span class="info-label">TOTAL RCP</span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<!-- VISIT CHART -->
 					<div class="panel">
 						<div class="panel-heading">
-							<h3 class="panel-title">Request for Check Payment Information</h3>
+							<h3 class="panel-title">Creation of RCP Activity</h3>
 							<div class="right">
 								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
 							</div>
 						</div>
-						<div class="panel-body">
-							<div id="visits-chart" class="ct-chart"></div>
-						</div>
-					</div>
-					<!-- END VISIT CHART -->
-				</div>
-				<div class="col-md-6">
-					<!-- TIMELINE -->
-					<div class="panel" style="touch-action: none">
-						<div class="panel-heading">
-							<h3 class="panel-title">Recent User Activity</h3>
-							<div class="right">
-								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-							</div>
-						</div>
-						<div class="panel-body" style="overflow-y: auto; height: 430px">
+						<div class="panel-body" style="overflow-y: auto; height: 430px;">
 							<ul class="list-unstyled activity-list">
 								<?php
+									$isEmpty = true;
 				                    $select = $sel->getAllRcp();
 				                    while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
 				                        extract($row);
+				                        $isEmpty = false;
 				                        echo '
 											<li>
-												<span class="icon pull-left"><i class="fa fa-file fa-3x" style="color: #0081C2"></i></span>
-												<p>RCP # <strong><a href="#" class="show-rcp-details" value="'.$row['rcp_no'].'">'.$row['rcp_no'].'</a></strong> has been created by '.$row['user_firstname'].' '.$row['user_middle_initial'].'. '.$row['user_lastname'].'</a> of '.$row['comp_name'].'<span class="timestamp">Created at: '.$row['created_at'].'</span></p>
+												<span class="icon pull-left"><i class="fa fa-file-o fa-3x" style="color: #0081C2"></i></span>
+												<p>RCP # <strong><a href="#" class="show-rcp-details" value="'.$row['rcp_no'].'">'.$row['rcp_no'].'</a></strong> has been created by '.$row['user_firstname'].' '.$row['user_lastname'].'</a> of '.$row['comp_name'].'.<span class="timestamp">Created at: '.$row['created_at'].'</span></p>
 											</li>
 				                        ';
+				                    }
+				                    if($isEmpty){
+				                    	echo '
+					                    	<div class="container-fluid text-center">
+												<div class="panel panel-headline">
+													<div class="panel-heading">
+														<i class="fa fa-exclamation-circle fa-5x" style="color: #D9534F"></i>
+														<br>
+														<small>NO DATA</small>
+													</div>
+												</div>
+											</div>
+										';
 				                    }
 				                ?>
 							</ul>
 						</div>
 					</div>
-					<!-- END TIMELINE -->
+					</div>
+					<div class="col-md-6">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">Approval of RCP Activity</h3>
+								<div class="right">
+									<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+								</div>
+							</div>
+							<div class="panel-body" style="overflow-y: auto; height: 430px;">
+								<ul class="list-unstyled activity-list">
+									<?php
+										$isEmpty = true;
+					                    $select = $sel->getAllApprove();
+					                    while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
+					                        extract($row);
+					                        $isEmpty = false;
+					                        echo '
+												<li>
+													<span class="icon pull-left"><i class="fa fa-file-text-o fa-3x" style="color: #0081C2"></i></span>
+													<p>RCP # <strong><a href="#" class="show-rcp-details" value="'.$row['rcp_no'].'">'.$row['rcp_no'].'</a></strong> has been approved by '.$row['user_firstname'].' '.$row['user_lastname'].'</a> of '.$row['comp_name'].'.<span class="timestamp">Approval Date: '.$row['rcp_date_approved'].'</span></p>
+												</li>
+					                        ';
+					                    }
+					                    if($isEmpty){
+					                    	echo '
+						                    	<div class="container-fluid text-center">
+													<div class="panel panel-headline">
+														<div class="panel-heading">
+															<i class="fa fa-exclamation-circle fa-5x" style="color: #D9534F"></i>
+															<br>
+															<small>NO DATA</small>
+														</div>
+													</div>
+												</div>
+											';
+					                    }
+					                ?>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">Disapproval of RCP Activity</h3>
+								<div class="right">
+									<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+								</div>
+							</div>
+							<div class="panel-body" style="overflow-y: auto; height: 430px;">
+								<ul class="list-unstyled activity-list">
+									<?php
+										$isEmpty = true;
+					                    $select = $sel->getAllDecline();
+					                    while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
+					                        extract($row);
+					                        $isEmpty = false;
+					                        echo '
+												<li>
+													<span class="icon pull-left"><i class="fa fa-trash fa-3x" style="color: #0081C2"></i></span>
+													<p>RCP # <strong><a href="#" class="show-rcp-details" value="'.$row['rcp_no'].'">'.$row['rcp_no'].'</a></strong> has been declined by '.$row['user_firstname'].' '.$row['user_lastname'].'</a> of '.$row['comp_name'].' due to the following reason: <i>'.$row['rcp_reason'].'.</i><span class="timestamp">Date Declined: '.$row['rcp_date_declined'].'</span></p>
+												</li>
+					                        ';
+					                    }
+					                    if($isEmpty){
+					                    	echo '
+						                    	<div class="container-fluid text-center">
+													<div class="panel panel-headline">
+														<div class="panel-heading">
+															<i class="fa fa-exclamation-circle fa-5x" style="color: #D9534F"></i>
+															<br>
+															<small>NO DATA</small>
+														</div>
+													</div>
+												</div>
+											';
+					                    }
+					                ?>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -220,20 +326,27 @@
       	var approvedCtr = "<?php echo $approvedCtr; ?>";
 		var data, options;
 
-		// visits chart
 		data = {
-			labels: ['Pending', 'Declined', 'Approved', 'Total RCP'],
+			labels: ['Pending', 'Approved', 'Declined', 'TOTAL'],
 			series: [
-				[pendingCtr, declinedCtr, approvedCtr, total_rcp]
+				[total_rcp],
+				[pendingCtr, approvedCtr, declinedCtr, total_rcp, 0],
 			]
 		};
+
 		options = {
-			height: 400,
+			height: 500,
+			showArea: true,
+			showLine: false,
+			showPoint: false,
+			fullWidth: true,
 			axisX: {
 				showGrid: false
 			},
+			lineSmooth: false,
 		};
-		new Chartist.Bar('#visits-chart', data, options);
+
+		new Chartist.Line('#headline-chart', data, options);
 	});
 	</script>
 </body>
