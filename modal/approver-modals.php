@@ -144,7 +144,7 @@
         </label>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <a href="#" id="hrefBtn" target="new" class="pdf_view" type="view">
-          <button type="button" class="btn btn-warning" onclick="printBtnClick()"><i class="fa fa-print" aria-hidden="true"></i> View Print</button>
+          <button type="button" class="btn btn-warning" id="print-btn"><i class="fa fa-print" aria-hidden="true"></i> View Print</button>
         </a>
         <button type="button" class="btn btn-primary" id="save-changes-btn" disabled=""><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
         <button type="button" class="btn btn-danger" id="decline-btn"><i class="fa fa-trash" aria-hidden="true"></i> Decline</button>
@@ -323,6 +323,7 @@
         document.getElementById("approve-btn").disabled = true;
         $('.isEdit').prop('contenteditable', true); 
         document.getElementById("save-changes-btn").disabled = false;
+        document.getElementById("print-btn").disabled = true;
       } 
       else{
         document.getElementById("project").disabled = true;
@@ -333,6 +334,7 @@
         document.getElementById("approve-btn").disabled = false;
         $('.isEdit').prop('contenteditable', false); 
         document.getElementById("save-changes-btn").disabled = true;
+        document.getElementById("print-btn").disabled = false;
       }
   }); 
 </script>
@@ -343,5 +345,6 @@
         document.getElementById("approve-btn").disabled = false;
         document.getElementById("decline-btn").disabled = false;
         document.getElementById("save-changes-btn").disabled = true;
+        document.getElementById("print-btn").disabled = false;
   });
 </script>

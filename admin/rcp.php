@@ -2,6 +2,7 @@
 <html lang="en">
 <title>RCP</title>
 	<?php
+		$page = 'RCP';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -52,8 +53,8 @@
 			}
 		?>
 		<div class="main">
-			<div class="main-content"  style="width: 160%">
-				<div class="container-fluid" >
+			<div class="main-content" style="width: 140%">
+				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
 						<div class="panel">
@@ -61,76 +62,17 @@
 									<h3 class="panel-title">Request for Check Payment Information</h3>
 								</div>
 								<div class="panel-body">
-									<table id="allRcpTbl" class="table table-striped table-bordered" cellspacing="0" style="font-size: 13px;">
-								        <thead>
-								            <tr>	
-								                <th class="th-lg">RCP No</th>
-								                <th class="th-sm">Requestor</th>
-								                <th class="th-sm">Approver</th>
-								                <th class="th-sm">Payee</th>
-								                <th class="th-sm">Department</th>
-								                <th class="th-sm">Company</th>
-								                <th class="th-sm">Project</th>
-								                <th class="th-sm">Date</th>
-								                <th class="th-sm">Amount</th>
-								                <th class="th-sm">Rush</th>
-								                <th class="th-sm">Status</th>
-								                <th class="th-sm">Action</th>
-								            </tr>
-								        </thead>
-								        <tbody>
-								                <?php
-								                    $index = 0;
-								                    $mApprvr = array();
-								                    $select = $sel->getAllApprover();
-								                    while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
-								                        extract($row);
-								                        $mApprvr[] =$row['approver_name'];
-								                    }
-
-								                    $sel->rcp_employee_id = $_SESSION['user_id'];
-								                    $select2 = $sel->getAllRcp();
-								                    while ($row = $select2->fetch(PDO::FETCH_ASSOC)) {
-								                        echo '
-								                            <tr>
-								                                <td>'.$row['rcp_no'].'</td>
-								                                <td>'.$row['user_firstname'].' '.$row['user_lastname'].'</td>
-								                                <td>'.$mApprvr[$index].'</td>
-								                                <td>'.$row['rcp_payee'].'</td>
-								                                <td>'.$row['dept_name'].'</td>
-								                                <td>'.$row['comp_name'].'</td>
-								                                <td>'.$row['proj_name'].'</td>
-								                                <td>'.$row['rcp_date_issued'].'</td>
-								                                <td>'.number_format($row['rcp_total_amount'], 2).'</td>
-								                                <td>'.$row['rcp_rush'].'</td>
-								                                <td>'.$row['rcp_status'].'</td>
-								                                <td>
-								                                    <button type="button" class="btn btn-warning show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
-								                                    ';
-							                                    ?>
-								                                <?php
-								                                	if($row['edited_by_app'] == "Yes"){
-								                                		echo '
-																	        <button type="button" class="btn btn-primary view-history" value="'.$row['rcp_no'].'" data-toggle="modal" data-target="#view-history-modal"><i class="fa fa-history" aria-hidden="true"></i> Edit History
-																          	</button>
-								                                		';
-								                                	}
-								                                	else{
-								                                		echo '
-								                                			<button type="button" class="btn btn-primary view-history" disabled><i class="fa fa-history" aria-hidden="true"></i> Edit History
-																          	</button>
-								                                		';
-								                                	}							                                
-								                                ?>    
-							                                    <?php
-								                                    echo '
-								                                </td>
-								                            </tr>
-								                        ';
-								                    }
-								                ?>
-								        </tbody>
-								    </table>
+									<div class="custom-tabs-line tabs-line-bottom left-aligned">
+	  									<ul class="nav" role="tablist">
+	  										<li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">All RCP</a></li>
+	  										<li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Pending RCP</a></li>
+	  										<li><a href="#tab-bottom-left3" role="tab" data-toggle="tab">Approved RCP</a></li>
+	  										<li><a href="#tab-bottom-left4" role="tab" data-toggle="tab">Declined RCP</a></li>
+	  									</ul>
+                  					</div>
+				                  	<?php
+				                      	include '../admin/tab-content/rcp-tabs.php';
+				                  	?>
 								<!-- END TABBED CONTENT -->
 								</div>
 							</div>
@@ -146,7 +88,34 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-        $('#allRcpTbl').DataTable({
+        $('#all-rcp-table').DataTable({
+        	sort: false
+        });
+        $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+        $('#pending-rcp-table').DataTable({
+        	sort: false
+        });
+        $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+        $('#approved-rcp-table').DataTable({
+        	sort: false
+        });
+        $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+        $('#declined-rcp-table').DataTable({
         	sort: false
         });
         $('.dataTables_length').addClass('bs-select');

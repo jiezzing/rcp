@@ -134,7 +134,7 @@
 								  				if($row['rcp_status'] == 'Declined'){
 									  				echo '
 									  					<li style="background-color: #f2dede" class="show-rcp-details read" value="'.$row['rcp_no'].'">
-										  					<a href="#" class="notification-item"><span class="dot bg-danger"></span><strong>'.$row['rcp_no'].'</strong> has been declined by '.$row['user_firstname'].' '.$row['user_lastname'].'
+										  					<a href="#" class="notification-item"><span class="dot bg-danger"></span><strong>'.$row['rcp_no'].'</strong> has been declined by '.$row['user_firstname'].' '.$row['user_lastname'].'.
 									  						</a>
 									  					</li>
 									  				';
@@ -170,7 +170,7 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-user" style="margin-right: 10px"></i><span><?php echo $user_fullname; ?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 					<ul class="dropdown-menu">
 						<li><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
-						<li><a href="../controls/auth/logout.php" onclick="logout()"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+						<li><a href="../controls/auth/logout.php"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
 					</ul>
 				</li>
 			</ul>

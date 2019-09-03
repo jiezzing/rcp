@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Users</title>
 	<?php
+		$page = 'Users';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -52,7 +53,7 @@
 			}
 		?>
 		<div class="main">
-			<div class="main-content" style="width: 130%">
+			<div class="main-content" style="width: 150%">
 				<div class="container-fluid">
 				<div class="row">
 						<div class="col-md-12">
@@ -121,9 +122,6 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-		include '../modal/error-modal.php';
-		include '../modal/success-modal.php';
-		include '../modal/confirmation-modal.php';
 	?>
 
 	<script>

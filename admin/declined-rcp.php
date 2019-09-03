@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 	<?php
+		$page = 'Declined RCP';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';

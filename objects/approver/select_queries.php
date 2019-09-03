@@ -24,7 +24,7 @@
 
 	    // Get all approved RCP's
 	    public function getApprovedRcp(){
-			$query = "SELECT * FROM rcp_file rcp, rcp_approved_file app, user_file usr, project_file, company_file, department_file WHERE rcp_project=proj_code AND rcp_company=comp_code AND rcp_department=dept_code AND rcp.rcp_no = app.rcp_no AND rcp.rcp_status = 'Approved' AND rcp.rcp_approver_id=? AND rcp.rcp_employee_id=usr.user_id";
+			$query = "SELECT * FROM rcp_file rcp, rcp_approved_file app, user_file usr, project_file, company_file, department_file WHERE rcp_project=proj_code AND rcp_company=comp_code AND rcp_department=dept_code AND rcp.rcp_no = app.rcp_no AND rcp.rcp_status = 'Approved' AND rcp.rcp_approver_id=? AND rcp.rcp_employee_id=usr.user_id ORDER BY rcp_date_approved DESC";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

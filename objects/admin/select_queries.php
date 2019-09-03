@@ -44,7 +44,7 @@
 		
 		//Get all pending RCP
 		public function getAllPendingRcp(){
-			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file WHERE rcp_company=comp_code AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_status='Pending'";
+			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file WHERE rcp_company=comp_code AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_status='Pending' ORDER BY created_at DESC";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -55,7 +55,7 @@
 		
 		//Get all approved RCP
 		public function getAllApprovedRcp(){
-			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file WHERE rcp_company=comp_code AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_status='Approved'";
+			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file, rcp_approved_file WHERE rcp_company=comp_code AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_file.rcp_no=rcp_approved_file.rcp_no AND rcp_file.rcp_status='Approved' ORDER BY rcp_date_approved DESC";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -66,7 +66,7 @@
 		
 		//Get all declined RCP
 		public function getAllDeclinedRcp(){
-			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file WHERE rcp_company=comp_code AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_status='Declined'";
+			$query = "SELECT * FROM rcp_file, company_file, project_file, user_file, department_file, rcp_declined_file WHERE rcp_company=comp_code  AND rcp_file.rcp_no=rcp_declined_file.rcp_no AND rcp_project=proj_code AND rcp_employee_id=user_id AND rcp_department=dept_code AND rcp_file.rcp_status='Declined' ORDER BY rcp_date_declined DESC";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 

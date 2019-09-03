@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Approver</title>
 	<?php
+    $page = 'Secondary Approver';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -51,7 +52,6 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-    include '../modal/success-modal.php';
 	?>
 
 	<script type="text/javascript">

@@ -34,7 +34,7 @@
     $old_proj_code = $row['rcp_project'];
     $old_payee = $row['rcp_payee'];
     $old_words_amt = $row['rcp_amount_in_words'];
-    $old_amt = $row['rcp_total_amount'];
+    $mold_amt = $row['rcp_total_amount'];
     $old_comp_name = $row['comp_name'];
     $old_proj_name = $row['proj_name'];
   }
@@ -115,7 +115,7 @@
                   echo '
                     <label for="project" class=" form-control-label">PROJECT</label>
                     <span class="pull-right">
-                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_proj_name.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_proj_name.'<br>(original data)"><i class="fa fa-pencil"></i>
                       </a>
                     </span>
                   ';
@@ -143,7 +143,7 @@
                   echo '
                     <label for="payee" class=" form-control-label">PAYEE</label>
                     <span class="pull-right">
-                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_payee.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_payee.'<br>(original data)"><i class="fa fa-pencil"></i>
                       </a>
                     </span>
                   ';
@@ -169,7 +169,7 @@
                     echo '
                     <label for="words-amount" class="form-control-label">AMOUNT IN WORDS</label>
                     <span class="pull-right">
-                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_words_amt.'<br>(your original data)"><i class="fa fa-pencil"></i>
+                      <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_words_amt.'<br>(original data)"><i class="fa fa-pencil"></i>
                       </a>
                     </span>
                   ';
@@ -210,12 +210,18 @@
                     $ref_code = array();
                     $amt = array();
 
-                    if($rcp_status == "Approved" || $rcp_status == "Pending"){
+                    if($rcp_status == "Approved"){
+                    $old_particulars = array();
+                    $old_ref_code = array();
+                    $old_amt = array();
+                    $particulars = array();
+                    $ref_code = array();
+                    $amt = array();
                       $query = $sel2->getOldRcpParticularDetails();
                       while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                         $old_particulars[] = $row['rcp_particulars'];
                         $old_ref_code[] = $row['rcp_ref_code'];
-                        $old_amt[] = $row['rcp_amount'];
+                        $old_amt[] = number_format($row['rcp_amount'], 2);
                       }
 
                       $sel->rcp_no = $rcp_no;
@@ -223,53 +229,55 @@
                       while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
                         $particulars[] = $row['rcp_particulars'];
                         $ref_code[] = $row['rcp_ref_code'];
-                        $amt[] = $row['rcp_amount'];
+                        $amt[] = number_format($row['rcp_amount'], 2);
                         $index++;
                       }
-                      for($i = 0; $i < sizeof($particulars); $i++){
-                        if($particulars[$i] == $old_particulars[$i]){
-                          echo '
-                            <tr>
-                              <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'</td>
-                          ';
+                        if(sizeof($old_particulars) > 0){
+                          for($i = 0; $i < sizeof($particulars); $i++){
+                            if($particulars[$i] == $old_particulars[$i]){
+                              echo '
+                                <tr>
+                                  <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'</td>
+                              ';
+                            }
+                            else{
+                              echo '
+                                <tr>
+                                  <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'
+                                    <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_particulars[$i].'<br>(original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                    </a>
+                                  </td>
+                              ';
+                            }
+                            if($ref_code[$i] == $old_ref_code[$i]){
+                              echo '
+                                <td style="border-right: 2px solid #EEEEEE">'.$ref_code[$i].'</td>
+                              ';
+                            }
+                            else{
+                              echo '
+                                <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$ref_code[$i].'
+                                    <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_ref_code[$i].'<br>(original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                    </a>
+                                </td>
+                              ';
+                            }
+                            if($amt[$i] == $old_amt[$i]){
+                              echo '
+                                <td style="border-right: 2px solid #EEEEEE">'.$amt[$i].'</td>
+                              ';
+                            }
+                            else{
+                              echo '
+                                <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$amt[$i].'
+                                    <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.number_format($old_amt[$i], 2).'<br>(original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                    </a>
+                                </td>
+                                </tr>
+                              ';
+                            }
+                          }
                         }
-                        else{
-                          echo '
-                            <tr>
-                              <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$particulars[$i].'
-                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_particulars[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
-                                </a>
-                              </td>
-                          ';
-                        }
-                        if($ref_code[$i] == $old_ref_code[$i]){
-                          echo '
-                            <td style="border-right: 2px solid #EEEEEE">'.$ref_code[$i].'</td>
-                          ';
-                        }
-                        else{
-                          echo '
-                            <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$ref_code[$i].'
-                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_ref_code[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
-                                </a>
-                            </td>
-                          ';
-                        }
-                        if($amt[$i] == $old_amt[$i]){
-                          echo '
-                            <td style="border-right: 2px solid #EEEEEE">'.$amt[$i].'</td>
-                          ';
-                        }
-                        else{
-                          echo '
-                            <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$amt[$i].'
-                                <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.$old_amt[$i].'<br>(your original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
-                                </a>
-                            </td>
-                            </tr>
-                          ';
-                        }
-                      }
                     }
                     else{
                       $sel->rcp_no = $rcp_no;
@@ -304,10 +312,29 @@
                   </div>
                   <div class="panel-footer">
                     <div class="row">
-                      <div class="col-md-6"></div>
-                      <div class="input-group">
+                        ';
+                      ?>
+
+                      <?php
+                        if($rcp_amt == $mold_amt){
+                          echo '
+                            <div class="col-md-6"></div>
+                                ';
+                        }
+                        else{
+                          echo '
+                            <div class="col-md-6"><a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.number_format($mold_amt, 2).'<br>(original data)" class="pull-right"><i class="fa fa-pencil" style="margin-top: 10px"></i>
+                                </a></div>
+                                ';
+                        }
+                      ?>
+                      
+
+                      <?php
+                        echo '
+                        <div class="input-group">
                         <span class="input-group-addon">₱</span>
-                        <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="total_amount">
+                        <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'">
                         <span class="input-group-addon">Total Amount Due</span>
                       </div>
                     </div>

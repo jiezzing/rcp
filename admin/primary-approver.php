@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Approver</title>
 	<?php
+    $page = 'Primary Approver';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -31,15 +32,15 @@
 								<div class="panel-body">
 									
 								<!-- TABBED CONTENT -->
-								<div class="custom-tabs-line tabs-line-bottom left-aligned">
-									<ul class="nav" role="tablist">
-										<li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">Primary Approver</a></li>
-										<li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Alternate Primary Approver</a></li>
-									</ul>
-                                </div>
-                                <?php
-                                    include '../admin/tab-content/primary-tabs.php';
-                                ?>
+  								<div class="custom-tabs-line tabs-line-bottom left-aligned">
+  									<ul class="nav" role="tablist">
+  										<li class="active"><a href="#tab-bottom-left1" role="tab" data-toggle="tab">Primary Approver</a></li>
+  										<li><a href="#tab-bottom-left2" role="tab" data-toggle="tab">Alternate Primary Approver</a></li>
+  									</ul>
+                  </div>
+                  <?php
+                      include '../admin/tab-content/primary-tabs.php';
+                  ?>
 								<!-- END TABBED CONTENT -->
 								</div>
 							</div>
@@ -51,7 +52,6 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-    include '../modal/success-modal.php';
 	?>
 
     <script type="text/javascript">

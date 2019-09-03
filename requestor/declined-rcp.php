@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Declined RCP</title>
 	<?php
+		$page = 'Declined RCP';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/requestor/select_queries.php';

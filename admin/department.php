@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Department</title>
 	<?php
+		$page = 'Department';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -80,9 +81,6 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-		include '../modal/error-modal.php';
-		include '../modal/confirmation-modal.php';
-		include '../modal/success-modal.php';
 	?>
 
     <script>

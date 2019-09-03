@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Approved RCP</title>
 	<?php
+		$page = 'Approved RCP';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/requestor/select_queries.php';

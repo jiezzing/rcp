@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Dashboard</title>
 	<?php
+		$page = 'Dashboard';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/admin/select_queries.php';
@@ -338,7 +339,7 @@
 			height: 500,
 			showArea: true,
 			showLine: false,
-			showPoint: false,
+			showPoint: true,
 			fullWidth: true,
 			axisX: {
 				showGrid: false

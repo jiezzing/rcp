@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Dashboard</title>
 	<?php
+		$page = 'Dashboard';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/requestor/select_queries.php';
@@ -239,18 +240,6 @@
 	      	var isEmpty = false;
 	      	var isSent;
 
-	      	toastr.options = {
-		        "closeButton": true,
-		        "debug": false,
-		        "progressBar": true,
-		        "positionClass": "toast-top-right",
-		        "preventDuplicates": true,
-		        "onclick": null,
-		        "showDuration": "300",
-		        "hideDuration": "1000",
-		        "timeOut": "5000"        
-	      	}
-
 			if(payee == "" || amount_in_words == ""){
 				toastr.error('Some fields are missing.', 'Required');
 	    		return;
@@ -316,7 +305,6 @@
 			      		if(data){
 			      			$.ajax({
 			                    type: "POST",
-			                    async: false,
 			                    url: "../controls/mails/new_approver_mail.php",
 			                    data: {
 			                      rcp_no:rcp_no,
@@ -327,6 +315,23 @@
 
 			                    },
 			                    complete: function(){
+									if(rush == "Yes"){
+										$.ajax({ // Start of updating RCP Rush file
+					                        type: "POST",
+					                        url: "../controls/requestor/update_rush_file.php",
+					                        data: {
+					                        	rcp_no:rcp_no, 
+					                        	due_date:due_date, 
+					                        	justification:justification
+					                        },
+					                        success: function(response){
+					                        	console.log(response);
+					                        },
+					                        error: function(xhr, ajaxOptions, thrownError){
+					                            alert(thrownError);
+					                        }
+					                    }); // End of updating RCP Rush file
+									}
 			                    	setTimeout(function () {
 						                swal({
 						                  title: rcp_no,
@@ -348,7 +353,6 @@
 			                    	// Send an email notification to approver
 			                      	$.ajax({
 			                          	type: "POST",
-			                          	async: false,
 			                          	url: "../controls/mails/new_rcp_mail.php",
 			                          	data: {
 				                            rcp_no:rcp_no, 
@@ -363,7 +367,6 @@
 											console.log("New approver: " + new_email);
 								      		$.ajax({ // Start of updating RCP File
 									            type: "POST",
-							                  	async: false,
 									            url: "../controls/requestor/update_rcp_file.php",
 									            data: {
 									                rcp_no: rcp_no, 
@@ -390,7 +393,6 @@
 									    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
 											                $.ajax({ // Start of changing status to remove
 													            type: "POST",
-													            async: false,
 													            url: "../controls/requestor/remove_rcp_particulars.php",
 													            data: {
 													                rcp_id: rcp_id
@@ -407,7 +409,6 @@
 									    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
 								                          	$.ajax({ // Start of adding new rcp particulars
 									                            type: "POST",
-									                            async: false,
 									                            url: "../controls/requestor/create_particulars.php",
 									                            data: {
 									                              	rcp_no:rcp_no, 
@@ -426,7 +427,6 @@
 									    				else{
 											                $.ajax({ // Start of updating particulars file
 													            type: "POST",
-													            async: false,
 													            url: "../controls/requestor/update_rcp_particulars.php",
 													            data: {
 													                rcp_id: rcp_id, 
@@ -470,7 +470,6 @@
 		      	else{
 		      		$.ajax({ // Start of updating RCP File
 			            type: "POST",
-	                  	async: false,
 			            url: "../controls/requestor/update_rcp_file.php",
 			            data: {
 			                rcp_no: rcp_no, 
@@ -486,6 +485,23 @@
 
 			            },
 			            complete: function(){
+							if(rush == "Yes"){
+								$.ajax({ // Start of updating RCP Rush file
+			                        type: "POST",
+			                        url: "../controls/requestor/update_rush_file.php",
+			                        data: {
+			                        	rcp_no:rcp_no, 
+			                        	due_date:due_date, 
+			                        	justification:justification
+			                        },
+			                        success: function(response){
+			                        	console.log(response);
+			                        },
+			                        error: function(xhr, ajaxOptions, thrownError){
+			                            alert(thrownError);
+			                        }
+			                    }); // End of updating RCP Rush file
+							}
 							$("#rcp-modal-details").modal('toggle');
 			            	swal({
 			                  	title: rcp_no,
@@ -515,7 +531,6 @@
 			    				else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
 					                $.ajax({ // Start of changing status to remove
 							            type: "POST",
-							            async: false,
 							            url: "../controls/requestor/remove_rcp_particulars.php",
 							            data: {
 							                rcp_id: rcp_id
@@ -532,7 +547,6 @@
 			    				else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
 		                          	$.ajax({ // Start of adding new rcp particulars
 			                            type: "POST",
-			                            async: false,
 			                            url: "../controls/requestor/create_particulars.php",
 			                            data: {
 			                              	rcp_no:rcp_no, 
@@ -551,7 +565,6 @@
 			    				else{
 					                $.ajax({ // Start of updating particulars file
 							            type: "POST",
-							            async: false,
 							            url: "../controls/requestor/update_rcp_particulars.php",
 							            data: {
 							                rcp_id: rcp_id, 
@@ -576,23 +589,6 @@
 		                }
 		            }); // End of updating RCP File
 		      	}
-				if(rush == "Yes"){
-					$.ajax({ // Start of updating RCP Rush file
-                        type: "POST",
-			            async: false,
-                        url: "../controls/requestor/update_rush_file.php",
-                        data: {
-                        	rcp_no:rcp_no, 
-                        	due_date:due_date, 
-                        	justification:justification
-                        },
-                        success: function(response){
-                        },
-                        error: function(xhr, ajaxOptions, thrownError){
-                            alert(thrownError);
-                        }
-                    }); // End of updating RCP Rush file
-				}
 		  	}
 		});
 	</script>

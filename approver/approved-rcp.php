@@ -2,6 +2,7 @@
 <html lang="en">
 <title>Approved RCP</title>
 	<?php
+		$page = 'Approved RCP';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
 		include '../objects/approver/select_queries.php';
@@ -61,7 +62,7 @@
 														<td>'.$row['rcp_date_approved'].'</td>
 						                                <td>
 													        <a href="../tcpdf/rcp_pdf.php?rcp_no='.$row['rcp_no'].'" target="new" class="pdf_view" type="view">
-													          <button type="button" class="btn btn-success view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> View / Print
+													          <button type="button" class="btn btn-success view-print" value="'.$row['rcp_no'].'"><i class="fa fa-print" aria-hidden="true"></i> Re-print
 													          </button>
 													        </a>
 													        <button type="button" class="btn btn-warning show-rcp-details" value="'.$row['rcp_no'].'"><i class="fa fa-file"></i> Details</button>
@@ -184,7 +185,9 @@
 
 	<script type="text/javascript">
         $(document).ready(function() {
-			$('#approveTable').DataTable();
+			$('#approveTable').DataTable({
+				sort: false
+			});
 		} );
     </script>
 </body>

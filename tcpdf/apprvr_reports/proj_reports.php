@@ -27,6 +27,10 @@ ob_start();
 
 // Include the main TCPDF library (search for installation path).
 require_once("../tcpdf.php");
+session_start();
+if(!isset($_SESSION['isLoggedIn'])){
+    header("Location: ../../index.php");
+}
 include "../../tcpdf/query.php";
 include "../../tcpdf/connection.php";
 $database = new connection();

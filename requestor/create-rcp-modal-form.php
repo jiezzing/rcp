@@ -190,7 +190,6 @@
       $.ajax({
         type: "POST",
         url: "../controls/univ/cls_get_approvers_data.php",
-        async: false,
         data: {
           prmy_id: prmy_id,
           alt_prmy_id: alt_prmy_id,
@@ -337,7 +336,6 @@
         if(data){
           $.ajax({ // Start of sending mail
             type: "POST",
-            async: false,
             url: "../controls/mails/new_rcp_mail.php",
             data: {
               rcp_no:rcp_no, 
@@ -352,6 +350,35 @@
 
             },
             complete: function(){
+              $.ajax({ // Start of updating department no of rcp
+                type: "POST",
+                url: "../controls/requestor/upd_dept_rcp.php",
+                data: { 
+                dept_code:dept_code
+                },
+                success: function(response){
+                  if(rush == "Yes"){ 
+                    $.ajax({ // Start of creating rush rcp data
+                      type: "POST",
+                      url: "../controls/requestor/create_rush_data.php",
+                      data: {
+                        rcp_no:rcp_no, 
+                        reason:reason, 
+                        due_date:due_date
+                      },
+                      success: function(response){
+                        console.log(response);
+                      },
+                      error: function(xhr, ajaxOptions, thrownError){
+                        alert(thrownError);
+                      }
+                    }); // End of creating rush rcp data
+                  }
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                  alert(thrownError);
+                }
+              }); // End of updating department no of rcp
               setTimeout(function () {
                 swal({
                   title: rcp_no,
@@ -371,7 +398,6 @@
             success: function(response){
               $.ajax({ // Start of creating new rcp
                 type: "POST",
-                async: false,
                 url: "../controls/requestor/create_rcp.php",
                 data: {
                 rcp_no:rcp_no, 
@@ -400,7 +426,6 @@
                   else{
                     $.ajax({
                       type: "POST",
-                      async: false,
                       url: "../controls/requestor/create_particulars.php",
                       data: {
                         rcp_no:rcp_no, 
@@ -417,40 +442,6 @@
                     });
                   }
                 } // End of for loop
-                if(isCompleted){
-                  $.ajax({ // Start of updating department no of rcp
-                      type: "POST",
-                      async: false,
-                      url: "../controls/requestor/upd_dept_rcp.php",
-                      data: { 
-                      dept_code:dept_code
-                    },
-                    success: function(response){
-                      
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                      alert(thrownError);
-                    }
-                  }); // End of updating department no of rcp
-                  if(rush == "Yes"){ 
-                    $.ajax({ // Start of creating rush rcp data
-                      type: "POST",
-                      async: false,
-                      url: "../controls/requestor/create_rush_data.php",
-                      data: {
-                        rcp_no:rcp_no, 
-                        reason:reason, 
-                        due_date:due_date
-                      },
-                      success: function(response){
-                        
-                      },
-                      error: function(xhr, ajaxOptions, thrownError){
-                        alert(thrownError);
-                      }
-                    }); // End of creating rush rcp data
-                  }
-                }
               },
               error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);

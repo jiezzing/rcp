@@ -8,20 +8,6 @@
 
 	$sel = new U_Select($db);
 
-	$rcp_no = "";
-	$rcp_dept_code = "";
-	$rcp_comp_code = "";
-	$rcp_proj_code = "";
-	$rcp_apprvr = "";
-	$rcp_payee = "";
-	$rcp_words_amt = "";
-	$rcp_amt = "";
-	$rcp_due_date = "";
-	$rcp_justify = "";
-	$dept_name = "";
-	$apprvr_id = "";
-  $rcp_rush = "";
-
 	$sel->rcp_no = $_POST['rcp_no'];
 	$query = $sel->getRcpDetails();
  	while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
