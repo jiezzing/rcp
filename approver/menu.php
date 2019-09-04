@@ -7,8 +7,8 @@
 					<a href="#subPages" id="rcp-li-subpage" data-toggle="collapse" class="<?php if($page == 'Approved RCP' || $page == 'Declined RCP') {echo 'active';}else{ echo 'collapsed'; } ?>"><i class="lnr lnr-book"></i> <span>RCP</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 					<div id="subPages" class="<?php if($page == 'Approved RCP' || $page == 'Declined RCP') {echo 'collapse in';}else { echo 'collapse';} ?>">
 						<ul class="nav">
-							<li><a href="../approver/approved-rcp.php" class="">Approved</a></li>
-							<li><a href="../approver/declined-rcp.php" class="">Declined</a></li>
+							<li><a href="../approver/approved-rcp.php" class="<?php if($page == 'Approved RCP') {echo 'collapse active';} ?>">Approved</a></li>
+							<li><a href="../approver/declined-rcp.php" class="<?php if($page == 'Declined RCP') {echo 'active';} ?>">Declined</a></li>
 						</ul>
 					</div>
 				</li>

@@ -100,7 +100,6 @@
 
             $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/modal_body/show_proj_details.php",
             data: {
               proj_code: proj_code
@@ -129,7 +128,6 @@
 	        else{
 	            $.ajax({
 		            type: "POST",
-		            async: false,
 		            url: "../controls/admin/update_project.php",
 		            data: {
 		              proj_code: proj_code,
@@ -138,7 +136,18 @@
 		            },
 		            success: function(response){
 		              $('#update-proj-details-modal').modal('toggle');
-		            	swal("Success", "Successfully updated", "success");
+		            	swal({
+		                  title: "Success",
+		                  text: "Successfully updated",
+		                  type: "success",
+		                  closeOnConfirm: false,
+		                  confirmButtonText: "Okay",
+		                  allowEscapeKey: false
+		                  }, function (data) {
+		                    if(data){
+		                      location.reload();
+		                    }
+		                });
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);
@@ -193,14 +202,24 @@
 				            $.ajax({
 				              	type: "POST",
 				              	url: "../controls/admin/activate_project.php",
-				              	async: false,
 				              	data: {
 					              	ids:ids
 				              	},
 				              	success: function(response){
 									$('tbody tr td input[type="checkbox"').attr('checked', false); 
 									$('#check-all').attr('checked', false); 
-				                	swal("Success", "Successfully activated", "success");
+				                	swal({
+					                  title: "Success",
+					                  text: "Successfully activated",
+					                  type: "success",
+					                  closeOnConfirm: false,
+					                  confirmButtonText: "Okay",
+					                  allowEscapeKey: false
+					                  }, function (data) {
+					                    if(data){
+					                      location.reload();
+					                    }
+					                });
 				                },
 				                error: function(xhr, ajaxOptions, thrownError){
 				                    alert(thrownError);
@@ -245,14 +264,24 @@
 				            $.ajax({
 				              	type: "POST",
 				              	url: "../controls/admin/deactivate_project.php",
-				              	async: false,
 				              	data: {
 					              	ids:ids
 				              	},
 				              	success: function(response){
 									$('tbody tr td input[type="checkbox"').attr('checked', false); 
 									$('#check-all').attr('checked', false); 
-				                	swal("Success", "Successfully deactivated", "success");
+				                	swal({
+					                  title: "Success",
+					                  text: "Successfully deactivated",
+					                  type: "success",
+					                  closeOnConfirm: false,
+					                  confirmButtonText: "Okay",
+					                  allowEscapeKey: false
+					                  }, function (data) {
+					                    if(data){
+					                      location.reload();
+					                    }
+					                });
 				                },
 				                error: function(xhr, ajaxOptions, thrownError){
 				                    alert(thrownError);
@@ -282,14 +311,24 @@
 		        $.ajax({
 		          	type: "POST",
 		          	url: "../controls/admin/add_new_project.php",
-		          	async: false,
 		          	data: {
 		              	code: code,
 		              	name: name
 		          	},
 		          	success: function(response){
 		          		$('#add-project-modal').modal('toggle');
-		            	swal("Success", "Successfully added", "success");
+		            	swal({
+		                  title: "Success",
+		                  text: "Successfully added",
+		                  type: "success",
+		                  closeOnConfirm: false,
+		                  confirmButtonText: "Okay",
+		                  allowEscapeKey: false
+		                  }, function (data) {
+		                    if(data){
+		                      location.reload();
+		                    }
+		                });
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);

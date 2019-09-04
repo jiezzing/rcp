@@ -101,7 +101,6 @@
 
             $.ajax({
               type: "POST",
-              async: false,
               url: "../controls/admin/update_prmy_approver.php",
               data: {
                 dept_code: prmy_dept_code,
@@ -109,7 +108,18 @@
               },
               success: function(response){
                 $('#set-prmy-approver-modal').modal('toggle');
-                swal("Success", "Successfully updated", "success");
+                swal({
+                  title: "Success",
+                  text: "Successfully updated",
+                  type: "success",
+                  closeOnConfirm: false,
+                  confirmButtonText: "Okay",
+                  allowEscapeKey: false
+                  }, function (data) {
+                    if(data){
+                      location.reload();
+                    }
+                });
               },
               error: function(xhr, ajaxOptions, thrownError){
                   alert(thrownError);
@@ -125,7 +135,6 @@
 
           $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/update_prmy_approver.php",
             data: {
               dept_code: prmy_dept_code,
@@ -133,7 +142,18 @@
             },
             success: function(response){
               $("#update-prmy-approver-modal").modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                  title: "Success",
+                  text: "Successfully updated",
+                  type: "success",
+                  closeOnConfirm: false,
+                  confirmButtonText: "Okay",
+                  allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -187,7 +207,6 @@
 
           $.ajax({
             type: "POST",
-            async: false,
             cache: false,
             url: "../controls/admin/update_alt_prmy_approver.php",
             data: {
@@ -196,7 +215,18 @@
             },
             success: function(response){
               $("#update-alt-prmy-approver-modal").modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                title: "Success",
+                text: "Successfully updated",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -212,7 +242,6 @@
 
           $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/update_alt_prmy_approver.php",
             data: {
               dept_code: alt_prmy_dept_code,
@@ -220,7 +249,18 @@
             },
             success: function(response){
               $('#set-alt-prmy-approver-modal').modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                title: "Success",
+                text: "Successfully updated",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);

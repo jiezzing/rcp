@@ -199,7 +199,18 @@
 	            success: function(response){
                     $('#form').trigger("reset");
 	            	$('#add-user-modal').modal('toggle');
-	            	swal("Success", "Successfully added", "success");
+	            	swal({
+	                  title: "Success",
+	                  text: "Successfully added",
+	                  type: "success",
+	                  closeOnConfirm: false,
+	                  confirmButtonText: "Okay",
+	                  allowEscapeKey: false
+	                  }, function (data) {
+	                    if(data){
+	                      location.reload();
+	                    }
+	                });
 	            },
 	            error: function(xhr, ajaxOptions, thrownError){
 	                alert(thrownError);
@@ -237,14 +248,24 @@
 			            $.ajax({
 			              	type: "POST",
 			              	url: "../controls/admin/deactivate_user.php",
-			              	async: false,
 			              	data: {
 				              	ids:ids
 			              	},
 			              	success: function(response){
 								$('tbody tr td input[type="checkbox"').attr('checked', false); 
 								$('#checkboxall').attr('checked', false); 
-			                	swal("Success", "Successfully deactivated", "success");
+			                	swal({
+				                  title: "Success",
+				                  text: "Successfully deactivated",
+				                  type: "success",
+				                  closeOnConfirm: false,
+				                  confirmButtonText: "Okay",
+				                  allowEscapeKey: false
+				                  }, function (data) {
+				                    if(data){
+				                      location.reload();
+				                    }
+				                });
 			                },
 			                error: function(xhr, ajaxOptions, thrownError){
 			                    alert(thrownError);
@@ -288,14 +309,24 @@
 			            $.ajax({
 			              	type: "POST",
 			              	url: "../controls/admin/activate_user.php",
-			              	async: false,
 			              	data: {
 				              	ids:ids
 			              	},
 			              	success: function(response){
 								$('tbody tr td input[type="checkbox"').attr('checked', false); 
 								$('#checkboxall').attr('checked', false); 
-			                	swal("Success", "Successfully activated", "success");
+			                	swal({
+				                  title: "Success",
+				                  text: "Successfully activated",
+				                  type: "success",
+				                  closeOnConfirm: false,
+				                  confirmButtonText: "Okay",
+				                  allowEscapeKey: false
+				                  }, function (data) {
+				                    if(data){
+				                      location.reload();
+				                    }
+				                });
 			                },
 			                error: function(xhr, ajaxOptions, thrownError){
 			                    alert(thrownError);
@@ -363,7 +394,18 @@
 	          	},
 	          	success: function(response){
 		            $('#user-detail-modal').modal('toggle');
-                	swal("Success", "Successfully updated", "success");
+                	swal({
+	                  title: "Success",
+	                  text: "Successfully updated",
+	                  type: "success",
+	                  closeOnConfirm: false,
+	                  confirmButtonText: "Okay",
+	                  allowEscapeKey: false
+	                  }, function (data) {
+	                    if(data){
+	                      location.reload();
+	                    }
+	                });
 	          	},
 	          	error: function(xhr, ajaxOptions, thrownError){
 	              alert(thrownError);

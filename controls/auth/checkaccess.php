@@ -10,7 +10,7 @@
     $sel = new Select($db);
 
 	$sel->user_username = $_SESSION['user_username'];
-	$sel->user_password = md5($_SESSION['user_password']);
+	$sel->user_password = base64_encode($_SESSION['user_password']);
 
 	$type = $sel->checkUserType();
 	if($row = $type->fetch(PDO::FETCH_ASSOC)){

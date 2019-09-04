@@ -101,7 +101,6 @@
             dept_code = $(this).attr('value');
             $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/modal_body/show_dept_details.php",
             data: {
               dept_code: dept_code
@@ -130,7 +129,6 @@
 	        else{
 	            $.ajax({
 		            type: "POST",
-		            async: false,
 		            url: "../controls/admin/update_department.php",
 		            data: {
 		              dept_code: dept_code,
@@ -139,7 +137,18 @@
 		            },
 		            success: function(response){
 		              	$('#update-dept-details-modal').modal('toggle');
-	                	swal("Success", "Successfully updated", "success");
+	                	swal({
+		                  title: "Success",
+		                  text: "Successfully updated",
+		                  type: "success",
+		                  closeOnConfirm: false,
+		                  confirmButtonText: "Okay",
+		                  allowEscapeKey: false
+		                  }, function (data) {
+		                    if(data){
+		                      location.reload();
+		                    }
+		                });
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);
@@ -193,14 +202,24 @@
 					            $.ajax({
 					              	type: "POST",
 					              	url: "../controls/admin/activate_department.php",
-					              	async: false,
 					              	data: {
 						              	ids:ids
 					              	},
 					              	success: function(response){
 										$('tbody tr td input[type="checkbox"').attr('checked', false); 
 										$('#check-all').attr('checked', false); 
-					                	swal("Success", "Successfully activated", "success");
+					                	swal({
+						                  title: "Success",
+						                  text: "Successfully activated",
+						                  type: "success",
+						                  closeOnConfirm: false,
+						                  confirmButtonText: "Okay",
+						                  allowEscapeKey: false
+						                  }, function (data) {
+						                    if(data){
+						                      location.reload();
+						                    }
+						                });
 					                },
 					                error: function(xhr, ajaxOptions, thrownError){
 					                    alert(thrownError);
@@ -246,14 +265,24 @@
 					            $.ajax({
 					              	type: "POST",
 					              	url: "../controls/admin/deactivate_department.php",
-					              	async: false,
 					              	data: {
 						              	ids:ids
 					              	},
 					              	success: function(response){
 									$('tbody tr td input[type="checkbox"').attr('checked', false); 
 									$('#check-all').attr('checked', false); 
-					                	swal("Success", "Successfully deactivated", "success");
+					                	swal({
+						                  title: "Success",
+						                  text: "Successfully deactivated",
+						                  type: "success",
+						                  closeOnConfirm: false,
+						                  confirmButtonText: "Okay",
+						                  allowEscapeKey: false
+						                  }, function (data) {
+						                    if(data){
+						                      location.reload();
+						                    }
+						                });
 					                },
 					                error: function(xhr, ajaxOptions, thrownError){
 					                    alert(thrownError);
@@ -284,14 +313,24 @@
 		        $.ajax({
 		          	type: "POST",
 		          	url: "../controls/admin/add_new_department.php",
-		          	async: false,
 		          	data: {
 		              	code: code,
 		              	name: name
 		          	},
 		          	success: function(response){
 		            	$('#add-department-modal').modal('toggle');
-		            	swal("Success", "Successfully added", "success");
+		            	swal({
+		                  title: "Success",
+		                  text: "Successfully added",
+		                  type: "success",
+		                  closeOnConfirm: false,
+		                  confirmButtonText: "Okay",
+		                  allowEscapeKey: false
+		                  }, function (data) {
+		                    if(data){
+		                      location.reload();
+		                    }
+		                });
 		            },
 		            error: function(xhr, ajaxOptions, thrownError){
 		                alert(thrownError);

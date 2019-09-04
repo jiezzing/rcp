@@ -127,28 +127,35 @@ $pdf->SetFont('dejavusans', '', 14, '', true);
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
+$orig_file = './original.png';
+$dup_file = './duplicate.png';
 
+// draw jpeg image
+$pdf->SetAlpha(0.3);
+$pdf->Image($orig_file, 15, 55, 175, 45, '', '', '', false, 300, '', false, false, 0);
+$pdf->Image($dup_file, 12, 190, 175, 45, '', '', '', false, 300, '', false, false, 0);
+$pdf->SetAlpha(1);
 // set text shadow effect
 $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
 // Set some content to print
 $tbl = '
 <table cellpadding="2">
-    <tr nobr="true" style="font-size: 12px">
+    <tr nobr="true" style="font-size: 15px">
         <th colspan="2"><strong>'.$comp_name.'</strong></th>
         <th colspan="2" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="3" style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">PAYEE: '.$rcp_payee.'</td>
         <td colspan="1" style="border-top: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">Date: '.$rcp_date_issued.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="4" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">AMOUNT IN WORDS: '.$rcp_words_amt.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="4" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">CHARGE TO PROJECT/DEPT: '.$dept_name.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;" align="center">
+    <tr nobr="true" style="font-size: 10px;" align="center">
         <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">PARTICULARS</td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">BOM Ref/Acct Code</td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">Amount </td>
@@ -159,7 +166,7 @@ $tbl = '
   $query = $sel->getRcpParticularValidatedDetails();
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $tbl .= '
-      <tr nobr="true" style="font-size: 9px;">
+      <tr nobr="true" style="font-size: 10px;">
           <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.$row['rcp_particulars'].'</td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.$row['rcp_ref_code'].'</td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.number_format($row['rcp_amount'], 2).'</td>
@@ -169,7 +176,7 @@ $tbl = '
   }
   for ($i=$index; $i < 8; $i++) { 
     $tbl .= '
-      <tr nobr="true" style="font-size: 9px;">
+      <tr nobr="true" style="font-size: 10px;">
           <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
@@ -177,12 +184,12 @@ $tbl = '
     ';
   }
   $tbl .= '
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"></td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"></td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"><strong>TOTAL: </strong> '.number_format($rcp_amt, 2).'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="3" style="border-left: 1px solid black; border-right: 1px solid black;"><strong>NOTE:</strong><br>
           1. BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
           <br> 
@@ -196,7 +203,7 @@ $tbl = '
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;"><strong>IF Rush, fill in the ff.: <br></strong>
          Due Date: '.$rcp_due_date.'<br><strong>Reason/Justification: <br> </strong> '.$rcp_justify.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">Prepared by: 
           <br>
           <br>
@@ -212,7 +219,7 @@ $tbl = '
         <td style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">Counter Check: 
           <br>
           <br>
-          ________________________________
+          __________________________
           <br>
           ACCOUNTING</td>
         <td style="border-top: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">RCP NO.
@@ -229,21 +236,21 @@ $tbl = '
 <br>
 <br>
 <table cellpadding="2">
-    <tr nobr="true" style="font-size: 12px">
+    <tr nobr="true" style="font-size: 15px">
         <th colspan="2"><strong>'.$comp_name.'</strong></th>
         <th colspan="2" align="right"><strong>REQUEST FOR CHECK PAYMENT</strong></th>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="3" style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">PAYEE: '.$rcp_payee.'</td>
         <td colspan="1" style="border-top: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">Date: '.$rcp_date_issued.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="4" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">AMOUNT IN WORDS: '.$rcp_words_amt.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="4" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">CHARGE TO PROJECT/DEPT: '.$dept_name.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;" align="center">
+    <tr nobr="true" style="font-size: 10px;" align="center">
         <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">PARTICULARS</td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">BOM Ref/Acct Code</td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;">Amount </td>
@@ -254,7 +261,7 @@ $tbl = '
   $query = $sel->getRcpParticularValidatedDetails();
   while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $tbl .= '
-      <tr nobr="true" style="font-size: 9px;">
+      <tr nobr="true" style="font-size: 10px;">
           <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.$row['rcp_particulars'].'</td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.$row['rcp_ref_code'].'</td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> '.number_format($row['rcp_amount'], 2).'</td>
@@ -264,7 +271,7 @@ $tbl = '
   }
   for ($i=$index; $i < 8; $i++) { 
     $tbl .= '
-      <tr nobr="true" style="font-size: 9px;">
+      <tr nobr="true" style="font-size: 10px;">
           <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
           <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"> </td>
@@ -272,12 +279,12 @@ $tbl = '
     ';
   }
   $tbl .= '
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="2" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"></td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"></td>
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black;"><strong>TOTAL: </strong> '.number_format($rcp_amt, 2).'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td colspan="3" style="border-left: 1px solid black; border-right: 1px solid black;"><strong>NOTE:</strong><br>
           1. BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
           <br> 
@@ -291,7 +298,7 @@ $tbl = '
         <td colspan="1" style="border-left: 1px solid black; border-right: 1px solid black;"><strong>IF Rush, fill in the ff.: <br></strong>
          Due Date: '.$rcp_due_date.'<br><strong>Reason/Justification: <br> </strong> '.$rcp_justify.'</td>
     </tr>
-    <tr nobr="true" style="font-size: 9px;">
+    <tr nobr="true" style="font-size: 10px;">
         <td style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">Prepared by: 
           <br>
           <br>
@@ -307,7 +314,7 @@ $tbl = '
         <td style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">Counter Check: 
           <br>
           <br>
-          ________________________________
+          __________________________
           <br>
           ACCOUNTING</td>
         <td style="border-top: 1px solid black; border-right: 1px solid black;border-bottom: 1px solid black; text-align: center">RCP NO.
@@ -319,6 +326,8 @@ $tbl = '
     </tr>
 </table>
 ';
+
+
 $pdf->writeHTML($tbl, true, false, false, false, '');
 
 // ---------------------------------------------------------

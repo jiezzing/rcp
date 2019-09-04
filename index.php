@@ -33,7 +33,7 @@
 						<div class="content">
 						<!-- Alert message -->
 						<div class="alert alert-danger" role="alert" id="errorMessage" hidden="">
-						  	Invalid credentials. Please check your username or password.
+						  	Invalid credentials. Please check your username or password or please contact the System Administrator.
 						</div>
 						<!-- End of alert message -->
 							<div class="header">
@@ -88,6 +88,7 @@
 						password: password
 					},
                 	success: function(response){
+                    	console.log("Response: " + response);
                     if(response > 0){
 						// alert(response);
                         window.location = "controls/auth/checkaccess.php";

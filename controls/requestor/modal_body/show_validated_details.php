@@ -232,7 +232,7 @@
                         $amt[] = number_format($row['rcp_amount'], 2);
                         $index++;
                       }
-                        if(sizeof($old_particulars) > 0){
+                        if(sizeof($old_particulars) >= 0){
                           for($i = 0; $i < sizeof($particulars); $i++){
                             if($particulars[$i] == $old_particulars[$i]){
                               echo '
@@ -270,7 +270,7 @@
                             else{
                               echo '
                                 <td style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE">'.$amt[$i].'
-                                    <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.number_format($old_amt[$i], 2).'<br>(original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
+                                    <a href="#" data-html="true" data-toggle="tooltip" data-placement="left" title="'.number_format((int)$old_amt[$i], 2).'<br>(original data)" class="pull-right"><i class="fa fa-pencil pull-right"></i>
                                     </a>
                                 </td>
                                 </tr>

@@ -6,7 +6,7 @@
         <thead>
             <tr>
                 <th class="th-sm">Department</th>
-                <th class="th-sm">Name</th>
+                <th class="th-sm">Approver Name</th>
                 <th class="th-sm">Company</th>
                 <th class="th-sm">Edit</th>
             </tr>
@@ -52,7 +52,7 @@
         <thead>
             <tr>
                 <th class="th-sm">Department</th>
-                <th class="th-sm">Name</th>
+                <th class="th-sm">Alternate Approver Name</th>
                 <th class="th-sm">Company</th>
                 <th class="th-sm">Action</th>
             </tr>

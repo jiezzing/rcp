@@ -90,7 +90,6 @@
           var id = $('#secondary-approver').val();
           $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/update_sec_approver.php",
             data: {
               dept_code: sec_dept_code,
@@ -98,7 +97,18 @@
             },
             success: function(response){
               $("#update-sec-approver-modal").modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                title: "Success",
+                text: "Successfully updated",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -124,7 +134,6 @@
 
             $.ajax({
               type: "POST",
-              async: false,
               url: "../controls/admin/update_sec_approver.php",
               data: {
                 dept_code: sec_dept_code,
@@ -132,7 +141,18 @@
               },
               success: function(response){
                 $('#set-sec-approver-modal').modal('toggle');
-              swal("Success", "Successfully updated", "success");
+                swal({
+                  title: "Success",
+                  text: "Successfully updated",
+                  type: "success",
+                  closeOnConfirm: false,
+                  confirmButtonText: "Okay",
+                  allowEscapeKey: false
+                  }, function (data) {
+                    if(data){
+                      location.reload();
+                    }
+                });
               },
               error: function(xhr, ajaxOptions, thrownError){
                   alert(thrownError);
@@ -186,7 +206,6 @@
 
           $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/update_alt_sec_approver.php",
             data: {
               dept_code: alt_sec_dept_code,
@@ -194,7 +213,18 @@
             },
             success: function(response){
               $('#update-alt-sec-approver-modal').modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                title: "Success",
+                text: "Successfully updated",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -210,7 +240,6 @@
           
           $.ajax({
             type: "POST",
-            async: false,
             url: "../controls/admin/update_alt_sec_approver.php",
             data: {
               dept_code: alt_sec_dept_code,
@@ -218,7 +247,18 @@
             },
             success: function(response){
               $('#set-alt-sec-approver-modal').modal('toggle');
-              swal("Success", "Successfully updated", "success");
+              swal({
+                title: "Success",
+                text: "Successfully updated",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
+                }, function (data) {
+                  if(data){
+                    location.reload();
+                  }
+              });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
