@@ -22,7 +22,7 @@
 		$declinedCtr = 0;
 		$totalRcp = 0;
 		$flag = false;
-	?>
+	?>	
 <body>
 	<div id="wrapper">
 		<?php
@@ -34,13 +34,28 @@
 				<div class="container-fluid">
 					<div class="panel panel-headline">
 						<div class="panel-heading">
-							<nav aria-label="breadcrumb">
-							  <ol class="breadcrumb">
-							    <li class="breadcrumb-item"><a href="#" data-toggle="modal" data-target="#exampleModal"><?php echo $user_fullname; ?></a></li>
-							    <li class="breadcrumb-item active" aria-current="page"><?php echo $user_type; ?></li>
-							  </ol>
-							</nav>
-							<h3 class="panel-title">Request for Check Payment Overview</h3>
+							<div class="row">
+								<div class="col-sm-8">
+									<nav aria-label="breadcrumb">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item"><a href="#" data-toggle="modal" data-target="#exampleModal"><?php echo $user_fullname; ?></a></li>
+										<li class="breadcrumb-item active" aria-current="page"><?php echo $user_type; ?></li>
+									</ol>
+									</nav>
+									<h5 class="panel-title">Request for Check Payment Overview</h5>
+								</div>
+								<div class="col-sm-4">
+										<label>Construction Expense Type: </label>
+										<label class="fancy-radio">
+											<input name="type" value="project" checked="checked" type="radio">
+											<span><i></i>Project Expense</span>
+										</label>
+										<label class="fancy-radio">
+											<input name="type" value="department" type="radio">
+											<span><i></i>Department Expense</span>
+										</label>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -100,7 +115,7 @@
 				</div>
 
 				<div class="col-md-4">
-					<a href = "##" data-toggle="modal" data-target="#rcp-fillup-modal" class="fancybox-effects-b" id="dummy">
+					<a href = "##" data-toggle="modal" data-target="#project-form-modal" class="fancybox-effects-b" id="dummy">
 					<!-- PANEL NO PADDING -->
 					<div class="panel">
 						<div class="panel-body no-padding bg-primary text-center">
@@ -118,6 +133,19 @@
 						</div>
 					</div>
 					</a>
+
+					<!-- <div id="demo" class="container">
+    <h1>jQuery num2words Converter Example</h1>
+    <h3> Enter amount: </h3>
+    <input id="num" type="text" class="form-control" placeholder="$"><br>
+    <br>
+    <input id="trans" type="button" value="Convert to words" class="btn btn-danger"><br>
+    <br>
+
+    <div class="well"></div>
+</div> -->
+
+
 					<!-- END PANEL NO PADDING -->
 				</div>
 			</div>
@@ -125,7 +153,7 @@
 	</div>
 	<?php
 		include '../scripts/js.php';
-		include '../requestor/create-rcp-modal-form.php';
+		include '../requestor/project-form.php';
 	?>
 	<!-- Global variables -->
 	<script>
@@ -598,13 +626,13 @@
 	<script>
 		forTableRowMethod();
 		$('#mDatePicker').click(function (){
-    		$('#rcp-fillup-modal').scroll(function (){
+    		$('#project-form-modal').scroll(function (){
 		      $('#mDatePicker').datepicker('place');
 		    });
 		});
 
-		$('#rcp-fillup-modal').on('hidden.bs.modal', function (e) {
-		  	$('#rcp-fillup-modal').scroll(function (){
+		$('#project-form-modal').on('hidden.bs.modal', function (e) {
+		  	$('#project-form-modal').scroll(function (){
 		      	$('#mDatePicker').datepicker('place');
 		    });
 		});
@@ -616,5 +644,14 @@
 		});
 	</script>
 	<!-- End -->
+	
+	
+	<!-- <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script> -->
+<script type="text/javascript" language="javascript" src="../jquery.num2words.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+   $('#fuck').num2words();
+}); 
+</script>
 </body>
 </html>
