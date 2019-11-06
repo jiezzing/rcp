@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment - Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
+        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment - Project Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
       </div>
       <div class="modal-body" id="detail-body">
         <?php 
@@ -465,4 +465,3 @@
       });
     });
 </script>
-<!-- End -->

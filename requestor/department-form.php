@@ -1,8 +1,8 @@
-<div class="modal fade bd-example-modal-lg" id="rcp-fillup-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="department-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment - Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
+        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment - Department Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
       </div>
       <div class="modal-body" id="detail-body">
         <?php 
@@ -77,7 +77,8 @@
             <div class="col-md-12">
                 <div class="col-md-12">
                   <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
-                  <i><input type="text" class="form-control" maxlength="100" placeholder="Amount in words" id="amount-in-words" style="text-align: center"></i>
+                  <input type="text" class="form-control" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words" style="text-align: center">
+                  <!-- <input id="number" type="text" /> -->
                 </div>
             </div>
           </div>
@@ -92,9 +93,11 @@
                             <table class="table table-responsive-md table-striped text-left" id="create-rcp-table" style="table-layout: fixed;">
                               <thead>
                                 <tr>
-                                  <th>Particulars</th>
-                                  <th style="width: 25%">BOM Ref/Acct Code</th>
-                                  <th style="width: 20%">Amount</th>
+                                  <th style="width: 10%">QTY</th>
+                                  <th style="width: 12%">Unit</th>
+                                  <th style="width: 25%">Particulars</th>
+                                  <th colspan="2">BOM Ref/Acct Code</th>
+                                  <th style="width: 18%">Amount</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -102,9 +105,12 @@
                                   for ($i=0; $i < 5; $i++) { 
                                     echo '
                                       <tr>
-                                        <td class="particulars" contenteditable="true" name="rcp-td1" id="td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>
-                                        <td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>
-                                        <td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>
+                                        <td class="allownumeric qty" contenteditable="true" name="rcp-td1" id="td4'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="unit" contenteditable="true" name="rcp-td1" id="td5'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="particulars" contenteditable="true" name="rcp-td1" id="td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
+                                        <td class="code" style="border-right: 2px solid #EEEEEE; width: 5%"></td>
+                                        <td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
                                       </tr>
                                     ';
                                   }
@@ -460,4 +466,3 @@
       });
     });
 </script>
-<!-- End -->

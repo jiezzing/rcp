@@ -5,7 +5,10 @@
 
 	<!-- Jquery -->
 	<script src="../assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../assets/dist/js/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../assets/jquery/jquery.css">
+    <link rel="stylesheet" href="../assets/css/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="../assets/dist/js/jquery-ui.min.js"> -->
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="../assets/vendor/bootstrap-sweetalert/dist/sweetalert.css">

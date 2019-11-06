@@ -11,4 +11,9 @@
 	.text-center{
 		text-align: center;
 	}
+	.ui-autocomplete{
+		position:absolute;
+		cursor:default;
+		z-index:4000 !important
+	}
 </style>

@@ -13,7 +13,7 @@
 	}
 
   function forTableRowMethod(){
-         $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
+        $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
             if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
@@ -78,10 +78,10 @@
         }
           $("#total_amount").val(currencyWithCommas(sum));
           if(sum == 1){
-            $("#amount-in-words").val(toWords(sum) + " Peso Only");
+            $("#amount-in-words").val(currencyToWords(sum) + " Peso Only");
           }
           else{
-            $("#amount-in-words").val(toWords(sum) + " Pesos Only");
+            $("#amount-in-words").val(currencyToWords(sum) + " Pesos Only");
           }
       });
 
@@ -94,7 +94,7 @@
       });
   }
 
-  function toWords(s) {
+  function currencyToWords(s) {
     var th = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
     var dg = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
     var tn = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];

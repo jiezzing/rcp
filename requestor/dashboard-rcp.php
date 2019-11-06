@@ -115,38 +115,23 @@
 				</div>
 
 				<div class="col-md-4">
-					<a href = "##" data-toggle="modal" data-target="#project-form-modal" class="fancybox-effects-b" id="dummy">
-					<!-- PANEL NO PADDING -->
-					<div class="panel">
-						<div class="panel-body no-padding bg-primary text-center">
-							<div class="padding-top-30 padding-bottom-30">
-								<i class="fa fa-file fa-4x"></i>
-								<h4>Click to create RCP</h4>
+					<a href = "##" data-toggle="modal" data-target="#project-form-modal" class="fancybox-effects-b" id="modal-type">
+						<div class="panel">
+							<div class="panel-body no-padding bg-primary text-center">
+								<div class="padding-top-30 padding-bottom-30">
+									<i class="fa fa-file fa-4x"></i>
+									<h4>Click to create RCP</h4>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<h5>
+									<ul class="list-unstyled list-justify">
+										<li>RCP Fill-up Form<i class="fa fa-plus pull-right"></i> </li>
+									</ul>
+								</h5>
 							</div>
 						</div>
-						<div class="panel-footer">
-							<h5>
-								<ul class="list-unstyled list-justify">
-									<li>RCP Fill-up Form<i class="fa fa-plus pull-right"></i> </li>
-								</ul>
-							</h5>
-						</div>
-					</div>
 					</a>
-
-					<!-- <div id="demo" class="container">
-    <h1>jQuery num2words Converter Example</h1>
-    <h3> Enter amount: </h3>
-    <input id="num" type="text" class="form-control" placeholder="$"><br>
-    <br>
-    <input id="trans" type="button" value="Convert to words" class="btn btn-danger"><br>
-    <br>
-
-    <div class="well"></div>
-</div> -->
-
-
-					<!-- END PANEL NO PADDING -->
 				</div>
 			</div>
 		</div>
@@ -154,6 +139,7 @@
 	<?php
 		include '../scripts/js.php';
 		include '../requestor/project-form.php';
+		include '../requestor/department-form.php';
 	?>
 	<!-- Global variables -->
 	<script>
@@ -644,14 +630,22 @@
 		});
 	</script>
 	<!-- End -->
-	
-	
-	<!-- <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script> -->
-<script type="text/javascript" language="javascript" src="../jquery.num2words.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-   $('#fuck').num2words();
-}); 
-</script>
+
+	<script> // Selecting construction expense type
+		$(document).ready(function(){
+			$('input[type=radio][name=type]').change(function() {
+				if (this.value == 'project')
+					$('#modal-type').attr('data-target','#project-form-modal');
+				else
+					$('#modal-type').attr('data-target','#department-form-modal');
+			});
+		})
+	</script>
+
+	<script> // Autocomplete
+		$('#department-form-modal').find('.ref_code').autocomplete({
+			source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+		});
+	</script>
 </body>
 </html>
