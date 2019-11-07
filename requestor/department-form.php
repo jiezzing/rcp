@@ -90,13 +90,14 @@
                         <!-- RECENT PURCHASES -->
                         <div class="panel">
                           <div class="panel-body no-padding">
-                            <table class="table table-responsive-md table-striped text-left" id="create-rcp-table" style="table-layout: fixed;">
+                            <table class="table table-responsive-md table-striped text-left" id="department-rcp-table" style="table-layout: fixed;">
                               <thead>
                                 <tr>
                                   <th style="width: 10%">QTY</th>
                                   <th style="width: 12%">Unit</th>
-                                  <th style="width: 25%">Particulars</th>
-                                  <th colspan="2">BOM Ref/Acct Code</th>
+                                  <th style="width: 20%">Particulars</th>
+                                  <th style="width: 20%">BOM Ref/Acct</th>
+                                  <th style="width: 10%">Code</th>
                                   <th style="width: 18%">Amount</th>
                                 </tr>
                               </thead>
@@ -109,7 +110,7 @@
                                         <td class="unit" contenteditable="true" name="rcp-td1" id="td5'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
                                         <td class="particulars" contenteditable="true" name="rcp-td1" id="td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
                                         <td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
-                                        <td class="code" style="border-right: 2px solid #EEEEEE; width: 5%"></td>
+                                        <td class="code" id="td6'.$i.'"  style="border-right: 2px solid #EEEEEE; text-align: center"> ---</td>
                                         <td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
                                       </tr>
                                     ';

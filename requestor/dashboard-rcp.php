@@ -2,6 +2,8 @@
 <html lang="en">
 <title>Dashboard</title>
 	<?php
+		define('allow_users', TRUE);
+
 		$page = 'Dashboard';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
@@ -642,9 +644,31 @@
 		})
 	</script>
 
-	<script> // Autocomplete
+	<script> // Department autocomplete
 		$('#department-form-modal').find('.ref_code').autocomplete({
-			source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+			source: function(request, response) {
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/test.php",
+					data: { search: request.term },
+					dataType: 'json',
+					success: function(data) {
+						response(data);
+					}
+				});
+			},
+			select: function( event, ui ) {
+				var data = ui.item.value;
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/test2.php",
+					data: { data: data },
+					dataType: 'json',
+					success: function(response) {
+						$('#td60').text(response);
+					}
+				});
+			}
 		});
 	</script>
 </body>
