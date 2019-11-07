@@ -398,7 +398,6 @@
                   }
                 });
               }, 2000);
-              console.log("Sending RCP to: " + email);
             },
             success: function(response){
               $.ajax({ // Start of creating new rcp

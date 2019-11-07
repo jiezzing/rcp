@@ -8,6 +8,15 @@
 		public function __construct($db){
 			$this->conn = $db;
 		}
+
+		public function filterDepartment($search){
+			$query = "SELECT * FROM department_file WHERE dept_name LIKE '%".$search."%' OR dept_code LIKE '%".$search."%'";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->execute();
+			return $sel;
+		}
 		
 		//Get all departments that are active
 		public function getAllDepartment(){
@@ -246,6 +255,18 @@
 			$sel = $this->conn->prepare($query);
 
 			$sel->bindParam(1, $this->dept_code);
+			$sel->execute();
+
+			return $sel;
+		}
+
+		//Get the data of specific department
+		public function getDepartmentCode(){
+			$query = "SELECT dept_code FROM department_file WHERE dept_name=?";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+
+			$sel->bindParam(1, $this->dept_name);
 			$sel->execute();
 
 			return $sel;

@@ -2,6 +2,10 @@
 <html lang="en">
 <title>Dashboard</title>
 	<?php
+		if(!defined('allow_users')){
+			header("Location: ../pages/error.php");
+			exit();
+		}
 		$page = 'Dashboard';
 		include '../controls/auth/auth_checker.php';
 		include '../config/connection.php';
