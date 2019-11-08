@@ -11,7 +11,7 @@
 
         $sel2 = new U_Select($db);
         ?>
-        <form id="form">
+        <form id="form-2">
           <div class="row">
             <div class="col-md-12">
                 <!-- Get all department -->
@@ -52,7 +52,6 @@
 
           <div class="row" style="margin-top: 15px">
             <div class="col-md-12">
-
                 <div class="col-md-6">
                   <label for="company" class=" form-control-label tooltiptext">COMPANY</label>
                   <select class="form-control" id="company">
@@ -78,19 +77,16 @@
                 <div class="col-md-12">
                   <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
                   <input type="text" class="form-control" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words" style="text-align: center">
-                  <!-- <input id="number" type="text" /> -->
                 </div>
             </div>
           </div>
 
           <div class="row" style="margin-top: 25px">
             <div class="col-md-12">
-                <!-- Get all department -->
                 <div class="col-md-12">
-                        <!-- RECENT PURCHASES -->
                         <div class="panel">
                           <div class="panel-body no-padding">
-                            <table class="table table-responsive-md table-striped text-left" id="department-rcp-table" style="table-layout: fixed;">
+                            <table class="table table-responsive-md table-striped text-left" id="department-table" style="table-layout: fixed;">
                               <thead>
                                 <tr>
                                   <th style="width: 10%">QTY</th>
@@ -103,15 +99,15 @@
                               </thead>
                               <tbody>
                                 <?php
-                                  for ($i=0; $i < 5; $i++) { 
+                                  for ($i = 0; $i < 5; $i++) { 
                                     echo '
                                       <tr>
-                                        <td class="allownumeric qty" contenteditable="true" name="rcp-td1" id="td4'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
-                                        <td class="unit" contenteditable="true" name="rcp-td1" id="td5'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
-                                        <td class="particulars" contenteditable="true" name="rcp-td1" id="td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
-                                        <td class="ref_code" contenteditable="true" name="rcp-td2" id="td2'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
-                                        <td class="code" id="td6'.$i.'"  style="border-right: 2px solid #EEEEEE; text-align: center"> ---</td>
-                                        <td class="allownumericwithdecimal amount" contenteditable="true" name="rcp-td3" id="td3'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
+                                        <td class="allownumeric qty" contenteditable="true" name="qty" id="qty-'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="unit" contenteditable="true" name="unit" id="unit-'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="particulars" contenteditable="true" name="particulars" id="particulars-'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE"></a></td>
+                                        <td class="bom-ref-code" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
+                                        <td class="code" id="code-'.$i.'"  style="border-right: 2px solid #EEEEEE; text-align: center"> --- </td>
+                                        <td class="allownumericwithdecimal amount" contenteditable="true" name="amount" id="amount-'.$i.'" style="border-right: 2px solid #EEEEEE"></td>
                                       </tr>
                                     ';
                                   }
@@ -121,10 +117,10 @@
                           </div>
                           <div class="panel-footer">
                             <div class="row">
-                              <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+                              <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
                               <div class="input-group">
                                 <span class="input-group-addon">₱</span>
-                                <input class="form-control" type="text" readonly id="total_amount" value="0.00" style="background-color: white">
+                                <input class="form-control" type="text" readonly id="total" value="0.00" style="background-color: white">
                                 <span class="input-group-addon">Total Amount Due</span>
                               </div>
                             </div>
@@ -138,7 +134,53 @@
           <div class="row" style="font-size: 14px">
             <div class="col-md-12">
                 <!-- Get all department -->
-                <div class="col-md-6">
+                <div class="col-md-8">
+                <div class="panel">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
+                        <div class="right">
+                          <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                        </div>
+                      </div>
+                      <div class="panel-body">
+                        <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
+                            <thead>
+                              <tr>
+                                <th style="width: 25%"></th>
+                                <th style="width: 20%"></th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td class="table-border">P.O.S. Trans #</td>
+                                <td class="table-border"></td>
+                                <td class="table-border">Less: VAT</td>
+                              </tr>
+                              <tr>
+                                <td class="table-border">VATable Sales</td>
+                                <td class="table-border"></td>
+                                <td class="table-border">Amount: Net of VAT</td>
+                              </tr>
+                              <tr>
+                                <td class="table-border">VAT-Exempt</td>
+                                <td class="table-border"></td>
+                                <td class="table-border">Less: SC/PWD Discount</td>
+                              </tr>
+                              <tr>
+                                <td class="table-border">Zero Rated</td>
+                                <td class="table-border"></td>
+                                <td class="table-border">Amount Due</td>
+                              </tr>
+                              <tr>
+                                <td class="table-border">VAT Amount</td>
+                                <td class="table-border"></td>
+                                <td class="table-border">Add: VAT</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     <label for="company" class=" form-control-label">NOTE:</label>
                     <p>
                        1.  BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
@@ -153,17 +195,17 @@
                     </p>
                 </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label class=" form-control-label">If RUSH, fill in the following:</label>
-                    <div class="input-group date" id="mDatePicker">
+                    <div class="input-group date" id="datepicker">
                       <div class="input-group-addon">
                        <span class="fa fa-calendar "></span>
                       </div>
-                      <input type="text" class="form-control col-md-6" id="mDatePicker2" style="background-color: white;">
+                      <input type="text" class="form-control col-md-6" id="datepicker-2" style="background-color: white;">
                     </div>
                     <br>
                     <label class=" form-control-label">Reason / Justification</label>
-                    <textarea class="form-control" placeholder="Your text here. . ." rows="6" id="justification"></textarea>
+                    <textarea class="form-control" placeholder="Your text here. . ." rows="10" id="justification-2"></textarea>
                   </div>
             </div>
           </div>

@@ -16,11 +16,19 @@
 		max-width: 350px;
 		overflow-y: auto;
 		overflow-x: hidden;
-		position:absolute;
-		cursor:default;
-		z-index:4000 !important
+		position: absolute;
+		cursor: default;
+		z-index: 4000 !important;
 	}
 	.ui-autocomplete-loading {
-		background: white url('../../assets/gif/anim_basic_16x16.gif') right center no-repeat;
+		background: white assets('../../assets/gif/anim_basic_16x16.gif') right center no-repeat;
+	}
+	.table-border{
+		border-right: 2px solid #EEEEEE; 
+		border-left: 2px solid #EEEEEE;
+		border-bottom: 2px solid #EEEEEE;
+	}
+	.text-size{
+		font-size: 13px;
 	}
 </style>

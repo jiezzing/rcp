@@ -8,13 +8,13 @@
 	<script src="../assets/dist/js/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../assets/jquery/jquery.css">
     <link rel="stylesheet" href="../assets/css/jquery-ui.css">
-    <!-- <link rel="stylesheet" href="../assets/dist/js/jquery-ui.min.js"> -->
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="../assets/vendor/bootstrap-sweetalert/dist/sweetalert.css">
 	<link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/dist/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="../assets/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap-select.css">
 	
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="../assets/css/main.css">
