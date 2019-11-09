@@ -17,8 +17,8 @@
                 <!-- Get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <select class="form-control" id="department">
-                      <option selected disabled>SELECT DEPARTMENT</option>
+                    <select class="form-control selectpicker" data-live-search="true" required id="department">
+                      <option hidden>SELECT DEPARTMENT</option>
                       <?php
                         $select = $sel2->getAllDepartment();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -37,8 +37,8 @@
 
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label>
-                    <select class="form-control" id="project">
-                      <option selected disabled>SELECT PROJECT</option>
+                    <select class="form-control selectpicker" data-live-search="true" required id="project">
+                      <option hidden>SELECT PROJECT</option>
                       <?php
                         $select = $sel2->getAllProject();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -54,8 +54,8 @@
             <div class="col-md-12">
                 <div class="col-md-6">
                   <label for="company" class=" form-control-label tooltiptext">COMPANY</label>
-                  <select class="form-control" id="company">
-                    <option selected disabled>SELECT COMPANY</option>
+                  <select class="form-control selectpicker" data-live-search="true" required id="company">
+                    <option hidden>SELECT COMPANY</option>
                     <?php
                       $select = $sel2->getAllCompany();
                       while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -92,8 +92,8 @@
                                   <th style="width: 10%">QTY</th>
                                   <th style="width: 12%">Unit</th>
                                   <th style="width: 20%">Particulars</th>
-                                  <th style="width: 20%">BOM Ref/Acct</th>
-                                  <th style="width: 10%">Code</th>
+                                  <th style="width: 20%">BOM Reference</th>
+                                  <th style="width: 10%">Acct Code</th>
                                   <th style="width: 18%">Amount</th>
                                 </tr>
                               </thead>
@@ -206,6 +206,8 @@
                     <br>
                     <label class=" form-control-label">Reason / Justification</label>
                     <textarea class="form-control" placeholder="Your text here. . ." rows="10" id="justification-2"></textarea>
+                    <br>
+                    <input type='file' name='upload'>
                   </div>
             </div>
           </div>

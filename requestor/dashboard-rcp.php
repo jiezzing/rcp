@@ -10,7 +10,7 @@
 		require '../objects/requestor/select_queries.php';
 		require '../objects/univ/count_for_all.php';
 		require '../header/header.php';
-		require '../assets/css/custom.css';
+		require '../assets/vendor/custom.css';
 
 		$con = new connection();
 		$db = $con->connect();
@@ -629,6 +629,8 @@
 					}
 				});
 			})
+		// End of selecting construction expense type
+
 		// Autocomplete field
 			$('#department-form-modal').find('.bom-ref-code').autocomplete({
 				source: function(request, response) {
@@ -656,6 +658,12 @@
 				}
 			});
 		// Ending of autocomplete field
+
+		// Initialization
+			$(function() {
+			  	$('.selectpicker').selectpicker();
+			});
+		// Ending of Initialization
 		</script>
 	</body>
 </html>

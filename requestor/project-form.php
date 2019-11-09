@@ -17,8 +17,8 @@
                 <!-- Get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <select class="form-control" id="department">
-                      <option disabled selected>SELECT DEPARTMENT</option>
+                    <select class="form-control selectpicker" data-live-search="true" required id="department">
+                      <option hidden>SELECT DEPARTMENT</option>
                       <?php
                         $select = $sel2->getAllDepartment();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -31,14 +31,14 @@
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
                     <select class="form-control" id="approver">
-                      <option selected disabled>SELECT DEPARTMENT FIRST</option>
+                      <option>SELECT DEPARTMENT FIRST</option>
                     </select>
                 </div>
 
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label>
-                    <select class="form-control" id="project">
-                      <option selected disabled>SELECT PROJECT</option>
+                    <select class="form-control selectpicker" data-live-search="true" required id="project">
+                      <option hidden>SELECT PROJECT</option>
                       <?php
                         $select = $sel2->getAllProject();
                         while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -55,8 +55,8 @@
 
                 <div class="col-md-6">
                   <label for="company" class=" form-control-label tooltiptext">COMPANY</label>
-                  <select class="form-control" id="company">
-                    <option selected disabled>SELECT COMPANY</option>
+                  <select class="form-control selectpicker" data-live-search="true" required id="company">
+                    <option hidden>SELECT COMPANY</option>
                     <?php
                       $select = $sel2->getAllCompany();
                       while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
@@ -87,7 +87,7 @@
               <div class="col-md-12">
                 <div class="panel">
                   <div class="panel-body no-padding">
-                    <table class="table table-responsive-md table-striped text-left" id="project-table" style="table-layout: fixed;">
+                    <table class="table table-responsive-md table-striped text-left" id="project-table">
                       <thead>
                         <tr>
                           <th style="width: 10%">QTY</th>
@@ -188,7 +188,7 @@
                        <br> 
                        4.  Avoid having RUSH requests; however, if truly urgent, indicate the date needed (box at the right). 
                        <br>  
-                       5.  All "RUSH" RCPs should be accompanied by an <u style="font-weight: bold;">acceptable explanation.</u>
+                       5.  All "RUSH" RCPs should be accompanied by an <u class="bold" ">acceptable explanation.</u>
                     </p>
                 </div>
 
@@ -203,6 +203,8 @@
                     <br>
                     <label class=" form-control-label">Reason / Justification</label>
                     <textarea class="form-control" placeholder="Your text here. . ." rows="10" id="justification"></textarea>
+                    <br>
+                    <input type='file' name='upload'>
                   </div>
             </div>
           </div>
