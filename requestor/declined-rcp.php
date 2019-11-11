@@ -3,12 +3,12 @@
 <title>Declined RCP</title>
 	<?php
 		$page = 'Declined RCP';
-		include '../controls/auth/auth_checker.php';
-		include '../config/connection.php';
-		include '../objects/requestor/select_queries.php';
-		include '../objects/univ/count_for_all.php';
-		include '../header/header.php';
-		include '../assets/css/custom.css';
+		require '../controls/auth/auth_checker.php';
+		require '../config/connection.php';
+		require '../objects/requestor/select_queries.php';
+		require '../objects/univ/count_for_all.php';
+		require '../header/header.php';
+		require '../assets/vendor/custom.css';
 
 		$con = new connection();
 		$db = $con->connect();

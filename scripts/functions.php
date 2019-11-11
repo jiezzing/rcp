@@ -36,7 +36,7 @@
         var particulars = $('#' + table).find("#particulars-" + i).text();
         var ref = $('#' + table).find("#bom-ref-code-" + i).text();
         var amount = $('#' + table).find("#amount-" + i).text();
-        
+
         if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == ""){
             continue;
         }
@@ -239,9 +239,9 @@
             }
         }
         if (x != s.length) {
-            str += 'And '; //i change the word point to and 
-            str1 += 'Centavos '; //i added another word called cent
-            //for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ' ;
+            str += 'and '; //i change the word point to and 
+            str1 += 'centavos '; //i added another word called cent
+
         var j=startpos;
         for (var i = j; i < fulllength; i++) {
             if ((fulllength - i) % 3 == 2) {
@@ -330,22 +330,22 @@
 
         if((i + 1) % 2 != 0){
           tbl += '<tr role="row" class="odd">';
-          tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-          tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-          tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-          tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-          tbl += '<td class="code table-border" id="code-'+i+'"> --- </td>';
-          tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+            tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
           tbl += '</tr>';
         }
         else{
           tbl += '<tr role="row" class="even">';
-          tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-          tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-          tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-          tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-          tbl += '<td class="code table-border" id="code-'+i+'"> --- </td>';
-          tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+            tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
           tbl += '</tr>';
         }
         tbl_row.last().after(tbl);
@@ -354,5 +354,52 @@
         computation('department-form-modal', 'department-table');
       }
     }
+  }
+
+  function datepicker(modal){
+    $('#' + modal).find('#datepicker').click(function (){
+      $('#' + modal).scroll(function (){
+        $('#' + modal).find('#datepicker').datepicker('place');
+      });
+    });
+
+    $('#' + modal).on('shown.bs.modal', function (e) {
+      $('#' + modal).scroll(function (){
+        $('#' + modal).find('#datepicker').datepicker('place');
+      });
+    });
+    
+    $('#' + modal).find('#datepicker').datepicker({
+      startDate: "today"
+    });
+  }
+
+  function autocomplete(){
+    $('#department-form-modal').find('.bom-ref-code').autocomplete({
+				source: function(request, response) {
+					$.ajax({
+						type: "POST",
+						url: "../controls/requestor/test.php",
+						data: { search: request.term },
+						dataType: 'json',
+						success: function(data) {
+							response(data);
+						}
+					});
+				},
+				select: function( event, ui ) {
+					var data = ui.item.value;
+					$.ajax({
+						type: "POST",
+						url: "../controls/requestor/test2.php",
+						data: { data: data },
+						dataType: 'json',
+						success: function(response) {
+							$('#td60').text(response);
+						}
+					});
+				}
+			});
+      $('#department-form-modal').find( ".bom-ref-code" ).autocomplete("option", "appendTo", "#department-form-modal" );
   }
 </script>

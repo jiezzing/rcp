@@ -38,4 +38,10 @@
 	table {
 	  table-layout: fixed;
 	}
+	.center{
+		text-align: center;
+	}
+	.hexa-font-size{
+		font-size: 35px;
+	}
 </style>

@@ -117,7 +117,7 @@
 					</div>
 
 					<div class="col-md-4">
-						<a href = "#" data-toggle="modal" data-target="#project-form-modal" class="fancybox-effects-b" id="modal-type">
+						<a href = "#" id="expense">
 							<div class="panel">
 								<div class="panel-body no-padding bg-primary text-center">
 									<div class="padding-top-30 padding-bottom-30">
@@ -139,9 +139,8 @@
 			</div>
 		</div>
 		<?php
+			require '../modal/requestor-modals.php';
 			require '../scripts/js.php';
-			include_once '../requestor/project-form.php';
-			include_once '../requestor/department-form.php';
 		?>
 		<script>
 		// Global variables
@@ -160,7 +159,8 @@
 			"showDuration": "300",
 			"hideDuration": "1000",
 			"timeOut": "5000"        
-			}
+			};
+			var expenseType = 'project';
 		// End of global variables
 
 		// Show RCP details when clicked
@@ -566,104 +566,52 @@
 				}
 			});
 		// End of updating RCP
-		
-		// For component bug fix
-			$(document).ready(function(){
-				computation('project-form-modal', 'project-table');
-				computation('department-form-modal', 'department-table');
-				numbersOnly();
-				$('#project-form-modal').find('#datepicker').click(function (){
-					$('#project-form-modal').scroll(function (){
-						$('#project-form-modal').find('#datepicker').datepicker('place');
-					});
-				});
-
-				$('#project-form-modal').on('shown.bs.modal', function (e) {
-					$('#project-form-modal').scroll(function (){
-						$('#project-form-modal').find('#datepicker').datepicker('place');
-					});
-				});
-
-				$('#department-form-modal').find('#datepicker').click(function (){
-					$('#department-form-modal').scroll(function (){
-						$('#department-form-modal').find('#datepicker').datepicker('place');
-						$('#department-form-modal').find('.bom-ref-code').autocomplete("option", "appendTo", '#department-form-modal');
-					});
-				});
-
-				$('#department-form-modal').on('shown.bs.modal', function (e) {
-					$('#department-form-modal').scroll(function (){
-						$('#department-form-modal').find('#datepicker').datepicker('place');
-						$('#department-form-modal').find('.bom-ref-code').autocomplete("option", "appendTo", '#department-form-modal');
-					});
-				});
-				
-				$('#rcp-modal-details').on('hidden.bs.modal', function (e) {
-					$('#rcp-modal-details').scroll(function (){
-						$('#date-needed').datepicker('place');
-					});
-				});
-			});
-		// Ending for component bug fix
-
-		// Add new table row
-			$('#project-form-modal').find('#rcp-add-row').click(function(event) {
-				addNewTableRow('project-table', 'project-form-modal');
-			});
-
-			$('#department-form-modal').find('#rcp-add-row').click(function(event) {
-				addNewTableRow('department-table', 'department-form-modal');
-			});
-		// End of adding new table row
 
 		// Selecting construction expense type
 			$(document).ready(function(){
 				$('input[type=radio][name=type]').change(function() {
 					if (this.value == 'project'){
-						$('#modal-type').attr('data-target','#project-form-modal');
-						computation('project-form-modal', 'project-table');
+						expenseType = 'project';
+						$('.expense-modal').attr('id','project-form-modal');
+						$('.expense-modal-body').attr('id','project-form-modal-body');
+						$('#title').text('Request for Check Payment - Project Expense Form');
+						datepicker('project-form-modal');
 					}
 					else{
-						$('#modal-type').attr('data-target','#department-form-modal');
-						computation('department-form-modal', 'department-table');
+						expenseType = 'department';
+						$('.expense-modal').attr('id','department-form-modal');
+						$('.expense-modal-body').attr('id','department-form-modal-body');
+						$('#title').text('Request for Check Payment - Department Expense Form');
+						datepicker('department-form-modal');	
 					}
 				});
-			})
+			});
 		// End of selecting construction expense type
-
-		// Autocomplete field
-			$('#department-form-modal').find('.bom-ref-code').autocomplete({
-				source: function(request, response) {
-					$.ajax({
-						type: "POST",
-						url: "../controls/requestor/test.php",
-						data: { search: request.term },
-						dataType: 'json',
-						success: function(data) {
-							response(data);
-						}
-					});
-				},
-				select: function( event, ui ) {
-					var data = ui.item.value;
-					$.ajax({
-						type: "POST",
-						url: "../controls/requestor/test2.php",
-						data: { data: data },
-						dataType: 'json',
-						success: function(response) {
-							$('#td60').text(response);
-						}
-					});
-				}
-			});
-		// Ending of autocomplete field
-
-		// Initialization
-			$(function() {
-			  	$('.selectpicker').selectpicker();
-			});
-		// Ending of Initialization
+		
+		$('#expense').click(function(){
+			if(expenseType == 'project'){
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/modal_body/rcp_form.php",
+					data: { data: 'project' },
+					success: function(html) {
+						$("#project-form-modal-body").html(html);
+						$("#project-form-modal").modal('show');
+					}
+				});
+			}
+			else{
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/modal_body/rcp_form.php",
+					data: { data: 'department' },
+					success: function(html) {
+						$("#department-form-modal-body").html(html);
+						$("#department-form-modal").modal('show');
+					}
+				});
+			}
+		});
 		</script>
 	</body>
 </html>

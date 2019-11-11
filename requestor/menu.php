@@ -15,6 +15,7 @@
 						</ul>
 					</div>
 				</li>
+				<li><a href="../pages/profile.php" data-toggle="modal" class=""><i class="lnr lnr-cog"></i> <span>Profile</span></a></li>
 				<li><a href="#" data-toggle="modal" id="report-generation-li" data-target="#report-generation-modal" class=""><i class="lnr lnr-chart-bars"></i> <span>Report Generation</span></a></li>
 			</ul>
 		</nav>
@@ -26,13 +27,8 @@
 	</footer>
 </div>
 
-<?php include '../modal/requestor-modals.php'; ?>
-
 <script>
 	$(document).ready(function (){
-        $('#mDatePicker').datepicker({
-        	startDate: "today"
-        });
         $('#from-datepicker').datepicker();
      	$('#to-datepicker').datepicker();
 	});
