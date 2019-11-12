@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-select.min.css">
 	
 	<!-- MAIN CSS -->
-	<link rel="stylesheet" href="../assets/vendor/klorofil/css/main.css">
+	<link rel="stylesheet" href="../assets/css/main.css">
 	<link rel="stylesheet" href="../assets/vendor/klorofil/css/datatable.bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../assets/vendor/linearicons/style.css">

@@ -34,7 +34,7 @@
 
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label>
-                    <select class="form-control selectpicker" d.ata-live-search="true" required id="project">
+                    <select class="form-control selectpicker" data-live-search="true" required id="project">
                         <option hidden>SELECT PROJECT</option>
                         ';
                         $project = $query->getAllProject();
@@ -264,7 +264,7 @@
 
 			$('#department-form-modal').find('#rcp-add-row').click(function(event) {
 				addNewTableRow('department-table', 'department-form-modal');
-                autocomplete();
+        autocomplete();
 			});
 		// End of adding new table row
     });

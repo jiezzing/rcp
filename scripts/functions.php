@@ -395,7 +395,11 @@
 						data: { data: data },
 						dataType: 'json',
 						success: function(response) {
-							$('#td60').text(response);
+							for(var i = 0; i < 13; i++){
+                if($('#department-table').find('#bom-ref-code-' + i).is(':focus')){
+                  $('#department-table').find('#code-' + i).text(response);
+                }
+              }
 						}
 					});
 				}
