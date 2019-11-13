@@ -1,25 +1,37 @@
 <?php 
 	session_start(); 
-	include '../../config/connection.php';
-	include '../../objects/requestor/insert_queries.php';
+	require_once '../../config/connection.php';
+	require_once '../../objects/requestor/insert_queries.php';
 
 	$con = new connection();
 	$db = $con->connect();
 
 	$sel = new RequestorInsert($db);
 
+	$data = json_decode(json_encode($_POST['data']), true);
+
 	date_default_timezone_set('Asia/Manila');
-	$sel->rcp_no = $_POST['rcp_no'];
-	$sel->rcp_particulars = $_POST['arraytd1'];
-	$sel->rcp_ref_code = $_POST['arraytd2'];
-    $sel->rcp_amount = $_POST['arraytd3'];
+	$sel->rcp_no = $data['rcp_no'];
+	$sel->rcp_qty = $data['qty'];
+	$sel->rcp_unit = $data['unit'];
+	$sel->rcp_particulars = $data['particulars'];
+	$sel->rcp_ref_code = json_encode($data['ref']);
+    $sel->rcp_amount = $data['amount'];
+    $sel->rcp_status = 1;
     
 	$sel->created_at = date("Y-m-d H:i:s");
 	$sel->updated_at = date("Y-m-d H:i:s");
 
+	// $query = $sel->createRcpParticulars();
+	// $query2 = $sel->createOrigRcpParticulars();
+	// if($query && $query2){
+	// 	echo 'Success';
+	// }
+	// else{
+	// 	echo 'Error';
+	// }
 	$query = $sel->createRcpParticulars();
-	$query2 = $sel->createOrigRcpParticulars();
-	if($query && $query2){
+	if($query){
 		echo 'Success';
 	}
 	else{

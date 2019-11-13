@@ -226,12 +226,12 @@
 					} 
 				}
 
-				for (var i = 0; i < table_length; i++){ // Start of for loop
+				for (var i = 0; i < table_length; i++){ 
 					var arraytd1 = $("#show-td1"+i+"").text();
 					var arraytd2 = $("#show-td2"+i+"").text();
 					var arraytd3 = $("#show-td3"+i+"").text();
 						if (arraytd1 == "" && arraytd2 == "" && arraytd3 == "") {
-						isEmpty = true;
+							isEmpty = true;
 						}
 						else{
 						isEmpty = false;
@@ -566,51 +566,125 @@
 				}
 			});
 		// End of updating RCP
+		
+		// Show modal depending of selected expense type
+			$('#expense').click(function(){
+				if(expenseType == 'project'){
+					$.ajax({
+						type: "POST",
+						url: "../controls/requestor/modal_body/rcp_form.php",
+						data: { data: 'project' },
+						success: function(html) {
+							$("#project-form-modal-body").html(html);
+							$("#project-form-modal").modal('show');
+						}
+					});
+				}
+				else{
+					$.ajax({
+						type: "POST",
+						url: "../controls/requestor/modal_body/rcp_form.php",
+						data: { data: 'department' },
+						success: function(html) {
+							$("#department-form-modal-body").html(html);
+							$("#department-form-modal").modal('show');
+						}
+					});
+				}
+			});
+		// End of showing modal depending of selected expense type
+
+
+
+		/*========================================================*/
+		/*                      SENDING RCP						  */
+		/*========================================================*/
+
+		var approver_id;
+		var email;
+		$(document).ready(function(){
+				
 
 		// Selecting construction expense type
-			$(document).ready(function(){
-				$('input[type=radio][name=type]').change(function() {
-					if (this.value == 'project'){
-						expenseType = 'project';
-						$('.expense-modal').attr('id','project-form-modal');
-						$('.expense-modal-body').attr('id','project-form-modal-body');
-						$('#title').text('Request for Check Payment - Project Expense Form');
-						datepicker('project-form-modal');
-					}
-					else{
-						expenseType = 'department';
-						$('.expense-modal').attr('id','department-form-modal');
-						$('.expense-modal-body').attr('id','department-form-modal-body');
-						$('#title').text('Request for Check Payment - Department Expense Form');
-						datepicker('department-form-modal');	
-					}
-				});
+			$('input[type=radio][name=type]').change(function() {
+				if (this.value == 'project'){
+					expenseType = 'project';
+					$('.expense-modal').attr('id','project-form-modal');
+					$('.expense-modal-body').attr('id','project-form-modal-body');
+					$('#title').text('Request for Check Payment - Project Expense Form');
+					datepicker('project-form-modal');
+				}
+				else{
+					expenseType = 'department';
+					$('.expense-modal').attr('id','department-form-modal');
+					$('.expense-modal-body').attr('id','department-form-modal-body');
+					$('#title').text('Request for Check Payment - Department Expense Form');
+					datepicker('department-form-modal');	
+				}
 			});
 		// End of selecting construction expense type
-		
-		$('#expense').click(function(){
-			if(expenseType == 'project'){
-				$.ajax({
-					type: "POST",
-					url: "../controls/requestor/modal_body/rcp_form.php",
-					data: { data: 'project' },
-					success: function(html) {
-						$("#project-form-modal-body").html(html);
-						$("#project-form-modal").modal('show');
+
+			$('#send-rcp-btn').click(function(){
+				var length = lengthGetter(expenseType);
+				var department_code = splitter('department', 0);
+				var total_rcp = parseInt(splitter('department', 5)) + 1;
+				var rcp_no = department_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
+				var amount = $('#' + expenseType + '-form-modal').find('#total').val();
+				var due_date = valueGetter('datepicker-2');
+				var justification = valueGetter('justification');
+				var rush = 'no';
+				var missingIndex = 0;
+				var isEmpty = false;
+				var isReady = true;
+				var vat = {
+					'vat_trans': 10,
+					'vat_sales': 10,
+					'vat_exempt': 10,
+					'zero_rated': 10,
+					'vat_amount': 10
+				};
+				var data = {
+					'rcp_no': rcp_no,
+					'department_code': department_code,
+					'approver_id': approver_id,
+					'project_code': valueGetter('project'),
+					'company_code': valueGetter('company'),
+					'payee': valueGetter('payee'),
+					'amount_in_words': valueGetter('amount-in-words'),
+					'user_id': <?php echo $_SESSION['user_id']; ?>,
+					'total_amount' : currencyRemoveCommas(amount),
+					'rush': rush,
+					'edited': 'no',
+					'current_date': currentDate(),
+					'vat': vat,
+					'expense': expenseType,
+					'justification': justification,
+					'due_date': due_date
+				};
+				var message = [
+					'Some fields are missing.',
+					'Please specify the particulars, BOM Ref/Acct Code and amount.',
+					'Please specify your reason or justification.',
+					'Please specify date needed.',
+					'Please fill-up all the fields required in row '];
+
+				if(due_date != "" && justification == ""){
+					toastr.info(message[2], 'Info');
+					return;
+				} 
+				else if(justification != "" && due_date == ""){
+					toastr.info(message[3], 'Info');
+					return;
+				}
+				else {
+					if (due_date != "" && justification != "") {
+						rush = "yes";
 					}
-				});
-			}
-			else{
-				$.ajax({
-					type: "POST",
-					url: "../controls/requestor/modal_body/rcp_form.php",
-					data: { data: 'department' },
-					success: function(html) {
-						$("#department-form-modal-body").html(html);
-						$("#department-form-modal").modal('show');
-					}
-				});
-			}
+				}
+
+				updateDepartmentRcpNo(department_code);
+				createRcp(data, expenseType);
+			});
 		});
 		</script>
 	</body>

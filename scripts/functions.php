@@ -406,4 +406,123 @@
 			});
       $('#department-form-modal').find( ".bom-ref-code" ).autocomplete("option", "appendTo", "#department-form-modal" );
   }
+
+  function splitter(key, index){
+    var value = $('#' + key).val();
+    var data = value.split("-"); 
+    return data[index];
+  }
+
+  function valueGetter(key){
+    return $('#' + key).val();
+  }
+
+  function lengthGetter(table){
+    return $('#' + table + '-table').find('td[name=qty]').length;
+  }
+
+  function currentDate(){
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy =  today.getFullYear();
+      return current_date = yyyy + '-' + mm + '-' + dd;
+  }
+
+  function updateDepartmentRcpNo(code){
+    $.ajax({ 
+      type: "POST",
+      url: "../controls/requestor/upd_dept_rcp.php",
+      data: { department_code: code },
+      success: function(response){ },
+      error: function(xhr, ajaxOptions, thrownError){
+        alert(thrownError);
+      }
+    });
+  }
+
+  function isRcpRush(rcp_no, justification, due_date){
+    var object = {
+      'rcp_no': rcp_no,
+      'justification' : justification,
+      'due_date': due_date
+    };
+    $.ajax({ 
+      type: "POST",
+      url: "../controls/requestor/create_rush_data.php",
+      data: { data: object },
+      success: function(response){
+        console.log(response);
+      },
+      error: function(xhr, ajaxOptions, thrownError){
+        alert(thrownError);
+      }
+    }); 
+  }
+
+  function createRcp(data){
+    if(data.rush == 'yes'){
+      isRcpRush(data.rcp_no, data.justification, data.due_date);
+    }
+    $.ajax({
+        type: "POST",
+        url: "../controls/requestor/create_rcp.php",
+        data: { data: data },
+      success: function(response){
+        createParticulars(data.expense, data.rcp_no)
+      },
+      error: function(xhr, ajaxOptions, thrownError){
+        alert(thrownError);
+      }
+    }); 
+  }
+
+  function createParticulars(expenseType, rcp_no){
+    var length = lengthGetter(expenseType);
+    for (var i = 0; i < length; i++){ 
+      var qty = $('#' + expenseType + '-table').find("#qty-" + i).text();
+      var unit = $('#' + expenseType + '-table').find("#unit-" + i).text();
+      var particulars = $('#' + expenseType + '-table').find("#particulars-" + i).text();
+      var ref = $('#' + expenseType + '-table').find("#bom-ref-code-" + i).text();
+      var amount = $('#' + expenseType + '-table').find("#amount-" + i).text();
+      var reference;
+      if(expenseType == 'department'){
+        var code = $('#department-table').find("#code-" + i).text();
+        reference = {
+          'ref': ref,
+          'code': code
+        };
+      }
+      else{
+        reference = {
+          'ref': ref
+        };
+      }
+      var object = {
+        'rcp_no': rcp_no,
+        'qty': qty,
+        'unit': unit,
+        'particulars': particulars,
+        'ref': reference,
+        'amount': currencyRemoveCommas(amount)
+      };
+
+        if(qty == "" || unit == "" || particulars == "" || ref == "" || amount == ""){
+          continue;
+        }
+        else{
+          $.ajax({
+            type: "POST",
+            url: "../controls/requestor/create_particulars.php",
+            data: { data: object },
+            success: function(response){
+              console.log(response);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
+            }
+          });
+        }
+      } 
+  }
 </script>

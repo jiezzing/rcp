@@ -1,16 +1,19 @@
 <?php 
 	session_start(); 
-	include '../../config/connection.php';
-	include '../../objects/requestor/insert_queries.php';
+	require_once '../../config/connection.php';
+	require_once '../../objects/requestor/insert_queries.php';
 
 	$con = new connection();
 	$db = $con->connect();
 
 	$sel = new RequestorInsert($db);
 
-	$sel->rcp_no = $_POST['rcp_no'];
-	$sel->rcp_justification = $_POST['reason'];
-	$sel->rcp_due_date = $_POST['due_date'];
+	$data = json_decode(json_encode($_POST['data']), true);
+
+	$sel->rcp_no = $data['rcp_no'];
+	$sel->rcp_justification = $data['justification'];
+	$sel->rcp_due_date = $data['due_date'];
+	$sel->rcp_status = 1;
 
 	$query = $sel->createRushData();
 	if($query){
