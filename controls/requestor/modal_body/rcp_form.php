@@ -14,7 +14,7 @@
                 <!-- Get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                    <select class="form-control selectpicker" data-live-search="true" required id="department">
+                    <select class="form-control selectpicker" data-live-search="true" required id="department" name="department">
                         <option hidden>SELECT DEPARTMENT</option>
                         ';
                         $department = $query->getAllDepartment();
@@ -27,14 +27,14 @@
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
-                    <select class="form-control" id="approver">
+                    <select class="form-control" id="approver" name="approver">
                         <option>SELECT DEPARTMENT FIRST</option>
                     </select>
                 </div>
 
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label>
-                    <select class="form-control selectpicker" data-live-search="true" required id="project">
+                    <select class="form-control selectpicker" data-live-search="true" required id="project" name="project">
                         <option hidden>SELECT PROJECT</option>
                         ';
                         $project = $query->getAllProject();
@@ -52,7 +52,7 @@
 
                 <div class="col-md-6">
                     <label for="company" class=" form-control-label tooltiptext">COMPANY</label>
-                    <select class="form-control selectpicker" data-live-search="true" required id="company">
+                    <select class="form-control selectpicker" data-live-search="true" required id="company" name="company">
                     <option hidden>SELECT COMPANY</option>
                         ';
                         $company = $query->getAllCompany();
@@ -65,7 +65,7 @@
 
                 <div class="col-md-6">
                     <label for="company" class=" form-control-label">PAYEE</label>
-                    <input type="text" class="form-control" placeholder="Payee" id="payee">
+                    <input type="text" name="payee" class="form-control" placeholder="Payee" id="payee">
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
             <div class="col-md-12">
                 <div class="col-md-12">
                     <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
-                    <input type="text" class="form-control" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words" style="text-align: center">
+                    <input type="text" name="amount-in-words" class="form-control center" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words">
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@
                         <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
                         <div class="input-group">
                         <span class="input-group-addon">₱</span>
-                        <input class="form-control" type="text" readonly id="total" value="0.00" style="background-color: white">
+                        <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
                         <span class="input-group-addon">Total Amount Due</span>
                         </div>
                     </div>
@@ -241,11 +241,11 @@
                     <label class=" form-control-label">Reason / Justification</label>
                     <textarea class="form-control" placeholder="Your text here. . ." rows="10" id="justification"></textarea>
                     <br>
-                    <input type="file" name="upload">
+                    <input type="file" name="file" id="file">
                     </div>
             </div>
         </div>
-        ';
+    ';
 ?>
 <script type="text/javascript" src="../assets/vendor/klorofil/scripts/klorofil-common.js"></script>
 <script>

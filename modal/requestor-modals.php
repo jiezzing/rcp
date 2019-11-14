@@ -255,16 +255,18 @@
 <div class="modal fade bd-example-modal-lg expense-modal" id="project-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="title">Request for Check Payment - Project Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
-      </div>
-      <div class="modal-body text-size expense-modal-body" id="project-form-modal-body">
+      <form id="form">
+        <div class="modal-header">
+          <h4 class="modal-title" id="title">Request for Check Payment - Project Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
+        </div>
+        <div class="modal-body text-size expense-modal-body" id="project-form-modal-body">
       
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="send-rcp-btn"><i class="fa fa-send"></i> Send RCP</button>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="send-rcp-btn"><i class="fa fa-send"></i> Send RCP</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

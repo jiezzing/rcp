@@ -461,15 +461,19 @@
   }
 
   function createRcp(data){
-    if(data.rush == 'yes'){
-      isRcpRush(data.rcp_no, data.justification, data.due_date);
-    }
+    // if(data.rush == 'yes'){
+    //   isRcpRush(data.rcp_no, data.justification, data.due_date);
+    // }
     $.ajax({
         type: "POST",
         url: "../controls/requestor/create_rcp.php",
         data: { data: data },
+        processData: false,
+        contentType: false, 
+        cache: false,
       success: function(response){
-        createParticulars(data.expense, data.rcp_no)
+        // createParticulars(data.expense, data.rcp_no)
+        console.log(response);
       },
       error: function(xhr, ajaxOptions, thrownError){
         alert(thrownError);

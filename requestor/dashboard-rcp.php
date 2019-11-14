@@ -625,6 +625,7 @@
 		// End of selecting construction expense type
 
 			$('#send-rcp-btn').click(function(){
+				var files = $('#file')[0].files[0];
 				var length = lengthGetter(expenseType);
 				var department_code = splitter('department', 0);
 				var total_rcp = parseInt(splitter('department', 5)) + 1;
@@ -636,6 +637,7 @@
 				var missingIndex = 0;
 				var isEmpty = false;
 				var isReady = true;
+				var data = new FormData();
 				var vat = {
 					'vat_trans': 10,
 					'vat_sales': 10,
@@ -643,24 +645,24 @@
 					'zero_rated': 10,
 					'vat_amount': 10
 				};
-				var data = {
-					'rcp_no': rcp_no,
-					'department_code': department_code,
-					'approver_id': approver_id,
-					'project_code': valueGetter('project'),
-					'company_code': valueGetter('company'),
-					'payee': valueGetter('payee'),
-					'amount_in_words': valueGetter('amount-in-words'),
-					'user_id': <?php echo $_SESSION['user_id']; ?>,
-					'total_amount' : currencyRemoveCommas(amount),
-					'rush': rush,
-					'edited': 'no',
-					'current_date': currentDate(),
-					'vat': vat,
-					'expense': expenseType,
-					'justification': justification,
-					'due_date': due_date
-				};
+				// var data = {
+				// 	'rcp_no': rcp_no,
+				// 	'department_code': department_code,
+				// 	'approver_id': approver_id,
+				// 	'project_code': valueGetter('project'),
+				// 	'company_code': valueGetter('company'),
+				// 	'payee': valueGetter('payee'),
+				// 	'amount_in_words': valueGetter('amount-in-words'),
+				// 	'user_id': <?php echo $_SESSION['user_id']; ?>,
+				// 	'total_amount' : currencyRemoveCommas(amount),
+				// 	'rush': rush,
+				// 	'edited': 'no',
+				// 	'current_date': currentDate(),
+				// 	'vat': vat,
+				// 	'expense': expenseType,
+				// 	'justification': justification,
+				// 	'due_date': due_date
+				// };
 				var message = [
 					'Some fields are missing.',
 					'Please specify the particulars, BOM Ref/Acct Code and amount.',
@@ -683,8 +685,32 @@
 				}
 
 				updateDepartmentRcpNo(department_code);
-				createRcp(data, expenseType);
+				// createRcp(form, expenseType);
 			});
+
+			$('#form').on('submit', function(e){
+				e.preventDefault();
+				var form = document.getElementById('form');
+				var fdata = new FormData(form);
+				var pdf = $('#project-form-modal #file')[0].files[0];
+				fdata.append('amount_in_words', $('#project-form-modal #amount-in-words').val());
+				fdata.append('file', pdf);
+				console.log(pdf);
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/create_rcp.php",
+					data: fdata,
+					contentType: false, 
+					cache: false,
+					processData: false,
+					success: function(response){
+						console.log(response);
+					},
+					error: function(xhr, ajaxOptions, thrownError){
+						alert(thrownError);
+					}
+				}); 
+			})
 		});
 		</script>
 	</body>
