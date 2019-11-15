@@ -8,7 +8,7 @@
 
 	$sel = new U_Update($db);
 
-	$sel->dept_code = $_POST['department_code'];
+	$sel->dept_code = $_POST['code'];
 	
 	$query = $sel->updateDeptRcpNo();
 	if($query){

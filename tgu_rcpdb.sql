@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 30, 2019 at 12:52 PM
+-- Generation Time: Nov 15, 2019 at 12:00 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -45,7 +45,7 @@ CREATE TABLE `approver_file` (
 INSERT INTO `approver_file` (`approver_id`, `approver_dept_code`, `approver_prmy_id`, `approver_alt_prmy_id`, `approver_sec_id`, `approver_alt_sec_id`, `approver_status`) VALUES
 (1, 'AAP', 2, 4, 5, 6, 'AC'),
 (2, 'AAR', 2, 0, 3, 6, 'AC'),
-(3, 'ACM', 2, 0, 0, 6, 'AC'),
+(3, 'ACM', 2, 0, 5, 6, 'AC'),
 (4, 'AFR', 2, 0, 2, 0, 'AC'),
 (5, 'ATR', 1, 0, 0, 0, 'AC'),
 (6, 'ANC', 1, 0, 0, 0, 'AC'),
@@ -69,7 +69,7 @@ INSERT INTO `approver_file` (`approver_id`, `approver_dept_code`, `approver_prmy
 (24, 'OHO', 1, 0, 0, 0, 'AC'),
 (25, 'OME', 2, 0, 0, 0, 'AC'),
 (26, 'OVE', 7, 0, 0, 0, 'AC'),
-(27, 'ONT', 0, 0, 0, 0, 'AC'),
+(27, 'ONT', 2, 0, 0, 0, 'AC'),
 (28, 'PCM', 0, 0, 0, 0, 'AC'),
 (29, 'PHS', 0, 0, 0, 0, 'AC'),
 (30, 'PQA', 0, 0, 0, 0, 'AC'),
@@ -146,7 +146,7 @@ CREATE TABLE `department_file` (
 --
 
 INSERT INTO `department_file` (`dept_id`, `dept_code`, `dept_name`, `dept_no_of_rcp`, `dept_status`) VALUES
-(1, 'AAP', 'ACCOUNTING-PAYABLES', 3, 'AC'),
+(1, 'AAP', 'ACCOUNTING-PAYABLES', 1, 'AC'),
 (2, 'AAR', 'ACCOUNTING-RECEIVABLES', 0, 'AC'),
 (3, 'ACM', 'ACCOUNTING-COMPLIANCE', 0, 'AC'),
 (4, 'AFR', 'ACCOUNTING-FIN REPORTS', 0, 'AC'),
@@ -212,7 +212,14 @@ CREATE TABLE `notification_file` (
 INSERT INTO `notification_file` (`notif_id`, `rcp_no`, `notif_status`) VALUES
 (1, 'AAP 19-0001', 'Read'),
 (2, 'AAP 19-0002', 'Read'),
-(3, 'AAP 19-0003', 'Read');
+(3, 'AAP 19-0003', 'Read'),
+(4, 'AAP 19-0004', 'Read'),
+(5, 'AAP 19-0005', 'Read'),
+(6, 'AAP 19-0006', 'Read'),
+(7, 'AAP 19-0007', 'Read'),
+(8, 'AAP 19-0008', 'Read'),
+(9, 'AAP 19-0009', 'Read'),
+(10, 'AAP 19-0010', 'Unread');
 
 -- --------------------------------------------------------
 
@@ -290,8 +297,14 @@ CREATE TABLE `rcp_approved_file` (
 --
 
 INSERT INTO `rcp_approved_file` (`rcp_id`, `rcp_no`, `rcp_date_approved`, `rcp_status`) VALUES
-(1, 'AAP 19-0001', '2019-08-30 18:39:38', 'Approved'),
-(2, 'AAP 19-0002', '2019-08-30 18:41:23', 'Approved');
+(1, 'AAP 19-0001', '2019-09-03 14:32:43', 'Approved'),
+(2, 'AAP 19-0003', '2019-09-03 14:39:02', 'Approved'),
+(3, 'AAP 19-0004', '2019-09-03 15:10:38', 'Approved'),
+(4, 'AAP 19-0005', '2019-09-03 15:44:41', 'Approved'),
+(5, 'AAP 19-0007', '2019-09-04 12:11:03', 'Approved'),
+(6, 'AAP 19-0006', '2019-09-04 12:12:13', 'Approved'),
+(7, 'AAP 19-0008', '2019-09-04 12:16:55', 'Approved'),
+(8, 'AAP 19-0009', '2019-11-08 15:55:19', 'Approved');
 
 -- --------------------------------------------------------
 
@@ -312,7 +325,7 @@ CREATE TABLE `rcp_declined_file` (
 --
 
 INSERT INTO `rcp_declined_file` (`rcp_id`, `rcp_no`, `rcp_reason`, `rcp_date_declined`, `rcp_status`) VALUES
-(1, 'AAP 19-0003', 'HAHAH', '2019-08-30 18:42:06', 'Declined');
+(1, 'AAP 19-0002', 'I am not satisfied.', '2019-09-03 14:43:15', 'Declined');
 
 -- --------------------------------------------------------
 
@@ -322,7 +335,7 @@ INSERT INTO `rcp_declined_file` (`rcp_id`, `rcp_no`, `rcp_reason`, `rcp_date_dec
 
 CREATE TABLE `rcp_file` (
   `rcp_id` int(11) NOT NULL,
-  `rcp_no` varchar(50) NOT NULL,
+  `rcp_no` varchar(15) NOT NULL,
   `rcp_employee_id` int(11) NOT NULL,
   `rcp_approver_id` int(11) NOT NULL,
   `rcp_payee` varchar(50) NOT NULL,
@@ -332,21 +345,21 @@ CREATE TABLE `rcp_file` (
   `rcp_date_issued` date NOT NULL,
   `rcp_amount_in_words` varchar(100) NOT NULL,
   `rcp_total_amount` double NOT NULL,
-  `rcp_rush` varchar(50) NOT NULL,
+  `rcp_vat` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `rcp_supp_file` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `rcp_rush` varchar(3) NOT NULL,
   `edited_by_app` varchar(3) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `rcp_status` varchar(50) NOT NULL
+  `rcp_status` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rcp_file`
 --
 
-INSERT INTO `rcp_file` (`rcp_id`, `rcp_no`, `rcp_employee_id`, `rcp_approver_id`, `rcp_payee`, `rcp_company`, `rcp_project`, `rcp_department`, `rcp_date_issued`, `rcp_amount_in_words`, `rcp_total_amount`, `rcp_rush`, `edited_by_app`, `created_at`, `updated_at`, `rcp_status`) VALUES
-(1, 'AAP 19-0001', 3, 2, 'HAH', 'CAB', 'PAC', 'AAP', '2019-08-30', 'AHAHA', 123, 'No', 'No', '2019-08-30 18:39:11', '2019-08-30 18:39:38', 'Approved'),
-(2, 'AAP 19-0002', 3, 2, 'haha', 'CAB', 'PAC', 'AAP', '2019-08-30', 'haha', 123, 'No', 'No', '2019-08-30 18:39:23', '2019-08-30 18:41:23', 'Approved'),
-(3, 'AAP 19-0003', 3, 2, 'haha', 'CAP', 'PAL', 'AAP', '2019-08-30', 'hah', 123, 'No', 'No', '2019-08-30 18:41:09', '2019-08-30 18:42:06', 'Declined');
+INSERT INTO `rcp_file` (`rcp_id`, `rcp_no`, `rcp_employee_id`, `rcp_approver_id`, `rcp_payee`, `rcp_company`, `rcp_project`, `rcp_department`, `rcp_date_issued`, `rcp_amount_in_words`, `rcp_total_amount`, `rcp_vat`, `rcp_supp_file`, `rcp_rush`, `edited_by_app`, `created_at`, `updated_at`, `rcp_status`) VALUES
+(1, 'AAP 19-0001', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-11-15', 'Seventeen thousand  pesos only', 17000, '\"{\\\"vat_trans\\\":10,\\\"vat_sales\\\":10,\\\"vat_exempt\\\":10,\\\"zero_rated\\\":10,\\\"vat_amount\\\":10}\"', '{\"name\":\"My-Resume.pdf\",\"path\":\"..\\/..\\/assets\\/files\\/My-Resume.pdf\"}', 'no', 'no', '2019-11-15 18:14:15', '2019-11-15 18:14:15', 1);
 
 -- --------------------------------------------------------
 
@@ -365,6 +378,30 @@ CREATE TABLE `rcp_file_edit_history` (
   `rcp_approver_id` int(11) NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rcp_file_edit_history`
+--
+
+INSERT INTO `rcp_file_edit_history` (`rcp_id`, `rcp_no`, `rcp_comp_code`, `rcp_proj_code`, `rcp_payee`, `rcp_amt_in_words`, `rcp_total_amt`, `rcp_approver_id`, `updated_at`) VALUES
+(1, 'AAP 19-0001', 'CAB', 'PAC', 'Elmar Malazarte', 'Three hundred thousand pesos only', 300000, 2, '2019-09-03 12:54:12'),
+(2, 'AAP 19-0001', 'CAB', 'PAC', 'Elmar Malazarte', 'Three hundred thousand pesos', 300000, 2, '2019-09-03 12:57:45'),
+(3, 'AAP 19-0001', 'CAB', 'PAC', 'Elmar Malazarte', 'Three hundred thousand pesos only', 300000, 2, '2019-09-03 12:59:19'),
+(4, 'AAP 19-0003', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 200000, 2, '2019-09-03 13:00:02'),
+(5, 'AAP 19-0003', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 200000, 2, '2019-09-03 13:00:38'),
+(6, 'AAP 19-0001', 'CAB', 'PAC', 'Elmar Malazarte', 'Three hundred thousand pesos only', 300000, 2, '2019-09-03 14:28:39'),
+(7, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 14:53:32'),
+(8, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 14:57:56'),
+(9, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 14:59:53'),
+(10, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:00:59'),
+(11, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:02:47'),
+(12, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:03:41'),
+(13, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:07:44'),
+(14, 'AAP 19-0004', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:10:12'),
+(15, 'AAP 19-0005', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos', 500, 2, '2019-09-03 15:44:18'),
+(16, 'AAP 19-0007', 'CVE', 'PAC', 'Jeffrey Monilla', 'Five hundred thousand pesos only', 500000, 2, '2019-09-04 12:10:50'),
+(17, 'AAP 19-0006', 'CAB', 'PAC', 'Jeffrey Monilla', 'Five hundred fifty thousand pesos', 550000, 2, '2019-09-04 12:12:04'),
+(18, 'AAP 19-0009', 'CAB', 'PAC', 'Jeffrey Monillass', 'One hundred twenty three  pesos only', 123, 2, '2019-11-08 15:54:59');
 
 -- --------------------------------------------------------
 
@@ -394,9 +431,16 @@ CREATE TABLE `rcp_orig_file` (
 --
 
 INSERT INTO `rcp_orig_file` (`rcp_no`, `rcp_employee_id`, `rcp_approver_id`, `rcp_payee`, `rcp_company`, `rcp_project`, `rcp_department`, `rcp_date_issued`, `rcp_amount_in_words`, `rcp_total_amount`, `rcp_rush`, `created_at`, `updated_at`, `rcp_status`) VALUES
-('AAP 19-0001', 3, 2, 'HAH', 'CAB', 'PAC', 'AAP', '2019-08-30', 'AHAHA', 123, 'No', '2019-08-30 18:39:11', '2019-08-30 18:39:11', 'Approved'),
-('AAP 19-0002', 3, 2, 'haha', 'CAB', 'PAC', 'AAP', '2019-08-30', 'haha', 123, 'No', '2019-08-30 18:39:23', '2019-08-30 18:39:23', 'Approved'),
-('AAP 19-0003', 3, 2, 'haha', 'CAP', 'PAL', 'AAP', '2019-08-30', 'hah', 123, 'No', '2019-08-30 18:41:09', '2019-08-30 18:41:09', 'Declined');
+('AAP 19-0001', 3, 2, 'Elmar Malazarte', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Three hundred thousand pesos only', 300000, 'No', '2019-09-03 12:15:12', '2019-09-03 12:15:12', 'Approved'),
+('AAP 19-0002', 3, 4, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Five hundred thousand pesos', 500000, 'No', '2019-09-03 12:16:28', '2019-09-03 12:51:30', 'Declined'),
+('AAP 19-0003', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Five hundred thousand pesos', 200000, 'Yes', '2019-09-03 12:18:52', '2019-09-03 12:50:51', 'Approved'),
+('AAP 19-0004', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Five hundred thousand pesos', 500, 'No', '2019-09-03 14:52:36', '2019-09-03 14:53:03', 'Approved'),
+('AAP 19-0005', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Five hundred thousand pesos', 500, 'Yes', '2019-09-03 15:30:50', '2019-09-03 15:30:50', 'Approved'),
+('AAP 19-0006', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-03', 'Five hundred thousand pesos', 500000, 'No', '2019-09-03 16:01:49', '2019-09-03 16:01:49', 'Approved'),
+('AAP 19-0007', 3, 2, 'Jeffrey Monilla', 'CVE', 'PAC', 'AAP', '2019-09-04', 'Five hundred thousand pesos', 500000, 'Yes', '2019-09-04 12:06:14', '2019-09-04 12:10:01', 'Approved'),
+('AAP 19-0008', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-09-04', 'Five hundred thousand pesos', 500000, 'No', '2019-09-04 12:16:38', '2019-09-04 12:16:38', 'Approved'),
+('AAP 19-0009', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-11-08', 'One hundred twenty three  pesos only', 123, 'No', '2019-11-08 10:22:21', '2019-11-08 10:29:05', 'Approved'),
+('AAP 19-0010', 3, 2, 'Jeffrey Monilla', 'CAB', 'PAC', 'AAP', '2019-11-08', 'Twelve  pesos only', 12, 'No', '2019-11-08 16:19:17', '2019-11-08 16:19:17', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -420,9 +464,26 @@ CREATE TABLE `rcp_orig_particulars_file` (
 --
 
 INSERT INTO `rcp_orig_particulars_file` (`rcp_id`, `rcp_no`, `rcp_particulars`, `rcp_ref_code`, `rcp_amount`, `created_at`, `updated_at`, `rcp_status`) VALUES
-(1, 'AAP 19-0001', 'HA', 'HAHA', 123, '2019-08-30 18:39:11', '2019-08-30 18:39:11', 'Approved'),
-(2, 'AAP 19-0002', 'hah', 'ahah', 123, '2019-08-30 18:39:23', '2019-08-30 18:39:23', 'Approved'),
-(3, 'AAP 19-0003', 'ahah', 'ah12', 123, '2019-08-30 18:41:09', '2019-08-30 18:41:09', 'Declined');
+(1, 'AAP 19-0001', 'A', 'A', 100000, '2019-09-03 12:15:12', '2019-09-03 12:15:12', 'Approved'),
+(2, 'AAP 19-0001', 'B', 'B', 100000, '2019-09-03 12:15:12', '2019-09-03 12:15:12', 'Approved'),
+(3, 'AAP 19-0001', 'C', 'C', 100000, '2019-09-03 12:15:12', '2019-09-03 12:15:12', 'Approved'),
+(4, 'AAP 19-0002', 'Apple Pen', 'A', 250000, '2019-09-03 12:16:28', '2019-09-03 12:51:30', 'Declined'),
+(5, 'AAP 19-0002', 'Bug', 'B', 250000, '2019-09-03 12:16:28', '2019-09-03 12:51:30', 'Declined'),
+(6, 'AAP 19-0003', 'Apple 2 - FRESH', '12345-XXX', 100000, '2019-09-03 12:18:52', '2019-09-03 12:50:51', 'Approved'),
+(7, 'AAP 19-0003', 'Abokado 2', '12345-XXX', 100000, '2019-09-03 12:18:52', '2019-09-03 12:50:51', 'Approved'),
+(8, 'AAP 19-0004', 'TEST A', 'TEST A', 100, '2019-09-03 14:52:36', '2019-09-03 14:53:03', 'Approved'),
+(9, 'AAP 19-0004', 'TEST B', 'TEST B', 100, '2019-09-03 14:52:36', '2019-09-03 14:53:03', 'Approved'),
+(10, 'AAP 19-0004', 'TEST C', 'TEST C', 300, '2019-09-03 14:53:03', '2019-09-03 14:53:03', 'Approved'),
+(11, 'AAP 19-0005', 'A', 'A', 250, '2019-09-03 15:30:50', '2019-09-03 15:30:50', 'Approved'),
+(12, 'AAP 19-0005', 'B', 'B', 250, '2019-09-03 15:30:50', '2019-09-03 15:30:50', 'Approved'),
+(13, 'AAP 19-0006', 'A', 'A', 250000, '2019-09-03 16:01:49', '2019-09-03 16:01:49', 'Approved'),
+(14, 'AAP 19-0006', 'B', 'B', 250000, '2019-09-03 16:01:49', '2019-09-03 16:01:49', 'Approved'),
+(15, 'AAP 19-0007', 'B', 'B', 100000, '2019-09-04 12:06:14', '2019-09-04 12:10:01', 'Approved'),
+(16, 'AAP 19-0007', 'A', 'A', 250000, '2019-09-04 12:06:14', '2019-09-04 12:10:01', 'Approved'),
+(17, 'AAP 19-0007', 'C', 'C', 100000, '2019-09-04 12:06:14', '2019-09-04 12:10:01', 'Approved'),
+(18, 'AAP 19-0007', 'D', 'D', 50000, '2019-09-04 12:06:14', '2019-09-04 12:10:01', 'Approved'),
+(19, 'AAP 19-0008', 'A', 'A', 500000, '2019-09-04 12:16:38', '2019-09-04 12:16:38', 'Approved'),
+(20, 'AAP 19-0009', 'XXXXXXXXs', 'XXXXX', 123, '2019-11-08 10:22:21', '2019-11-08 10:29:05', 'Approved');
 
 -- --------------------------------------------------------
 
@@ -440,6 +501,61 @@ CREATE TABLE `rcp_particulars_edit_history` (
   `updated_at` datetime DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `rcp_particulars_edit_history`
+--
+
+INSERT INTO `rcp_particulars_edit_history` (`rcp_id`, `rcp_file_id`, `rcp_no`, `rcp_particulars`, `rcp_ref_code`, `rcp_amount`, `updated_at`) VALUES
+(1, 1, 'AAP 19-0001', 'A', 'A', 100000, '2019-09-03 12:54:12'),
+(2, 1, 'AAP 19-0001', 'Banana', 'B', 100000, '2019-09-03 12:54:12'),
+(3, 1, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 12:54:12'),
+(4, 2, 'AAP 19-0001', 'A', 'A', 100000, '2019-09-03 12:57:45'),
+(5, 2, 'AAP 19-0001', 'Banana', 'B', 100000, '2019-09-03 12:57:45'),
+(6, 2, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 12:57:45'),
+(7, 3, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 12:59:19'),
+(8, 3, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 12:59:19'),
+(9, 3, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 12:59:19'),
+(10, 4, 'AAP 19-0003', 'Abokado 2 - FRESH', '12345-XXX', 100000, '2019-09-03 13:00:02'),
+(11, 4, 'AAP 19-0003', 'Abokado 2 - FRESH', '12345-XXX', 100000, '2019-09-03 13:00:02'),
+(12, 5, 'AAP 19-0003', 'Abokado 2 - FRESH', '12345-XXX', 100000, '2019-09-03 13:00:38'),
+(13, 5, 'AAP 19-0003', 'Abokado 2 - FRESH', '12345-XXX', 100000, '2019-09-03 13:00:38'),
+(14, 6, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 14:28:39'),
+(15, 6, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 14:28:39'),
+(16, 6, 'AAP 19-0001', 'Carrots', 'C', 100000, '2019-09-03 14:28:39'),
+(17, 7, 'AAP 19-0004', 'TEST Check', 'TEST Check', 300, '2019-09-03 14:53:32'),
+(18, 7, 'AAP 19-0004', 'TEST Check', 'TEST Check', 300, '2019-09-03 14:53:32'),
+(19, 7, 'AAP 19-0004', 'TEST Check', 'TEST Check', 300, '2019-09-03 14:53:32'),
+(20, 8, 'AAP 19-0004', 'TEST Check 2', 'TEST Check', 300, '2019-09-03 14:57:56'),
+(21, 8, 'AAP 19-0004', 'TEST Check 2', 'TEST Check', 300, '2019-09-03 14:57:56'),
+(22, 8, 'AAP 19-0004', 'TEST Check 2', 'TEST Check', 300, '2019-09-03 14:57:56'),
+(23, 9, 'AAP 19-0004', 'TEST Check 3', 'TEST Check 3', 300, '2019-09-03 14:59:53'),
+(24, 9, 'AAP 19-0004', 'TEST Check 3', 'TEST Check 3', 300, '2019-09-03 14:59:53'),
+(25, 9, 'AAP 19-0004', 'TEST Check 3', 'TEST Check 3', 300, '2019-09-03 14:59:53'),
+(26, 10, 'AAP 19-0004', 'TEST A', 'TEST A', 100, '2019-09-03 15:00:59'),
+(27, 10, 'AAP 19-0004', 'TEST B', 'TEST B', 100, '2019-09-03 15:00:59'),
+(28, 10, 'AAP 19-0004', 'TEST Check 4', 'TEST Check 3', 300, '2019-09-03 15:00:59'),
+(29, 11, 'AAP 19-0004', 'TESTÂ  A 1', 'TEST A', 100, '2019-09-03 15:02:47'),
+(30, 11, 'AAP 19-0004', 'TEST B', 'TEST B', 100, '2019-09-03 15:02:47'),
+(31, 11, 'AAP 19-0004', 'TEST Check 4', 'TEST Check 3', 300, '2019-09-03 15:02:47'),
+(32, 12, 'AAP 19-0004', 'TEST A1', 'TEST A', 100, '2019-09-03 15:03:41'),
+(33, 12, 'AAP 19-0004', 'TEST B', 'TEST B', 100, '2019-09-03 15:03:41'),
+(34, 12, 'AAP 19-0004', 'TEST Check 4', 'TEST Check 3', 300, '2019-09-03 15:03:41'),
+(35, 13, 'AAP 19-0004', 'TEST A1', 'TEST A', 100, '2019-09-03 15:07:44'),
+(36, 13, 'AAP 19-0004', 'TEST B', 'TEST B', 100, '2019-09-03 15:07:44'),
+(37, 13, 'AAP 19-0004', 'TEST Check 4', 'TEST Check 3', 300, '2019-09-03 15:07:44'),
+(38, 14, 'AAP 19-0004', 'TEST A1', 'TEST A', 100, '2019-09-03 15:10:12'),
+(39, 14, 'AAP 19-0004', 'TEST B', 'TEST B1', 100, '2019-09-03 15:10:12'),
+(40, 14, 'AAP 19-0004', 'TEST Check 4', 'TEST Check 3', 300, '2019-09-03 15:10:12'),
+(41, 15, 'AAP 19-0005', 'A', 'A', 250, '2019-09-03 15:44:18'),
+(42, 15, 'AAP 19-0005', 'B', 'Babe', 250, '2019-09-03 15:44:18'),
+(43, 16, 'AAP 19-0007', 'B', 'B', 100000, '2019-09-04 12:10:50'),
+(44, 16, 'AAP 19-0007', 'A', 'A', 250000, '2019-09-04 12:10:50'),
+(45, 16, 'AAP 19-0007', 'C', 'C', 100000, '2019-09-04 12:10:50'),
+(46, 16, 'AAP 19-0007', 'D', 'D', 50000, '2019-09-04 12:10:50'),
+(47, 17, 'AAP 19-0006', 'A', 'A', 250000, '2019-09-04 12:12:04'),
+(48, 17, 'AAP 19-0006', 'B', 'B', 300000, '2019-09-04 12:12:04'),
+(49, 18, 'AAP 19-0009', 'XXXXXXXXs', 'XXXXX', 123, '2019-11-08 15:54:59');
+
 -- --------------------------------------------------------
 
 --
@@ -449,20 +565,21 @@ CREATE TABLE `rcp_particulars_edit_history` (
 CREATE TABLE `rcp_particulars_file` (
   `rcp_id` int(11) NOT NULL,
   `rcp_no` varchar(50) NOT NULL,
+  `rcp_qty` int(11) NOT NULL,
+  `rcp_unit` varchar(30) NOT NULL,
   `rcp_particulars` varchar(200) NOT NULL,
-  `rcp_ref_code` varchar(50) NOT NULL,
+  `rcp_ref_code` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `rcp_amount` double NOT NULL,
-  `rcp_status` varchar(50) NOT NULL
+  `rcp_status` int(5) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rcp_particulars_file`
 --
 
-INSERT INTO `rcp_particulars_file` (`rcp_id`, `rcp_no`, `rcp_particulars`, `rcp_ref_code`, `rcp_amount`, `rcp_status`) VALUES
-(1, 'AAP 19-0001', 'HA', 'HAHA', 123, 'Approved'),
-(2, 'AAP 19-0002', 'hah', 'ahah', 123, 'Approved'),
-(3, 'AAP 19-0003', 'ahah', 'ah12', 123, 'Pending');
+INSERT INTO `rcp_particulars_file` (`rcp_id`, `rcp_no`, `rcp_qty`, `rcp_unit`, `rcp_particulars`, `rcp_ref_code`, `rcp_amount`, `rcp_status`) VALUES
+(1, 'AAP 19-0001', 1, '1', 'Washing Machine', '{\"ref\":\"WASH-MACH\"}', 2000, 1),
+(2, 'AAP 19-0001', 2, '2', 'Driller', '{\"ref\":\"DRLR\"}', 15000, 1);
 
 -- --------------------------------------------------------
 
@@ -475,8 +592,36 @@ CREATE TABLE `rcp_rush_file` (
   `rcp_no` varchar(50) NOT NULL,
   `rcp_justification` varchar(200) NOT NULL,
   `rcp_due_date` date NOT NULL,
-  `rcp_status` varchar(50) NOT NULL
+  `rcp_status` int(5) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rcp_rush_file`
+--
+
+INSERT INTO `rcp_rush_file` (`rcp_id`, `rcp_no`, `rcp_justification`, `rcp_due_date`, `rcp_status`) VALUES
+(1, 'AAP 19-0004', 'sadder', '2019-11-28', 1),
+(2, 'AAP 19-0006', 'sadder', '2019-11-15', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `status`
+--
+
+CREATE TABLE `status` (
+  `status_id` int(11) NOT NULL,
+  `status_name` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `status`
+--
+
+INSERT INTO `status` (`status_id`, `status_name`) VALUES
+(1, 'Pending'),
+(2, 'Approved'),
+(3, 'Declined');
 
 -- --------------------------------------------------------
 
@@ -530,7 +675,7 @@ CREATE TABLE `user_file` (
 --
 
 INSERT INTO `user_file` (`user_id`, `user_lastname`, `user_firstname`, `user_middle_initial`, `user_comp_code`, `user_dept_code`, `user_type`, `user_status`) VALUES
-(1, 'Malazarte', 'Elmar', '', 'IGC', 'ITS', 1, 'AC'),
+(1, 'Malazarte', 'Elmar', 's', 'IGC', 'ITS', 1, 'AC'),
 (2, 'Huan', 'Mona Joyce', 'C', 'IGC', 'ITS', 3, 'AC'),
 (3, 'Monilla', 'Jeffrey', 'M', 'IGC', 'ITS', 2, 'AC'),
 (4, 'Dumdum', 'Franck', 'M', 'CEX', 'ITS', 4, 'AC'),
@@ -696,7 +841,7 @@ ALTER TABLE `department_file`
 -- AUTO_INCREMENT for table `notification_file`
 --
 ALTER TABLE `notification_file`
-  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `project_file`
@@ -708,7 +853,7 @@ ALTER TABLE `project_file`
 -- AUTO_INCREMENT for table `rcp_approved_file`
 --
 ALTER TABLE `rcp_approved_file`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `rcp_declined_file`
@@ -720,37 +865,37 @@ ALTER TABLE `rcp_declined_file`
 -- AUTO_INCREMENT for table `rcp_file`
 --
 ALTER TABLE `rcp_file`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `rcp_file_edit_history`
 --
 ALTER TABLE `rcp_file_edit_history`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `rcp_orig_particulars_file`
 --
 ALTER TABLE `rcp_orig_particulars_file`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `rcp_particulars_edit_history`
 --
 ALTER TABLE `rcp_particulars_edit_history`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `rcp_particulars_file`
 --
 ALTER TABLE `rcp_particulars_file`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rcp_rush_file`
 --
 ALTER TABLE `rcp_rush_file`
-  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `rcp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_account_file`

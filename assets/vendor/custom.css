@@ -22,7 +22,7 @@
 		z-index: 4000 !important;
 	}
 	.ui-autocomplete-loading {
-		background: white assets('../../assets/gif/anim_basic_16x16.gif') right center no-repeat;
+		background: white assets('../assets/gif/anim_basic_16x16.gif') right center no-repeat;
 	}
 	.table-border{
 		border-right: 2px solid #EEEEEE; 
@@ -43,5 +43,13 @@
 	}
 	.hexa-font-size{
 		font-size: 35px;
+	}
+	.canvas{
+		margin-top: 25px;
+		height: 220px;
+		width: 175px;
+	}
+	.canvas-hidden{
+		display: none;
 	}
 </style>

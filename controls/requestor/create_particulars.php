@@ -8,14 +8,13 @@
 
 	$sel = new RequestorInsert($db);
 
-	$data = json_decode(json_encode($_POST['data']), true);
-
 	date_default_timezone_set('Asia/Manila');
+	$data = json_decode(json_encode($_POST['data']), true);
 	$sel->rcp_no = $data['rcp_no'];
 	$sel->rcp_qty = $data['qty'];
 	$sel->rcp_unit = $data['unit'];
 	$sel->rcp_particulars = $data['particulars'];
-	$sel->rcp_ref_code = json_encode($data['ref']);
+	$sel->rcp_ref_code = json_encode($data['reference']);
     $sel->rcp_amount = $data['amount'];
     $sel->rcp_status = 1;
     

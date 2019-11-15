@@ -179,7 +179,7 @@
 </nav>
 <?php 
 	include '../modal/univ-modal.php';
-	include '../scripts/functions.php';
+	include '../scripts/trappings.php';
 ?>
 
     <script>

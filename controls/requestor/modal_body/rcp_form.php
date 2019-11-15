@@ -103,11 +103,11 @@
                                 for ($i = 0; $i < 5; $i++) { 
                         echo '
                                     <tr>
-                                    <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
-                                    <td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
-                                    <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
-                                    <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
-                                    <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
+                                        <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
+                                        <td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
+                                        <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
+                                        <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
+                                        <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
                                     </tr>
                                 ';
                                 }
@@ -235,13 +235,16 @@
                         <div class="input-group-addon">
                         <span class="fa fa-calendar "></span>
                         </div>
-                        <input type="text" class="form-control col-md-6" id="datepicker-2" style="background-color: white;">
+                        <input type="text" name="due-date" class="form-control col-md-6" id="datepicker-2" style="background-color: white;">
                     </div>
                     <br>
                     <label class=" form-control-label">Reason / Justification</label>
-                    <textarea class="form-control" placeholder="Your text here. . ." rows="10" id="justification"></textarea>
+                    <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                     <br>
-                    <input type="file" name="file" id="file">
+                    <div class="form-group text-center">
+                        <input type="file" name="file" id="file" accept=".pdf">
+                        <canvas id="viewer" class="form-control canvas center-block canvas-hidden"></canvas>
+                    </div>
                     </div>
             </div>
         </div>
@@ -303,7 +306,56 @@
             email = splitter('approver', 1);
           });
       // End of approver change
-    
+
+        $("#file").on("change", function(e){
+            $('#viewer').removeClass('canvas-hidden')
+            // Loaded via <script> tag, create shortcut to access PDF.js exports.
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+            // The workerSrc property shall be specified.
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+            var file = e.target.files[0]
+            
+            if(file.type == "application/pdf"){
+            var fileReader = new FileReader();  
+            fileReader.onload = function() {
+                var pdfData = new Uint8Array(this.result);
+                // Using DocumentInitParameters object to load binary data.
+                var loadingTask = pdfjsLib.getDocument({data: pdfData});
+                loadingTask.promise.then(function(pdf) {
+                console.log('PDF loaded');
+                
+                // Fetch the first page
+                var pageNumber = 1;
+                pdf.getPage(pageNumber).then(function(page) {
+                    console.log('Page loaded');
+                    
+                    var scale = 1.5;
+                    var viewport = page.getViewport({scale: scale});
+
+                    // Prepare canvas using PDF page dimensions
+                    var canvas = $("#viewer")[0];
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // Render PDF page into canvas context
+                    var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                    };
+                    var renderTask = page.render(renderContext);
+                    renderTask.promise.then(function () {
+                    console.log('Page rendered');
+                    });
+                });
+                }, function (reason) {
+                // PDF loading error
+                console.error(reason);
+                });
+            };
+            fileReader.readAsArrayBuffer(file);
+        }
+        });
     });
 </script>
 

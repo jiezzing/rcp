@@ -141,6 +141,7 @@
 		<?php
 			require '../modal/requestor-modals.php';
 			require '../scripts/js.php';
+			require '../scripts/rcp_functions.php';
 		?>
 		<script>
 		// Global variables
@@ -150,15 +151,15 @@
 			var current_appr_email;
 			var rcp_no;
 			toastr.options = {
-			"closeButton": true,
-			"debug": false,
-			"progressBar": true,
-			"positionClass": "toast-top-right",
-			"preventDuplicates": true,
-			"onclick": null,
-			"showDuration": "300",
-			"hideDuration": "1000",
-			"timeOut": "5000"        
+				"closeButton": true,
+				"debug": false,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": true,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "5000"        
 			};
 			var expenseType = 'project';
 		// End of global variables
@@ -597,14 +598,12 @@
 
 
 		/*========================================================*/
-		/*                      SENDING RCP						  */
+		/*                      SEND OF RCP						  */
 		/*========================================================*/
 
 		var approver_id;
 		var email;
 		$(document).ready(function(){
-				
-
 		// Selecting construction expense type
 			$('input[type=radio][name=type]').change(function() {
 				if (this.value == 'project'){
@@ -624,20 +623,17 @@
 			});
 		// End of selecting construction expense type
 
-			$('#send-rcp-btn').click(function(){
-				var files = $('#file')[0].files[0];
-				var length = lengthGetter(expenseType);
-				var department_code = splitter('department', 0);
+		// Sending of data - RCP
+			$('#form').on('submit', function(e){
+				e.preventDefault();
+				var code = splitter('department', 0);
 				var total_rcp = parseInt(splitter('department', 5)) + 1;
-				var rcp_no = department_code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-				var amount = $('#' + expenseType + '-form-modal').find('#total').val();
-				var due_date = valueGetter('datepicker-2');
-				var justification = valueGetter('justification');
+				var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
+				var user_id = <?php echo $_SESSION['user_id']; ?>;
 				var rush = 'no';
-				var missingIndex = 0;
-				var isEmpty = false;
-				var isReady = true;
-				var data = new FormData();
+				var length = lengthGetter(expenseType);
+				var table_data = [];
+				var reference;
 				var vat = {
 					'vat_trans': 10,
 					'vat_sales': 10,
@@ -645,72 +641,76 @@
 					'zero_rated': 10,
 					'vat_amount': 10
 				};
-				// var data = {
-				// 	'rcp_no': rcp_no,
-				// 	'department_code': department_code,
-				// 	'approver_id': approver_id,
-				// 	'project_code': valueGetter('project'),
-				// 	'company_code': valueGetter('company'),
-				// 	'payee': valueGetter('payee'),
-				// 	'amount_in_words': valueGetter('amount-in-words'),
-				// 	'user_id': <?php echo $_SESSION['user_id']; ?>,
-				// 	'total_amount' : currencyRemoveCommas(amount),
-				// 	'rush': rush,
-				// 	'edited': 'no',
-				// 	'current_date': currentDate(),
-				// 	'vat': vat,
-				// 	'expense': expenseType,
-				// 	'justification': justification,
-				// 	'due_date': due_date
-				// };
-				var message = [
-					'Some fields are missing.',
-					'Please specify the particulars, BOM Ref/Acct Code and amount.',
-					'Please specify your reason or justification.',
-					'Please specify date needed.',
-					'Please fill-up all the fields required in row '];
-
-				if(due_date != "" && justification == ""){
-					toastr.info(message[2], 'Info');
-					return;
-				} 
-				else if(justification != "" && due_date == ""){
-					toastr.info(message[3], 'Info');
-					return;
-				}
-				else {
-					if (due_date != "" && justification != "") {
-						rush = "yes";
-					}
-				}
-
-				updateDepartmentRcpNo(department_code);
-				// createRcp(form, expenseType);
-			});
-
-			$('#form').on('submit', function(e){
-				e.preventDefault();
+				
 				var form = document.getElementById('form');
-				var fdata = new FormData(form);
-				var pdf = $('#project-form-modal #file')[0].files[0];
-				fdata.append('amount_in_words', $('#project-form-modal #amount-in-words').val());
-				fdata.append('file', pdf);
-				console.log(pdf);
-				$.ajax({
-					type: "POST",
-					url: "../controls/requestor/create_rcp.php",
-					data: fdata,
-					contentType: false, 
-					cache: false,
-					processData: false,
-					success: function(response){
-						console.log(response);
-					},
-					error: function(xhr, ajaxOptions, thrownError){
-						alert(thrownError);
+				var data = new FormData(form);
+				var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
+				for(var i = 0; i < length; i++){
+					var qty = $('#' + expenseType + '-table #qty-' + i).text();
+					var unit = $('#' + expenseType + '-table #unit-' + i).text();
+					var particulars = $('#' + expenseType + '-table #particulars-' + i).text();
+					var ref = $('#' + expenseType + '-table #bom-ref-code-' + i).text();
+					var amount = $('#' + expenseType + '-table #amount-' + i).text();
+					
+					if(expenseType == 'project'){ reference = { 'ref': ref }; }
+					else{
+						var code = $('#department-table #code-' + i).text();
+						reference = {
+							'ref': ref,
+							'code': code
+						};
 					}
-				}); 
-			})
+
+					if(qty == "" || unit == "" || particulars == "" || ref == "" || amount == ""){ continue; }
+					else{
+						table_data.push({
+							'qty': qty,
+							'unit': unit,
+							'particulars': particulars,
+							'reference': reference,
+							'amount': currencyRemoveCommas(amount)
+						});
+					}
+				}
+
+				data.append('rcp_no', rcp_no);
+				data.append('user_id', user_id);
+				data.append('approver', approver_id);
+				data.append('project', $('#project').val());
+				data.append('department', code);
+				data.append('amount_in_words', $('#project-form-modal #amount-in-words').val());
+				data.append('total', currencyRemoveCommas($('#total').val()))
+				data.append('vat', JSON.stringify(vat));
+				data.append('file', pdf);
+				data.append('rush', rush);
+				data.append('expenseType', expenseType);
+				data.append('length', length);
+				data.append('table_data', JSON.stringify(table_data));
+
+				$('#' + expenseType + '-form-modal').modal('toggle');
+				swal({
+					title: "Confirmation",
+					text: "Would you like to send the RCP?",
+					type: "info",
+					showCancelButton: true,
+					closeOnConfirm: false,
+					confirmButtonText: "Yes",
+					showLoaderOnConfirm: true
+				}, function (value) {
+					if(value){
+						createRcp(data);
+					}
+					else{
+						$('#' + expenseType + '-form-modal').modal('show');
+						return false;
+					}
+				});
+			});
+		// End of sending data - RCP
+
+		/*========================================================*/
+		/*                   END OF SENDING RCP					  */
+		/*========================================================*/
 		});
 		</script>
 	</body>

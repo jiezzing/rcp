@@ -11,7 +11,7 @@
 		
 		// Method in creating RCP
 		public function createRcp(){
-			$query = "INSERT INTO rcp_file(rcp_no, rcp_employee_id, rcp_approver_id, rcp_payee, rcp_company, rcp_project, rcp_department, rcp_date_issued, rcp_amount_in_words, rcp_total_amount, rcp_vat, rcp_supp_file, rcp_rush, edited_by_app, created_at, updated_at, rcp_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO rcp_file(rcp_no, rcp_employee_id, rcp_approver_id, rcp_payee, rcp_company, rcp_project, rcp_department, rcp_date_issued, rcp_amount_in_words, rcp_total_amount, rcp_vat, rcp_supp_file, rcp_rush, edited_by_app, created_at, updated_at, rcp_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
