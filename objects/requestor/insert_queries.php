@@ -11,7 +11,7 @@
 		
 		// Method in creating RCP
 		public function createRcp(){
-			$query = "INSERT INTO rcp_file(rcp_no, rcp_employee_id, rcp_approver_id, rcp_payee, rcp_company, rcp_project, rcp_department, rcp_date_issued, rcp_amount_in_words, rcp_total_amount, rcp_vat, rcp_supp_file, rcp_rush, edited_by_app, created_at, updated_at, rcp_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			$query = "INSERT INTO rcp_file(rcp_no, rcp_employee_id, rcp_approver_id, rcp_payee, rcp_company, rcp_project, rcp_department, rcp_date_issued, rcp_amount_in_words, rcp_total_amount, rcp_vat, rcp_supp_file, rcp_expense_type, rcp_rush, edited_by_app, created_at, updated_at, rcp_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
@@ -27,11 +27,12 @@
 			$sel->bindParam(10, $this->rcp_total_amount);
 			$sel->bindParam(11, $this->rcp_vat);
 			$sel->bindParam(12, $this->rcp_supp_file);
-			$sel->bindParam(13, $this->rcp_rush);
-			$sel->bindParam(14, $this->edited_by_app);
-			$sel->bindParam(15, $this->created_at);
-			$sel->bindParam(16, $this->updated_at);
-			$sel->bindParam(17, $this->rcp_status);
+			$sel->bindParam(13, $this->rcp_expense_type);
+			$sel->bindParam(14, $this->rcp_rush);
+			$sel->bindParam(15, $this->edited_by_app);
+			$sel->bindParam(16, $this->created_at);
+			$sel->bindParam(17, $this->updated_at);
+			$sel->bindParam(18, $this->rcp_status);
 
 			$sel->execute();
 			return $sel;

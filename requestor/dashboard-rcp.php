@@ -97,11 +97,11 @@
 												<ul class="list-unstyled list-justify">
 													<li>Approver <span>'.$row['user_firstname'].' '.$row['user_lastname'].'</span></li>
 													<li>Department <span>'.$row['dept_name'].'</span></li>
-													<li>Rush <span>'.$row['rcp_rush'].'</span></li>
+													<li>Type <span>'.$row['rcp_expense_type'].'</span></li>
 												</ul>
 											</div>
 											<a href="##" data-toggle="modal" data-target="#rcp-modal-details" id="dummier">
-												<div class="panel-footer show-more-details" value="'.$row['rcp_no'].':'.$row['rcp_approver_id'].':'.$row['rcp_rush'].':'.$row['rcp_id'].':'.$row['user_email'].'">
+												<div class="panel-footer show-more-details" value="'.$row['rcp_no'].':'.$row['rcp_approver_id'].':'.$row['rcp_rush'].':'.$row['rcp_id'].':'.$row['user_email'].':'.$row['rcp_expense_type'].'">
 													<h5>
 														<ul class="list-unstyled list-justify">
 															<li>Created: '.$row['created_at'].'<i class="fa fa-pencil pull-right"></i></li>
@@ -162,36 +162,35 @@
 				"timeOut": "5000"        
 			};
 			var expenseType = 'project';
+			var expense = 'Project Expense';
+			var rcpExpenseType;
 		// End of global variables
 
 		// Show RCP details when clicked
 			$(document).on('click', '.show-more-details', function(e){
 				e.preventDefault();
-				var split = $(this).attr('value');
-				var mValues = split.split(":");   
-				rcp_no = mValues[0];
-				prev_apprvr_id = mValues[1];
-				rush = mValues[2];
-				id = mValues[3];
-				current_appr_email = mValues[4];
+				var key = $(this).attr('value');
+
+				rcp_no = valueSplitter(key, 0);
+				prev_apprvr_id = valueSplitter(key, 1);
+				rush = valueSplitter(key, 2);
+				id = valueSplitter(key, 3);
+				current_appr_email = valueSplitter(key, 4);
 				rcp_id = id;
+				rcpExpenseType = valueSplitter(key, 5);
 				$.ajax({
-				type: "POST",
-				url: "../controls/requestor/modal_body/show_detail_modal.php",
-				data: {
-					rcp_no: rcp_no
-				},
-				cache: false,
-				success: function(html)
-				{
-					$("#rcp-modal-details-body").html(html);
-					$("#rcp-modal-details").modal('show');
-				},
-				error: function(xhr, ajaxOptions, thrownError)
-				{
-					alert(thrownError);
-				}
-			});
+					type: "POST",
+					url: "../controls/requestor/modal_body/show_detail_modal.php",
+					data: { rcp_no: rcp_no },
+					cache: false,
+					success: function(html){
+						$("#rcp-modal-details-body").html(html);
+						$("#rcp-modal-details").modal('show');
+					},
+					error: function(xhr, ajaxOptions, thrownError){
+						alert(thrownError);
+					}
+				});
 			});
 		// End of showing RCP details when clicked
 
@@ -591,6 +590,7 @@
 							$("#department-form-modal").modal('show');
 						}
 					});
+					addNewTableRow('department-table', 'department-form-modal', 'Department Expense');
 				}
 			});
 		// End of showing modal depending of selected expense type
@@ -608,6 +608,7 @@
 			$('input[type=radio][name=type]').change(function() {
 				if (this.value == 'project'){
 					expenseType = 'project';
+					expense = 'Project Expense';
 					$('.expense-modal').attr('id','project-form-modal');
 					$('.expense-modal-body').attr('id','project-form-modal-body');
 					$('#title').text('Request for Check Payment - Project Expense Form');
@@ -615,6 +616,7 @@
 				}
 				else{
 					expenseType = 'department';
+					expense = 'Department Expense';
 					$('.expense-modal').attr('id','department-form-modal');
 					$('.expense-modal-body').attr('id','department-form-modal-body');
 					$('#title').text('Request for Check Payment - Department Expense Form');
@@ -635,11 +637,11 @@
 				var table_data = [];
 				var reference;
 				var vat = {
-					'vat_trans': 10,
+					'vat_trans': 5,
 					'vat_sales': 10,
-					'vat_exempt': 10,
-					'zero_rated': 10,
-					'vat_amount': 10
+					'vat_exempt': 15,
+					'zero_rated': 20,
+					'vat_amount': 25
 				};
 				
 				var form = document.getElementById('form');
@@ -654,10 +656,10 @@
 					
 					if(expenseType == 'project'){ reference = { 'ref': ref }; }
 					else{
-						var code = $('#department-table #code-' + i).text();
+						var ref_code = $('#department-table #code-' + i).text();
 						reference = {
 							'ref': ref,
-							'code': code
+							'code': ref_code
 						};
 					}
 
@@ -678,7 +680,7 @@
 				data.append('approver', approver_id);
 				data.append('project', $('#project').val());
 				data.append('department', code);
-				data.append('amount_in_words', $('#project-form-modal #amount-in-words').val());
+				data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
 				data.append('total', currencyRemoveCommas($('#total').val()))
 				data.append('vat', JSON.stringify(vat));
 				data.append('file', pdf);
@@ -686,6 +688,7 @@
 				data.append('expenseType', expenseType);
 				data.append('length', length);
 				data.append('table_data', JSON.stringify(table_data));
+				data.append('expense', expense);
 
 				$('#' + expenseType + '-form-modal').modal('toggle');
 				swal({

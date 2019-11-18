@@ -143,11 +143,11 @@
       return result; //i added the word cent to the last part of the return value to get desired output
   }
 
-  function addNewTableRow(table, modal){
-    if(modal == 'project-form-modal'){
+  function addNewTableRow(table, modal, expenseType){
+    if((modal == 'project-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Project Expense'){
       var  tbl_row = $(document).find('#' + table).find('tr');
       var tbl = '';
-      var i = $(document).find('#' + table).find('td[name=qty]').length;
+      var i = $(document).find('#' + modal).find('#' + table).find('td[name=qty]').length;
 
       if(i == 13){
         return;
@@ -182,49 +182,52 @@
           tbl_row.last().after(tbl);
           $(document).find('#' + table).find('tr').last().find('.qty').focus();
           numbersOnly();
-          computation('project-form-modal', 'project-table');
+          computation(modal, 'project-table');
       }
     }
     else{
-      var  tbl_row = $(document).find('#' + table).find('tr');
-      var tbl = '';
-      var i = $(document).find('#' + table).find('td[name=qty]').length;
-      if(i == 13){
-        return;
-      }
-      else{
-        if(i == 12){
-          $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
-          $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
-          $('#' + modal).find('#rcp-add-row').text("MAX");
-        }
-        else
-          $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
+      if((modal == 'department-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Department Expense'){
+        var  tbl_row = $(document).find('#' + table).find('tr');
+        var tbl = '';
+        var i = $(document).find('#' + table).find('td[name=qty]').length;
 
-        if((i + 1) % 2 != 0){
-          tbl += '<tr role="row" class="odd">';
-            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-            tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
-            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-          tbl += '</tr>';
+        if(i == 13){
+          return;
         }
         else{
-          tbl += '<tr role="row" class="even">';
-            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-            tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
-            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-          tbl += '</tr>';
+          if(i == 12){
+            $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
+            $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
+            $('#' + modal).find('#rcp-add-row').text("MAX");
+          }
+          else
+            $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
+
+          if((i + 1) % 2 != 0){
+            tbl += '<tr role="row" class="odd">';
+              tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+              tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+              tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+              tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+              tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+              tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+            tbl += '</tr>';
+          }
+          else{
+            tbl += '<tr role="row" class="even">';
+              tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+              tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+              tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+              tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+              tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+              tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+            tbl += '</tr>';
+          }
+          tbl_row.last().after(tbl);
+          $(document).find('#' + table).find('tr').last().find('.qty').focus();
+          numbersOnly();
+          computation(modal, 'department-table');
         }
-        tbl_row.last().after(tbl);
-        $(document).find('#' + table).find('tr').last().find('.qty').focus();
-        numbersOnly();
-        computation('department-form-modal', 'department-table');
       }
     }
   }
@@ -253,7 +256,19 @@
     return data[index];
   }
 
+  function valueSplitter(key, index){
+    var data = key.split(":"); 
+    return data[index];
+  }
+
   function lengthGetter(table){
     return $('#' + table + '-table td[name=qty]').length;
+  }
+
+  function destroyModal(modal){
+    $('#' + modal).on('hidden.bs.modal', function(){
+      alert('destroy');
+			$(this).data('modal', null);
+		});
   }
 </script>

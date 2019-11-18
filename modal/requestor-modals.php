@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
       </div>
-      <div class="modal-body" id="rcp-modal-details-body">
+      <div class="modal-body text-size" id="rcp-modal-details-body">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

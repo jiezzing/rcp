@@ -6,7 +6,9 @@
 	<!-- Jquery -->
 	<script type="text/javascript" src="../assets/vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="../assets/vendor/jquery/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="../assets/vendor/jquery/jquery-ui.css">
+	<link rel="stylesheet" href="../assets/vendor/jquery/jquery-ui.css">
+	<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+	
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="../assets/vendor/bootstrap-sweetalert/dist/sweetalert.css">

@@ -9,8 +9,9 @@
 	$sel = new RequestorInsert($db);
 
 	if(isset($_FILES['file']['name'])){
-		$path = '../../assets/files/' . $_FILES['file']['name'];
+		$path = '../assets/files/' . $_FILES['file']['name'];
 		date_default_timezone_set('Asia/Manila');
+		
 		$supp_file = array(
 			'name' => $_FILES['file']['name'],
 			'path' => $path
@@ -26,8 +27,9 @@
 		$sel->rcp_date_issued = date("Y-m-d");
 		$sel->rcp_amount_in_words = $_POST['amount_in_words'];
 		$sel->rcp_total_amount = $_POST['total'];
-		$sel->rcp_vat = json_encode($_POST['vat']);
+		$sel->rcp_vat = $_POST['vat'];
 		$sel->rcp_supp_file = json_encode($supp_file);
+		$sel->rcp_expense_type = $_POST['expense'];
 		$sel->rcp_rush = $_POST['rush'];
 		$sel->edited_by_app = 'no';
 		$sel->created_at = date("Y-m-d H:i:s");

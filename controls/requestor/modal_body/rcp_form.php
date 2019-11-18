@@ -101,15 +101,15 @@
                             ';
 
                                 for ($i = 0; $i < 5; $i++) { 
-                        echo '
-                                    <tr>
-                                        <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
-                                        <td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
-                                        <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
-                                        <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
-                                        <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
-                                    </tr>
-                                ';
+                                    echo '
+                                        <tr>
+                                            <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
+                                            <td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
+                                            <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
+                                            <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
+                                            <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
+                                        </tr>
+                                    ';
                                 }
                                 echo'
                             </tbody>
@@ -133,16 +133,16 @@
                             ';
 
                                 for ($i = 0; $i < 5; $i++) { 
-                        echo '
-                                <tr>
-                                    <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
-                                    <td class="uni table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
-                                    <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
-                                    <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
-                                    <td class="code table-border center" id="code-'.$i.'"> --- </td>
-                                    <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
-                                </tr>
-                                ';
+                                    echo '
+                                        <tr>
+                                            <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
+                                            <td class="uni table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
+                                            <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
+                                            <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
+                                            <td class="code table-border center" id="code-'.$i.'"> --- </td>
+                                            <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
+                                        </tr>
+                                    ';
                                 }
                                 echo'
                             </tbody>
@@ -151,17 +151,17 @@
                     }
             echo '
                     </div>
-                    <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
-                        <div class="input-group">
-                        <span class="input-group-addon">₱</span>
-                        <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
-                        <span class="input-group-addon">Total Amount Due</span>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+                                <div class="input-group">
+                                <span class="input-group-addon">₱</span>
+                                <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
+                                <span class="input-group-addon">Total Amount Due</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -171,47 +171,47 @@
                 <div class="col-md-8">
                     <div class="panel">
                         <div class="panel-heading">
-                        <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
-                        <div class="right">
-                            <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-                        </div>
+                            <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
+                            <div class="right">
+                                <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                            </div>
                         </div>
                         <div class="panel-body">
-                        <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                <th style="width: 25%"></th>
-                                <th style="width: 20%"></th>
-                                <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <td class="table-border">P.O.S. Trans #</td>
-                                <td class="table-border"></td>
-                                <td class="table-border">Less: VAT</td>
-                                </tr>
-                                <tr>
-                                <td class="table-border">VATable Sales</td>
-                                <td class="table-border"></td>
-                                <td class="table-border">Amount: Net of VAT</td>
-                                </tr>
-                                <tr>
-                                <td class="table-border">VAT-Exempt</td>
-                                <td class="table-border"></td>
-                                <td class="table-border">Less: SC/PWD Discount</td>
-                                </tr>
-                                <tr>
-                                <td class="table-border">Zero Rated</td>
-                                <td class="table-border"></td>
-                                <td class="table-border">Amount Due</td>
-                                </tr>
-                                <tr>
-                                <td class="table-border">VAT Amount</td>
-                                <td class="table-border"></td>
-                                <td class="table-border">Add: VAT</td>
-                                </tr>
-                            </tbody>
+                            <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                    <th style="width: 25%"></th>
+                                    <th style="width: 20%"></th>
+                                    <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td class="table-border">P.O.S. Trans #</td>
+                                    <td class="table-border"></td>
+                                    <td class="table-border">Less: VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VATable Sales</td>
+                                    <td class="table-border"></td>
+                                    <td class="table-border">Amount: Net of VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT-Exempt</td>
+                                    <td class="table-border"></td>
+                                    <td class="table-border">Less: SC/PWD Discount</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">Zero Rated</td>
+                                    <td class="table-border"></td>
+                                    <td class="table-border">Amount Due</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT Amount</td>
+                                    <td class="table-border"></td>
+                                    <td class="table-border">Add: VAT</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         </div>
@@ -243,7 +243,8 @@
                     <br>
                     <div class="form-group text-center">
                         <input type="file" name="file" id="file" accept=".pdf">
-                        <canvas id="viewer" class="form-control canvas center-block canvas-hidden"></canvas>
+                        <canvas id="viewer" class="form-control canvas center-block canvas-hidden" target="_blank"></canvas>
+                        <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
                     </div>
                     </div>
             </div>
@@ -262,11 +263,11 @@
 
 		  // Add new table row
         $('#project-form-modal').find('#rcp-add-row').click(function(event) {
-          addNewTableRow('project-table', 'project-form-modal');
+          addNewTableRow('project-table', 'project-form-modal', 'Project Expense');
         });
 
         $('#department-form-modal').find('#rcp-add-row').click(function(event) {
-          addNewTableRow('department-table', 'department-form-modal');
+          addNewTableRow('department-table', 'department-form-modal', 'Department Expense');
           autocomplete();
         });
 		  // End of adding new table row
@@ -313,11 +314,12 @@
             var pdfjsLib = window['pdfjs-dist/build/pdf'];
             // The workerSrc property shall be specified.
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
-            var file = e.target.files[0]
+            var file = e.target.files[0];
             
             if(file.type == "application/pdf"){
             var fileReader = new FileReader();  
             fileReader.onload = function() {
+                $('#loading').removeClass('hidden');
                 var pdfData = new Uint8Array(this.result);
                 // Using DocumentInitParameters object to load binary data.
                 var loadingTask = pdfjsLib.getDocument({data: pdfData});
@@ -346,11 +348,12 @@
                     var renderTask = page.render(renderContext);
                     renderTask.promise.then(function () {
                     console.log('Page rendered');
+                        $('#loading').addClass('hidden');
                     });
                 });
                 }, function (reason) {
                 // PDF loading error
-                console.error(reason);
+                    console.error(reason);
                 });
             };
             fileReader.readAsArrayBuffer(file);

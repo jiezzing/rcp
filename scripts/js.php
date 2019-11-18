@@ -18,10 +18,6 @@
 <script type="text/javascript" src="../assets/vendor/toastr/build/toastr.min.js"></script>
 
 
-<!-- Toaster JS-->
-<script type="text/javascript" src="../assets/vendor/pdf.js"></script>
-
-
 	
 
 

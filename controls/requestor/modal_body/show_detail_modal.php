@@ -21,7 +21,9 @@
 		$apprvr_id = $row['rcp_approver_id'];
 		$rcp_rush =  $row['rcp_rush'];
 		$rcp_date_issued = $row['rcp_date_issued'];
-		echo $row['rcp_date_issued'];
+		$expense_type = $row['rcp_expense_type'];
+		$vat = json_decode($row['rcp_vat'], true);
+		$supp_file = json_decode($row['rcp_supp_file'], true);
  	}
 
  	$sel->dept_code = $rcp_dept_code;
@@ -162,7 +164,7 @@
                 <!-- Get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <select class="form-control" id="company">
+                    <select class="form-control selectpicker" data-live-search="true" required id="company">
                       ';
                       ?>
                       	<?php
@@ -187,7 +189,7 @@
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <select class="form-control" id="project">
+                    <select class="form-control selectpicker" data-live-search="true" required id="project">
                       ';
                       ?>
                       <?php
@@ -233,66 +235,229 @@
                 <div class="col-md-12">
                         <!-- RECENT PURCHASES -->
                         <div class="panel">
-                          <div class="panel-body no-padding">
-                            <table class="table table-responsive-md table-striped text-left" id="show-rcp-details-table" style="table-layout: fixed;">
-                              <thead>
-                                <tr>
-                                  <th>Particulars</th>
-                                  <th style="width: 25%">BOM Ref/Acct Code</th>
-                                  <th style="width: 20%">Amount</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-
-                              ';
-                              ?>
-                                <?php
-									$index = 0;
-									$sel->rcp_no = $rcp_no;
-									$query3 = $sel->getRcpParticularDetails();
-								 	while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
-								 		echo '
-								 			<tr>
-												<td class="show-particulars" contenteditable="true" name="show-td1" id="show-td1'.$index.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()">'.$row['rcp_particulars'].'</a></td>
-												<td class="show-ref_code" contenteditable="true" name="show-td2" id="show-td2'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()">'.$row['rcp_ref_code'].'</td>
-												<td class="allownumericwithdecimal show-amount" contenteditable="true" name="show-td3" id="show-td3'.$index.'" style="border-right: 2px solid #EEEEEE" keyup="amount()"> '.number_format($row['rcp_amount'], 2).'</td>
-												<td style="display:none" name="td4" id="show-td4'.$index.'">'.$row['rcp_id'].'</td>
+						  <div class="panel-body no-padding">
+						  ';
+						  ?>
+							<?php
+								if($expense_type == 'Project Expense'){
+									echo '
+									<table class="table table-responsive-md table-striped text-left" id="project-table">
+										<thead>
+											<tr>
+												<th style="width: 10%">QTY</th>
+												<th style="width: 12%">Unit</th>
+												<th>Particulars</th>
+												<th style="width: 25%">BOM Ref/Acct Code</th>
+												<th style="width: 18%">Amount</th>
 											</tr>
-								 		';
-							 			$index++;
-								 	}
-
-								 	for($i = $index; $i < 5; $i++){
-								 		echo '
-								 			<tr>
-												<td class="show-particulars" contenteditable="true" name="show-td1" id="show-td1'.$i.'" style="border-right: 2px solid #EEEEEE; border-left: 2px solid #EEEEEE" keyup="particulars()"></a></td>
-												<td class="show-ref_code" contenteditable="true" name="show-td2" id="show-td2'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="refCode()"></td>
-												<td class="allownumericwithdecimal show-amount" contenteditable="true" name="show-td3" id="show-td3'.$i.'" style="border-right: 2px solid #EEEEEE" keyup="amount()"></td>
-												<td style="display:none" name="td4" id="show-td4'.$i.'"></td>
+										</thead>
+										<tbody>
+										';
+											$i = 0;
+											$sel->rcp_no = $rcp_no;
+											$query3 = $sel->getRcpParticularDetails();
+											while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
+												echo '
+													<tr>
+														<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'">'.$row['rcp_qty'].'</a></td>
+														<td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'">'.$row['rcp_unit'].'</a></td>
+														<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'">'.$row['rcp_particulars'].'</a></td>
+														';
+														?>
+														<?php
+															$data = json_decode($row['rcp_ref_code'], true);
+															echo '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'">'.$data['ref'].'</td>';
+														?>
+														<?php
+														echo '
+														
+														<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'">'.$row['rcp_amount'].'</td>
+													</tr>
+												';
+												$i++;
+											}
+											if($i < 5){
+												for ($index = $i; $index < 5; $index++) { 
+													echo '
+														<tr>
+															<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$index.'"></a></td>
+															<td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$index.'"></a></td>
+															<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$index.'"></a></td>
+															<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$index.'"></td>
+															<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$index.'"></td>
+														</tr>
+													';
+												}
+											}
+										echo'
+										</tbody>
+									</table>
+									';
+								}
+								else{
+									echo '
+									<table class="table table-responsive-md table-striped text-left" id="department-table">
+										<thead>
+											<tr>
+												<th style="width: 10%">QTY</th>
+												<th style="width: 12%">Unit</th>
+												<th style="width: 20%">Particulars</th>
+												<th style="width: 20%">BOM Reference</th>
+												<th style="width: 10%">Acct Code</th>
+												<th style="width: 18%">Amount</th>
 											</tr>
-								 		';
-								 	}
-								?>
-                                <?php
-                                echo '
-                              </tbody>
-                            </table>
+										</thead>
+										<tbody>
+										';
+			
+											$i = 0;
+											$sel->rcp_no = $rcp_no;
+											$query3 = $sel->getRcpParticularDetails();
+											while ($row = $query3->fetch(PDO::FETCH_ASSOC)) {
+												echo '
+													<tr>
+														<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'">'.$row['rcp_qty'].'</a></td>
+														<td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'">'.$row['rcp_unit'].'</a></td>
+														<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'">'.$row['rcp_particulars'].'</a></td>
+														';
+														?>
+														<?php
+															$data = json_decode($row['rcp_ref_code'], true);
+															echo '
+																<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'">'.$data['ref'].'</td>
+																<td class="code table-border center" id="code-'.$i.'">'.$data['code'].'</td>
+															';
+														?>
+														<?php
+														echo '
+														
+														<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'">'.$row['rcp_amount'].'</td>
+													</tr>
+												';
+												$i++;
+											}
+											if($i < 5){
+												for ($index = $i; $index < 5; $index++) { 
+													echo '
+														<tr>
+														<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$index.'"></a></td>
+														<td class="uni table-border" contenteditable="true" name="unit" id="unit-'.$index.'"></a></td>
+														<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$index.'"></a></td>
+														<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$index.'"></td>
+														<td class="code table-border center" id="code-'.$index.'"> --- </td>
+														<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$index.'"></td>
+														</tr>
+													';
+												}
+											}
+											echo'
+										</tbody>
+									</table>
+									';
+								}
+							?>
+						  <?php
+						  echo'
                           </div>
                           <div class="panel-footer">
                             <div class="row">
-                              <div class="col-md-6"><span class="panel-note"><label id="show-no-of-rows"> '.$i.' out of 8 rows /</label> </span><span class="panel-note"><a href="#" id="show-add-row"> Add New Row</a></span></div>
-                              <div class="input-group">
-                                <span class="input-group-addon">₱</span>
-                                <input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="show_total_amount">
-                                <span class="input-group-addon">Total Amount Due</span>
-                              </div>
-                            </div>
-                          </div>
+                              	<div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> '.$index.' out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+									<div class="input-group">
+										<span class="input-group-addon">₱</span>
+										<input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="show_total_amount">
+										<span class="input-group-addon">Total Amount Due</span>
+									</div>
+                           		</div>
+                         	</div>
                         </div>
-                        <!-- END RECENT PURCHASES -->
-                      </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+            <div class="col-md-12">
+                <div class="col-md-8">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
+                            <div class="right">
+                                <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                    <th style="width: 25%"></th>
+                                    <th style="width: 20%"></th>
+                                    <th></th>
+                                    </tr>
+                                </thead>
+								<tbody class="text-center">
+                                    <tr>
+                                    <td class="table-border">P.O.S. Trans #</td>
+                                    <td class="table-border">'.$vat['vat_trans'].'</td>
+                                    <td class="table-border">Less: VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VATable Sales</td>
+                                    <td class="table-border">'.$vat['vat_sales'].'</td>
+                                    <td class="table-border">Amount: Net of VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT-Exempt</td>
+                                    <td class="table-border">'.$vat['vat_exempt'].'</td>
+                                    <td class="table-border">Less: SC/PWD Discount</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">Zero Rated</td>
+                                    <td class="table-border">'.$vat['zero_rated'].'</td>
+                                    <td class="table-border">Amount Due</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT Amount</td>
+                                    <td class="table-border">'.$vat['vat_amount'].'</td>
+                                    <td class="table-border">Add: VAT</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    <label for="company" class=" form-control-label">NOTE:</label>
+                    <p>
+                        1.  BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
+                        <br> 
+                        2.  To facilitate processing, please fill out all the fields COMPLETELY especially the account to be charged and attach the necessary supporting documents.
+                        <br> 
+                        3.  All alterations must be initialed by the authorized requesters / officers. 
+                        <br> 
+                        4.  Avoid having RUSH requests; however, if truly urgent, indicate the date needed (box at the right). 
+                        <br>  
+                        5.  All "RUSH" RCPs should be accompanied by an <u class="bold" ">acceptable explanation.</u>
+                    </p>
+                </div>
+
+                    <div class="col-md-4">
+                    <label class=" form-control-label">If RUSH, fill in the following:</label>
+                    <div class="input-group date" id="datepicker">
+                        <div class="input-group-addon">
+                        <span class="fa fa-calendar "></span>
+                        </div>
+                        <input type="text" name="due-date" class="form-control col-md-6" id="datepicker-2" style="background-color: white;">
+                    </div>
+                    <br>
+                    <label class=" form-control-label">Reason / Justification</label>
+                    <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
+                    <br>
+                    <div class="form-group text-center">
+                        <input type="file" name="file" id="file" accept=".pdf">
+						<canvas id="viewer" class="form-control canvas center-block canvas-hidden"></canvas>
+						<embed class="canvas" src="'.$supp_file['path'].'"/>
+                        <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
+                    </div>
+                    </div>
             </div>
-          </div>
+        </div>
 	';
 ?>
 <?php
@@ -319,10 +484,31 @@
     ';
   }
 ?>
+<script type="text/javascript" src="../assets/vendor/klorofil/scripts/klorofil-common.js"></script>
 <script>
+	$(function() {
+		datepicker('rcp-modal-details');
+		computation('rcp-modal-details', 'project-table');
+        computation('rcp-modal-details', 'department-table');
+        numbersOnly();
+        autocomplete();
+		$('.selectpicker').selectpicker();
+
+		  // Add new table row
+        $('#rcp-modal-details #rcp-add-row').click(function(event) {
+          addNewTableRow('project-table', 'rcp-modal-details', rcpExpenseType);
+        });
+
+        $('#rcp-modal-details #rcp-add-row').click(function(event) {
+          addNewTableRow('department-table', 'rcp-modal-details', rcpExpenseType);
+          autocomplete();
+        });
+		  // End of adding new table row
+	});
+</script>
+<!-- <script>
 	$(document).ready(function (){
 		var date_issued = "<?php echo date("m/d/Y", strtotime($rcp_date_issued)); ?>";
-    	forTableRowMethod2();
         $('#date-needed').datepicker({
         	startDate: date_issued
         });
@@ -332,9 +518,9 @@
 		    });
 		});
 	});
-</script>
+</script> -->
 
-<script>
+<!-- <script>
   $('#show-add-row').click(function(event) {
     event.preventDefault();
     var  tbl_row = $(document).find('#show-rcp-details-table').find('tr');
@@ -366,10 +552,9 @@
       }
       tbl_row.last().after(tbl);
       $(document).find('#show-rcp-details-table').find('tr').last().find('.show-particulars').focus();
-      forTableRowMethod2();
     }
   });
-</script>
+</script> -->
 
 	<!-- Show RCP approver -->
 	<script>

@@ -23,6 +23,7 @@
             cache: false,
             processData: false,
             success: function(response){
+                console.log(response);
                 JSON.parse(data.get('table_data')).forEach((value)=>{
                     createParticulars(
                         data.get('rcp_no'), 

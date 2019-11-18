@@ -202,7 +202,7 @@
 
 		// Get all particulars of specific data
 		public function getRcpParticularDetails(){
-			$query = "SELECT * FROM rcp_particulars_file WHERE rcp_no =? AND rcp_status='Pending'";
+			$query = "SELECT * FROM rcp_particulars_file WHERE rcp_no =? AND rcp_status=1";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
