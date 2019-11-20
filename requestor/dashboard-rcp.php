@@ -195,376 +195,376 @@
 		// End of showing RCP details when clicked
 
 		// Update RCP
-			$('#save-changes-btn').click(function (){
-				var rcp_no = $('#rcp-no').val();
-				var new_apprvr_id = $('#show-approver').val();
-				var comp_code = $('#company').val();
-				var proj_code = $('#project').val();
-				var payee = $('#payee').val();
-				var amount_in_words = $('#amount-in-words').val();
-				var total_amount = $('#show_total_amount').val();
-				var currencyNoCommas = total_amount.replace(/\,/g,'');
-				currencyNoCommas = Number(currencyNoCommas);
-				var due_date = $('#mDate-needed').val();
-				var justification = $('#justification').val();
-				var isSuccess = false;
-				var table_length = $('td[name=show-td1]').length;
-				var rqstr_name = "<?php echo $user_fullname; ?>";
-				var removedData = [];
-				var isReady = true;
-				var isEmpty = false;
-				var isSent;
+			// $('#save-changes-btn').click(function (){
+			// 	var rcp_no = $('#rcp-no').val();
+			// 	var new_apprvr_id = $('#show-approver').val();
+			// 	var comp_code = $('#company').val();
+			// 	var proj_code = $('#project').val();
+			// 	var payee = $('#payee').val();
+			// 	var amount_in_words = $('#amount-in-words').val();
+			// 	var total_amount = $('#show_total_amount').val();
+			// 	var currencyNoCommas = total_amount.replace(/\,/g,'');
+			// 	currencyNoCommas = Number(currencyNoCommas);
+			// 	var due_date = $('#mDate-needed').val();
+			// 	var justification = $('#justification').val();
+			// 	var isSuccess = false;
+			// 	var table_length = $('td[name=show-td1]').length;
+			// 	var rqstr_name = "<?php echo $user_fullname; ?>";
+			// 	var removedData = [];
+			// 	var isReady = true;
+			// 	var isEmpty = false;
+			// 	var isSent;
 
-				if(payee == "" || amount_in_words == ""){
-					toastr.error('Some fields are missing.', 'Required');
-					return;
-				}
-				if(rush == "Yes"){
-					if(due_date != "" && justification == ""){
-						toastr.info('Please specify your reason or justification.', 'Info');
-						return;
-					} 
-				}
+			// 	if(payee == "" || amount_in_words == ""){
+			// 		toastr.error('Some fields are missing.', 'Required');
+			// 		return;
+			// 	}
+			// 	if(rush == "Yes"){
+			// 		if(due_date != "" && justification == ""){
+			// 			toastr.info('Please specify your reason or justification.', 'Info');
+			// 			return;
+			// 		} 
+			// 	}
 
-				for (var i = 0; i < table_length; i++){ 
-					var arraytd1 = $("#show-td1"+i+"").text();
-					var arraytd2 = $("#show-td2"+i+"").text();
-					var arraytd3 = $("#show-td3"+i+"").text();
-						if (arraytd1 == "" && arraytd2 == "" && arraytd3 == "") {
-							isEmpty = true;
-						}
-						else{
-						isEmpty = false;
-						break;
-						}
-				}
+			// 	for (var i = 0; i < table_length; i++){ 
+			// 		var arraytd1 = $("#show-td1"+i+"").text();
+			// 		var arraytd2 = $("#show-td2"+i+"").text();
+			// 		var arraytd3 = $("#show-td3"+i+"").text();
+			// 			if (arraytd1 == "" && arraytd2 == "" && arraytd3 == "") {
+			// 				isEmpty = true;
+			// 			}
+			// 			else{
+			// 			isEmpty = false;
+			// 			break;
+			// 			}
+			// 	}
 
-				if(isEmpty){
-					toastr.error('Please specify the particulars, BOM Ref/Acct Code and amount.', 'Required');
-					isReady = false;
-					return;
-				}
-				else{
-					for(var i = 0; i < table_length; i++){
-						var arraytd1 = $("#show-td1"+i+"").text();
-						var arraytd2 = $("#show-td2"+i+"").text();
-						var arraytd3 = $("#show-td3"+i+"").text();
-						if(arraytd1 == "" && arraytd2 == "" && arraytd3 == "")
-							continue;
-						else{
-							if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
-								missingIndex = i + 1;
-								isReady = false;
-								break;
-							}
-						}
-					}
-				}   
+			// 	if(isEmpty){
+			// 		toastr.error('Please specify the particulars, BOM Ref/Acct Code and amount.', 'Required');
+			// 		isReady = false;
+			// 		return;
+			// 	}
+			// 	else{
+			// 		for(var i = 0; i < table_length; i++){
+			// 			var arraytd1 = $("#show-td1"+i+"").text();
+			// 			var arraytd2 = $("#show-td2"+i+"").text();
+			// 			var arraytd3 = $("#show-td3"+i+"").text();
+			// 			if(arraytd1 == "" && arraytd2 == "" && arraytd3 == "")
+			// 				continue;
+			// 			else{
+			// 				if(arraytd1 == "" || arraytd2 == "" || arraytd3 == ""){
+			// 					missingIndex = i + 1;
+			// 					isReady = false;
+			// 					break;
+			// 				}
+			// 			}
+			// 		}
+			// 	}   
 
-				if(!isReady){
-					toastr.error('Please fill-up all the fields required in row ' + missingIndex, 'Required');
-					return;
-				}
-				else{
-					if(prev_apprvr_id != new_apprvr_id){ // Start of condition of new approver
-						$("#rcp-modal-details").modal('toggle');
-						swal({
-							title: "Confirmation",
-							text: "It seems that you are changing the approver of your RCP, would you like to continue?",
-							type: "info",
-							showCancelButton: true,
-							closeOnConfirm: false,
-							confirmButtonText: "Yes",
-							showLoaderOnConfirm: true
-						}, function (data) {
-							if(data){
-								$.ajax({
-									type: "POST",
-									url: "../controls/mails/new_approver_mail.php",
-									data: {
-									rcp_no:rcp_no,
-									email:current_appr_email
-									},
-									cache: false,
-									beforeSend: function(){
+			// 	if(!isReady){
+			// 		toastr.error('Please fill-up all the fields required in row ' + missingIndex, 'Required');
+			// 		return;
+			// 	}
+			// 	else{
+			// 		if(prev_apprvr_id != new_apprvr_id){ // Start of condition of new approver
+			// 			$("#rcp-modal-details").modal('toggle');
+			// 			swal({
+			// 				title: "Confirmation",
+			// 				text: "It seems that you are changing the approver of your RCP, would you like to continue?",
+			// 				type: "info",
+			// 				showCancelButton: true,
+			// 				closeOnConfirm: false,
+			// 				confirmButtonText: "Yes",
+			// 				showLoaderOnConfirm: true
+			// 			}, function (data) {
+			// 				if(data){
+			// 					$.ajax({
+			// 						type: "POST",
+			// 						url: "../controls/mails/new_approver_mail.php",
+			// 						data: {
+			// 						rcp_no:rcp_no,
+			// 						email:current_appr_email
+			// 						},
+			// 						cache: false,
+			// 						beforeSend: function(){
 
-									},
-									complete: function(){
-										if(rush == "Yes"){
-											$.ajax({ // Start of updating RCP Rush file
-												type: "POST",
-												url: "../controls/requestor/update_rush_file.php",
-												data: {
-													rcp_no:rcp_no, 
-													due_date:due_date, 
-													justification:justification
-												},
-												success: function(response){
-													console.log(response);
-												},
-												error: function(xhr, ajaxOptions, thrownError){
-													alert(thrownError);
-												}
-											}); // End of updating RCP Rush file
-										}
-										setTimeout(function () {
-											swal({
-											title: rcp_no,
-											text: "has been successfully updated",
-											type: "success",
-											closeOnConfirm: false,
-											confirmButtonText: "Okay",
-											allowEscapeKey: false
-											}, function (data) {
-											if(data){
-												location.reload();
-											}
-											});
-										}, 2000);
-										isSent = true;
-										console.log("Current approver: " + current_appr_email);
-									},
-									success: function(response){
-										// Send an email notification to approver
-										$.ajax({
-											type: "POST",
-											url: "../controls/mails/new_rcp_mail.php",
-											data: {
-												rcp_no:rcp_no, 
-												rqstr_name:rqstr_name,
-												rush:rush,
-												due_date:due_date,
-												justification:justification,
-												email:new_email
-											},
-											cache: false,
-											success: function(response){
-												$.ajax({ // Start of updating RCP File
-													type: "POST",
-													url: "../controls/requestor/update_rcp_file.php",
-													data: {
-														rcp_no: rcp_no, 
-														rcp_approver_id: new_apprvr_id, 
-														comp_code: comp_code, 
-														proj_code: proj_code, 
-														payee: payee, 
-														amount_in_words:amount_in_words, 
-														currencyNoCommas:currencyNoCommas
-													},
-													cache: false,
-													success: function(response){
-														for (var i = 0; i < table_length; i++) { // Start of for loop
-															var particulars = $("#show-td1"+i+"").text(); 
-															var ref_codes = $("#show-td2"+i+"").text(); 
-															var amounts = $("#show-td3"+i+"").text(); 
-															var rcp_id = $("#show-td4"+i+"").text(); 
-															var currencyNoCommas = amounts.replace(/\,/g,'');
-															currencyNoCommas = Number(currencyNoCommas);
+			// 						},
+			// 						complete: function(){
+			// 							if(rush == "Yes"){
+			// 								$.ajax({ // Start of updating RCP Rush file
+			// 									type: "POST",
+			// 									url: "../controls/requestor/update_rush_file.php",
+			// 									data: {
+			// 										rcp_no:rcp_no, 
+			// 										due_date:due_date, 
+			// 										justification:justification
+			// 									},
+			// 									success: function(response){
+			// 										console.log(response);
+			// 									},
+			// 									error: function(xhr, ajaxOptions, thrownError){
+			// 										alert(thrownError);
+			// 									}
+			// 								}); // End of updating RCP Rush file
+			// 							}
+			// 							setTimeout(function () {
+			// 								swal({
+			// 								title: rcp_no,
+			// 								text: "has been successfully updated",
+			// 								type: "success",
+			// 								closeOnConfirm: false,
+			// 								confirmButtonText: "Okay",
+			// 								allowEscapeKey: false
+			// 								}, function (data) {
+			// 								if(data){
+			// 									location.reload();
+			// 								}
+			// 								});
+			// 							}, 2000);
+			// 							isSent = true;
+			// 							console.log("Current approver: " + current_appr_email);
+			// 						},
+			// 						success: function(response){
+			// 							// Send an email notification to approver
+			// 							$.ajax({
+			// 								type: "POST",
+			// 								url: "../controls/mails/new_rcp_mail.php",
+			// 								data: {
+			// 									rcp_no:rcp_no, 
+			// 									rqstr_name:rqstr_name,
+			// 									rush:rush,
+			// 									due_date:due_date,
+			// 									justification:justification,
+			// 									email:new_email
+			// 								},
+			// 								cache: false,
+			// 								success: function(response){
+			// 									$.ajax({ // Start of updating RCP File
+			// 										type: "POST",
+			// 										url: "../controls/requestor/update_rcp_file.php",
+			// 										data: {
+			// 											rcp_no: rcp_no, 
+			// 											rcp_approver_id: new_apprvr_id, 
+			// 											comp_code: comp_code, 
+			// 											proj_code: proj_code, 
+			// 											payee: payee, 
+			// 											amount_in_words:amount_in_words, 
+			// 											currencyNoCommas:currencyNoCommas
+			// 										},
+			// 										cache: false,
+			// 										success: function(response){
+			// 											for (var i = 0; i < table_length; i++) { // Start of for loop
+			// 												var particulars = $("#show-td1"+i+"").text(); 
+			// 												var ref_codes = $("#show-td2"+i+"").text(); 
+			// 												var amounts = $("#show-td3"+i+"").text(); 
+			// 												var rcp_id = $("#show-td4"+i+"").text(); 
+			// 												var currencyNoCommas = amounts.replace(/\,/g,'');
+			// 												currencyNoCommas = Number(currencyNoCommas);
 
-															if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
-																continue;
-															}
-															else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
-																$.ajax({ // Start of changing status to remove
-																	type: "POST",
-																	url: "../controls/requestor/remove_rcp_particulars.php",
-																	data: {
-																		rcp_id: rcp_id
-																	},
-																	success: function(response){
-																		isSuccess = true;	
-																	},
-																	error: function(xhr, ajaxOptions, thrownError)
-																	{
-																		alert(thrownError);
-																	}
-																}); // End of changing status to remove
-															}
-															else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
-																$.ajax({ // Start of adding new rcp particulars
-																	type: "POST",
-																	url: "../controls/requestor/create_particulars.php",
-																	data: {
-																		rcp_no:rcp_no, 
-																		arraytd1:particulars, 
-																		arraytd2:ref_codes, 
-																		arraytd3:currencyNoCommas
-																	},
-																	success: function(response){
-																	isSuccess = true;
-																	},
-																	error: function(xhr, ajaxOptions, thrownError) {
-																		alert(thrownError);
-																	}
-																}); // End of adding new rcp particulars
-															}
-															else{
-																$.ajax({ // Start of updating particulars file
-																	type: "POST",
-																	url: "../controls/requestor/update_rcp_particulars.php",
-																	data: {
-																		rcp_id: rcp_id, 
-																		particulars: particulars, 
-																		ref_codes: ref_codes, 
-																		amounts: currencyNoCommas
-																	},
-																	success: function(response){
-																		isSuccess = true;	
-																	},
-																	error: function(xhr, ajaxOptions, thrownError)
-																	{
-																		alert(thrownError);
-																	}
-																}); // End of updating particulars file
-															}
-														} // End of for loop
-													},
-													error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
-													{
-														alert(thrownError);
-													}
-												}); // End of updating RCP File
-											},
-											error: function(xhr, ajaxOptions, thrownError){
-											alert(thrownError);
-											} 
-										});
-									},
-									error: function(xhr, ajaxOptions, thrownError){
-										alert(thrownError);
-									} 
-								});
-							}
-							else{
-								$("#rcp-modal-details").modal('show');
-								return false;
-							}
-						});
-					}
-					else{
-						$.ajax({ // Start of updating RCP File
-							type: "POST",
-							url: "../controls/requestor/update_rcp_file.php",
-							data: {
-								rcp_no: rcp_no, 
-								rcp_approver_id: new_apprvr_id, 
-								comp_code: comp_code, 
-								proj_code: proj_code, 
-								payee: payee, 
-								amount_in_words:amount_in_words, 
-								currencyNoCommas:currencyNoCommas
-							},
-							cache: false,
-							beforeSend: function(){
+			// 												if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
+			// 													continue;
+			// 												}
+			// 												else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
+			// 													$.ajax({ // Start of changing status to remove
+			// 														type: "POST",
+			// 														url: "../controls/requestor/remove_rcp_particulars.php",
+			// 														data: {
+			// 															rcp_id: rcp_id
+			// 														},
+			// 														success: function(response){
+			// 															isSuccess = true;	
+			// 														},
+			// 														error: function(xhr, ajaxOptions, thrownError)
+			// 														{
+			// 															alert(thrownError);
+			// 														}
+			// 													}); // End of changing status to remove
+			// 												}
+			// 												else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
+			// 													$.ajax({ // Start of adding new rcp particulars
+			// 														type: "POST",
+			// 														url: "../controls/requestor/create_particulars.php",
+			// 														data: {
+			// 															rcp_no:rcp_no, 
+			// 															arraytd1:particulars, 
+			// 															arraytd2:ref_codes, 
+			// 															arraytd3:currencyNoCommas
+			// 														},
+			// 														success: function(response){
+			// 														isSuccess = true;
+			// 														},
+			// 														error: function(xhr, ajaxOptions, thrownError) {
+			// 															alert(thrownError);
+			// 														}
+			// 													}); // End of adding new rcp particulars
+			// 												}
+			// 												else{
+			// 													$.ajax({ // Start of updating particulars file
+			// 														type: "POST",
+			// 														url: "../controls/requestor/update_rcp_particulars.php",
+			// 														data: {
+			// 															rcp_id: rcp_id, 
+			// 															particulars: particulars, 
+			// 															ref_codes: ref_codes, 
+			// 															amounts: currencyNoCommas
+			// 														},
+			// 														success: function(response){
+			// 															isSuccess = true;	
+			// 														},
+			// 														error: function(xhr, ajaxOptions, thrownError)
+			// 														{
+			// 															alert(thrownError);
+			// 														}
+			// 													}); // End of updating particulars file
+			// 												}
+			// 											} // End of for loop
+			// 										},
+			// 										error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
+			// 										{
+			// 											alert(thrownError);
+			// 										}
+			// 									}); // End of updating RCP File
+			// 								},
+			// 								error: function(xhr, ajaxOptions, thrownError){
+			// 								alert(thrownError);
+			// 								} 
+			// 							});
+			// 						},
+			// 						error: function(xhr, ajaxOptions, thrownError){
+			// 							alert(thrownError);
+			// 						} 
+			// 					});
+			// 				}
+			// 				else{
+			// 					$("#rcp-modal-details").modal('show');
+			// 					return false;
+			// 				}
+			// 			});
+			// 		}
+			// 		else{
+			// 			$.ajax({ // Start of updating RCP File
+			// 				type: "POST",
+			// 				url: "../controls/requestor/update_rcp_file.php",
+			// 				data: {
+			// 					rcp_no: rcp_no, 
+			// 					rcp_approver_id: new_apprvr_id, 
+			// 					comp_code: comp_code, 
+			// 					proj_code: proj_code, 
+			// 					payee: payee, 
+			// 					amount_in_words:amount_in_words, 
+			// 					currencyNoCommas:currencyNoCommas
+			// 				},
+			// 				cache: false,
+			// 				beforeSend: function(){
 
-							},
-							complete: function(){
-								if(rush == "Yes"){
-									$.ajax({ // Start of updating RCP Rush file
-										type: "POST",
-										url: "../controls/requestor/update_rush_file.php",
-										data: {
-											rcp_no:rcp_no, 
-											due_date:due_date, 
-											justification:justification
-										},
-										success: function(response){
-											console.log(response);
-										},
-										error: function(xhr, ajaxOptions, thrownError){
-											alert(thrownError);
-										}
-									}); // End of updating RCP Rush file
-								}
-								$("#rcp-modal-details").modal('toggle');
-								swal({
-									title: rcp_no,
-									text: "has been successfully updated",
-									type: "success",
-									closeOnConfirm: false,
-									confirmButtonText: "Okay",
-									allowEscapeKey: false
-								}, function (data) {
-								if(data){
-									location.reload();
-								}
-								});
-							},
-							success: function(response){
-								for (var i = 0; i < table_length; i++) { // Start of for loop
-									var particulars = $("#show-td1"+i+"").text(); 
-									var ref_codes = $("#show-td2"+i+"").text(); 
-									var amounts = $("#show-td3"+i+"").text(); 
-									var rcp_id = $("#show-td4"+i+"").text(); 
-									var currencyNoCommas = amounts.replace(/\,/g,'');
-									currencyNoCommas = Number(currencyNoCommas);
+			// 				},
+			// 				complete: function(){
+			// 					if(rush == "Yes"){
+			// 						$.ajax({ // Start of updating RCP Rush file
+			// 							type: "POST",
+			// 							url: "../controls/requestor/update_rush_file.php",
+			// 							data: {
+			// 								rcp_no:rcp_no, 
+			// 								due_date:due_date, 
+			// 								justification:justification
+			// 							},
+			// 							success: function(response){
+			// 								console.log(response);
+			// 							},
+			// 							error: function(xhr, ajaxOptions, thrownError){
+			// 								alert(thrownError);
+			// 							}
+			// 						}); // End of updating RCP Rush file
+			// 					}
+			// 					$("#rcp-modal-details").modal('toggle');
+			// 					swal({
+			// 						title: rcp_no,
+			// 						text: "has been successfully updated",
+			// 						type: "success",
+			// 						closeOnConfirm: false,
+			// 						confirmButtonText: "Okay",
+			// 						allowEscapeKey: false
+			// 					}, function (data) {
+			// 					if(data){
+			// 						location.reload();
+			// 					}
+			// 					});
+			// 				},
+			// 				success: function(response){
+			// 					for (var i = 0; i < table_length; i++) { // Start of for loop
+			// 						var particulars = $("#show-td1"+i+"").text(); 
+			// 						var ref_codes = $("#show-td2"+i+"").text(); 
+			// 						var amounts = $("#show-td3"+i+"").text(); 
+			// 						var rcp_id = $("#show-td4"+i+"").text(); 
+			// 						var currencyNoCommas = amounts.replace(/\,/g,'');
+			// 						currencyNoCommas = Number(currencyNoCommas);
 
-									if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
-										continue;
-									}
-									else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
-										$.ajax({ // Start of changing status to remove
-											type: "POST",
-											url: "../controls/requestor/remove_rcp_particulars.php",
-											data: {
-												rcp_id: rcp_id
-											},
-											success: function(response){
-												isSuccess = true;	
-											},
-											error: function(xhr, ajaxOptions, thrownError)
-											{
-												alert(thrownError);
-											}
-										}); // End of changing status to remove
-									}
-									else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
-										$.ajax({ // Start of adding new rcp particulars
-											type: "POST",
-											url: "../controls/requestor/create_particulars.php",
-											data: {
-												rcp_no:rcp_no, 
-												arraytd1:particulars, 
-												arraytd2:ref_codes, 
-												arraytd3:currencyNoCommas
-											},
-											success: function(response){
-											isSuccess = true;
-											},
-											error: function(xhr, ajaxOptions, thrownError) {
-												alert(thrownError);
-											}
-										}); // End of adding new rcp particulars
-									}
-									else{
-										$.ajax({ // Start of updating particulars file
-											type: "POST",
-											url: "../controls/requestor/update_rcp_particulars.php",
-											data: {
-												rcp_id: rcp_id, 
-												particulars: particulars, 
-												ref_codes: ref_codes, 
-												amounts: currencyNoCommas
-											},
-											success: function(response){
-												isSuccess = true;	
-											},
-											error: function(xhr, ajaxOptions, thrownError)
-											{
-												alert(thrownError);
-											}
-										}); // End of updating particulars file
-									}
-								} // End of for loop
-							},
-							error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
-							{
-								alert(thrownError);
-							}
-						}); // End of updating RCP File
-					}
-				}
-			});
+			// 						if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id == ""){
+			// 							continue;
+			// 						}
+			// 						else if(particulars == "" && ref_codes == "" && amounts == "" && rcp_id != ""){
+			// 							$.ajax({ // Start of changing status to remove
+			// 								type: "POST",
+			// 								url: "../controls/requestor/remove_rcp_particulars.php",
+			// 								data: {
+			// 									rcp_id: rcp_id
+			// 								},
+			// 								success: function(response){
+			// 									isSuccess = true;	
+			// 								},
+			// 								error: function(xhr, ajaxOptions, thrownError)
+			// 								{
+			// 									alert(thrownError);
+			// 								}
+			// 							}); // End of changing status to remove
+			// 						}
+			// 						else if(particulars != "" && ref_codes != "" && amounts != "" && rcp_id == ""){
+			// 							$.ajax({ // Start of adding new rcp particulars
+			// 								type: "POST",
+			// 								url: "../controls/requestor/create_particulars.php",
+			// 								data: {
+			// 									rcp_no:rcp_no, 
+			// 									arraytd1:particulars, 
+			// 									arraytd2:ref_codes, 
+			// 									arraytd3:currencyNoCommas
+			// 								},
+			// 								success: function(response){
+			// 								isSuccess = true;
+			// 								},
+			// 								error: function(xhr, ajaxOptions, thrownError) {
+			// 									alert(thrownError);
+			// 								}
+			// 							}); // End of adding new rcp particulars
+			// 						}
+			// 						else{
+			// 							$.ajax({ // Start of updating particulars file
+			// 								type: "POST",
+			// 								url: "../controls/requestor/update_rcp_particulars.php",
+			// 								data: {
+			// 									rcp_id: rcp_id, 
+			// 									particulars: particulars, 
+			// 									ref_codes: ref_codes, 
+			// 									amounts: currencyNoCommas
+			// 								},
+			// 								success: function(response){
+			// 									isSuccess = true;	
+			// 								},
+			// 								error: function(xhr, ajaxOptions, thrownError)
+			// 								{
+			// 									alert(thrownError);
+			// 								}
+			// 							}); // End of updating particulars file
+			// 						}
+			// 					} // End of for loop
+			// 				},
+			// 				error: function(xhr, ajaxOptions, thrownError) // End of Rcp particulars
+			// 				{
+			// 					alert(thrownError);
+			// 				}
+			// 			}); // End of updating RCP File
+			// 		}
+			// 	}
+			// });
 		// End of updating RCP
 		
 		// Show modal depending of selected expense type
@@ -626,8 +626,11 @@
 		// End of selecting construction expense type
 
 		// Sending of data - RCP
-			$('#form').on('submit', function(e){
+			$('#' + expenseType + '-form-modal #form').on('submit', function(e){
 				e.preventDefault();
+				var form = document.getElementById('form');
+				var data = new FormData(form);
+				var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
 				var code = splitter('department', 0);
 				var total_rcp = parseInt(splitter('department', 5)) + 1;
 				var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
@@ -643,10 +646,7 @@
 					'zero_rated': 20,
 					'vat_amount': 25
 				};
-				
-				var form = document.getElementById('form');
-				var data = new FormData(form);
-				var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
+
 				for(var i = 0; i < length; i++){
 					var qty = $('#' + expenseType + '-table #qty-' + i).text();
 					var unit = $('#' + expenseType + '-table #unit-' + i).text();
@@ -679,9 +679,11 @@
 				data.append('user_id', user_id);
 				data.append('approver', approver_id);
 				data.append('project', $('#project').val());
+				data.append('company', $('#company').val());
+				data.append('payee', $('#payee').val());
 				data.append('department', code);
 				data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
-				data.append('total', currencyRemoveCommas($('#total').val()))
+				data.append('total', currencyRemoveCommas($('#total').val()));
 				data.append('vat', JSON.stringify(vat));
 				data.append('file', pdf);
 				data.append('rush', rush);
@@ -713,6 +715,37 @@
 
 		/*========================================================*/
 		/*                   END OF SENDING RCP					  */
+		/*========================================================*/
+
+		/*========================================================*/
+		/*                      UPDATE OF RCP					  */
+		/*========================================================*/
+
+		$('#rcp-modal-details #form').on('submit', function(e){
+				e.preventDefault();
+				var form = document.getElementById('form');
+				var data = new FormData(form);
+				var pdf = $('#file')[0].files[0];
+				var total = currencyRemoveCommas($('#total').val());
+				var rcp = $('#rcp-no').val();
+				var vat = {
+					'vat_trans': 5,
+					'vat_sales': 10,
+					'vat_exempt': 15,
+					'zero_rated': 20,
+					'vat_amount': 25
+				};
+				
+				data.append('rcp', rcp);
+				data.append('total', total);
+				data.append('vat', JSON.stringify(vat));
+				data.append('file', pdf);
+
+				updateRcp(data);
+		});
+
+		/*========================================================*/
+		/*                   END OF UPDATING RCP				  */
 		/*========================================================*/
 		});
 		</script>

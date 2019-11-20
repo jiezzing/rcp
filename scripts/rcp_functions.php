@@ -126,4 +126,20 @@
         $('#department-form-modal').find( ".bom-ref-code" ).autocomplete("option", "appendTo", "#department-form-modal" );
     }
 
+    function updateRcp(data){
+        $.ajax({
+            type: "POST",
+            url: "../controls/requestor/update_rcp_file.php",
+            data: data,
+            contentType: false, 
+            cache: false,
+            processData: false,
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            }
+        });
+    }
 </script>

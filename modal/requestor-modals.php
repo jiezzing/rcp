@@ -1,16 +1,18 @@
 <div class="modal fade bd-example-modal-lg" data-keyboard="true" id="rcp-modal-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
+    <form id="form">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
+        </div>
+        <div class="modal-body text-size" id="rcp-modal-details-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="save-changes-btn"><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
+        </div>
       </div>
-      <div class="modal-body text-size" id="rcp-modal-details-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save-changes-btn"><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
 

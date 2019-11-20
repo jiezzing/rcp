@@ -1,25 +1,38 @@
 <?php 
 	session_start(); 
-	include '../../config/connection.php';
-	include '../../objects/requestor/update_queries.php';
+	require_once '../../config/connection.php';
+	require_once '../../objects/requestor/update_queries.php';
 
 	$con = new connection();
 	$db = $con->connect();
 
 	$sel = new RequestorUpdate($db);
-
 	date_default_timezone_set('Asia/Manila');
-	$sel->rcp_no = $_POST['rcp_no'];
-	$sel->apprvr_id = $_POST['rcp_approver_id'];
-	$sel->comp_code = $_POST['comp_code'];
-	$sel->proj_code = $_POST['proj_code'];
-	$sel->payee = $_POST['payee'];
-	$sel->amount_in_words = $_POST['amount_in_words'];
-	$sel->total_amount = $_POST['currencyNoCommas'];
 
-	$query = $sel->updateRcp();
-	$query2 = $sel->updateOrigRcp();
-	if($query && $query2){
+	$sel->rcp_no = $_POST['rcp'];
+	if(isset($_FILES['file']['name'])){
+		$path = '../assets/files/' . $_FILES['file']['name'];
+		date_default_timezone_set('Asia/Manila');
+		
+		$file = array(
+			'name' => $_FILES['file']['name'],
+			'path' => $path
+		);
+		move_uploaded_file($_FILES["file"]["tmp_name"], '../../assets/files/' . $_FILES['file']['name']);
+		print_r($file);
+		$query = $sel->updateRcp(
+			$_POST['approver'],
+			$_POST['payee'],
+			$_POST['company'],
+			$_POST['project'],
+			$_POST['amount-in-words'],
+			$_POST['total'],
+			$_POST['vat'],
+			json_encode($file)
+		);
+	}
+	// $query2 = $sel->updateOrigRcp();
+	if($query){
 		echo 'Success';
 	}
 	else{

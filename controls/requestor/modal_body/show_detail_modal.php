@@ -46,18 +46,18 @@
             <div class="col-md-12">
                 <!-- Get all department -->
                 <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">RCP NO.</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <strong><input type="text" class="form-control text-center" placeholder="Payee" value="'.$rcp_no.'" disabled id="rcp-no"></strong>
+                    <label for="company" class=" form-control-label tooltiptext">RCP NO.</label>
+                    <strong><input type="text" class="form-control text-center" placeholder="Payee" value="'.$rcp_no.'" disabled id="rcp-no" name="rcp-no"></strong>
                 </div>
                 <!-- End of get all department -->
                 <div class="col-md-4">
-                    <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
+                    <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
                     <input type="text" class="form-control" placeholder="Payee" value="'.$dept_name.'" disabled>
                 </div>
 
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">APPROVER</label>
-                  <select class="form-control" id="show-approver">
+                  <select class="form-control" id="approver" name="approver">
                     ';
                 ?>
                     <?php
@@ -164,7 +164,7 @@
                 <!-- Get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">COMPANY</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <select class="form-control selectpicker" data-live-search="true" required id="company">
+                    <select class="form-control selectpicker" data-live-search="true" required id="company" name="company">
                       ';
                       ?>
                       	<?php
@@ -189,7 +189,7 @@
                 <!-- End of get all department -->
                 <div class="col-md-4">
                     <label for="company" class=" form-control-label tooltiptext">PROJECT</label><span class="pull-right" style="color: red; display: none" id="required2"> required**</span>
-                    <select class="form-control selectpicker" data-live-search="true" required id="project">
+                    <select class="form-control selectpicker" data-live-search="true" required id="project" name="project">
                       ';
                       ?>
                       <?php
@@ -214,7 +214,7 @@
 
                 <div class="col-md-4">
                   <label for="company" class=" form-control-label tooltiptext">PAYEE</label><span class="pull-right" style="color: red; display: none" id="required3"> required**</span>
-                  <input type="text" class="form-control" placeholder="Payee" value="'.$rcp_payee.'" id="payee">
+                  <input type="text" class="form-control" placeholder="Payee" value="'.$rcp_payee.'" id="payee" name="payee">
                 </div>
             </div>
       	</div>
@@ -224,7 +224,7 @@
                 <!-- Get all department -->
                 <div class="col-md-12">
                     <label for="company" class=" form-control-label tooltiptext">AMOUNT IN WORDS</label><span class="pull-right" style="color: red; display: none" id="required"> required**</span>
-                    <i><input type="text" class="form-control text-center" placeholder="Amount in words field" value="'.$rcp_words_amt.'" id="amount-in-words"></i>
+                    <i><input type="text" class="form-control text-center" placeholder="Amount in words field" value="'.$rcp_words_amt.'" id="amount-in-words" name="amount-in-words"></i>
                 </div>
             </div>
       	</div>
@@ -364,7 +364,7 @@
                               	<div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> '.$index.' out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
 									<div class="input-group">
 										<span class="input-group-addon">₱</span>
-										<input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="show_total_amount">
+										<input class="form-control" style="background-color: white" type="text" readonly value="'.number_format($rcp_amt, 2).'" id="total" name="total">
 										<span class="input-group-addon">Total Amount Due</span>
 									</div>
                            		</div>
@@ -450,39 +450,15 @@
                     <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                     <br>
                     <div class="form-group text-center">
-                        <input type="file" name="file" id="file" accept=".pdf">
+                        <input type="file" name="file" id="file" accept="application/pdf">
 						<canvas id="viewer" class="form-control canvas center-block canvas-hidden"></canvas>
-						<embed class="canvas" src="'.$supp_file['path'].'"/>
+						<embed id="preview" class="canvas" src="'.$supp_file['path'].'"/>
                         <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
                     </div>
                     </div>
             </div>
         </div>
 	';
-?>
-<?php
-  if($rcp_rush == "Yes"){
-    echo '
-        <div class="row" style="font-size: 14px">
-          <div class="col-md-12">
-            <div class="col-md-6">
-              	<label class=" form-control-label">Date needed:</label>
-              	<div class="input-group date" id="date-needed">
-                  	<div class="input-group-addon">
-                   		<span class="fa fa-calendar "></span>
-                  	</div>
-                  	<input type="text" class="form-control col-md-6" id="mDate-needed" readonly value="'.date("m/d/Y", strtotime($rcp_due_date)).'" style="background-color: white;">
-                </div>
-            </div>
-            <div class="col-md-12">
-          		<br>
-          		<label class=" form-control-label">Reason / Justification</label>
-          		<textarea class="form-control" placeholder="Your text here. . ." rows="4" id="justification">'.$rcp_justify.'</textarea>
-            </div>
-          </div>
-        </div>
-    ';
-  }
 ?>
 <script type="text/javascript" src="../assets/vendor/klorofil/scripts/klorofil-common.js"></script>
 <script>
@@ -504,6 +480,13 @@
           autocomplete();
         });
 		  // End of adding new table row
+
+		$("#file").on("change", function(e){
+            $('#viewer').removeClass('canvas-hidden');
+            $('#preview').addClass('hidden');
+            var file = e.target.files[0];
+            filereader(file);
+        });
 	});
 </script>
 <!-- <script>

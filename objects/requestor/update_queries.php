@@ -21,22 +21,18 @@
 		}
 
 		// Update rcp file
-		public function updateRcp(){
+		public function updateRcp($apprvr_id, $payee, $company, $project, $words, $total, $vat, $file){
 
-			$query = "UPDATE rcp_file SET rcp_approver_id='".$this->apprvr_id."', rcp_payee='".$this->payee."', rcp_company='".$this->comp_code."', rcp_project='".$this->proj_code."', rcp_amount_in_words='".$this->amount_in_words."', rcp_total_amount='".$this->total_amount."', updated_at='".date("Y-m-d H:i:s")."' WHERE rcp_no=?";
+			$query = "UPDATE rcp_file SET rcp_approver_id=$apprvr_id, rcp_payee='$payee', rcp_company='$company', rcp_project='$project', rcp_amount_in_words='$words', rcp_total_amount=$total, rcp_vat='$vat', rcp_supp_file='$file', updated_at='".date("Y-m-d H:i:s")."' WHERE rcp_no=?";
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
 			$sel->bindParam(1, $this->rcp_no);
 
 			if($sel->execute())
-			{
 				return true;
-			}
 			else
-			{
 				return false;
-			}
 			return $sel;
 		}
 

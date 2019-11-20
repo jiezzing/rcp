@@ -242,7 +242,14 @@
                     <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                     <br>
                     <div class="form-group text-center">
-                        <input type="file" name="file" id="file" accept=".pdf">
+                    <div class="row">
+                            <div class="col-md-4">
+                                <input type="file" name="file" id="file" accept="application/pdf">
+                            </div>
+                            <div class="col-md-8">
+                                <label for="file" class=" form-control-label tooltiptext">Add supporting file</label>
+                            </div>
+                    </div>
                         <canvas id="viewer" class="form-control canvas center-block canvas-hidden" target="_blank"></canvas>
                         <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
                     </div>
@@ -309,55 +316,9 @@
       // End of approver change
 
         $("#file").on("change", function(e){
-            $('#viewer').removeClass('canvas-hidden')
-            // Loaded via <script> tag, create shortcut to access PDF.js exports.
-            var pdfjsLib = window['pdfjs-dist/build/pdf'];
-            // The workerSrc property shall be specified.
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+            $('#viewer').removeClass('canvas-hidden');
             var file = e.target.files[0];
-            
-            if(file.type == "application/pdf"){
-            var fileReader = new FileReader();  
-            fileReader.onload = function() {
-                $('#loading').removeClass('hidden');
-                var pdfData = new Uint8Array(this.result);
-                // Using DocumentInitParameters object to load binary data.
-                var loadingTask = pdfjsLib.getDocument({data: pdfData});
-                loadingTask.promise.then(function(pdf) {
-                console.log('PDF loaded');
-                
-                // Fetch the first page
-                var pageNumber = 1;
-                pdf.getPage(pageNumber).then(function(page) {
-                    console.log('Page loaded');
-                    
-                    var scale = 1.5;
-                    var viewport = page.getViewport({scale: scale});
-
-                    // Prepare canvas using PDF page dimensions
-                    var canvas = $("#viewer")[0];
-                    var context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    // Render PDF page into canvas context
-                    var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                    };
-                    var renderTask = page.render(renderContext);
-                    renderTask.promise.then(function () {
-                    console.log('Page rendered');
-                        $('#loading').addClass('hidden');
-                    });
-                });
-                }, function (reason) {
-                // PDF loading error
-                    console.error(reason);
-                });
-            };
-            fileReader.readAsArrayBuffer(file);
-        }
+            filereader(file);
         });
     });
 </script>

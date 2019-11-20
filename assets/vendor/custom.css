@@ -52,4 +52,7 @@
 	.canvas-hidden{
 		display: none;
 	}
+	input[type=file]{
+		width:86px;
+	}
 </style>
