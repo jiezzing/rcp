@@ -55,4 +55,14 @@
 	input[type=file]{
 		width:86px;
 	}
+
+	.center-overlay{
+		margin: auto;
+		display: flex;
+		position: absolute;
+		right: 0;
+		left: 0;
+		top: 0;
+		bottom: 0;
+	}
 </style>

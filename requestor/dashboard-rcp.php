@@ -24,7 +24,7 @@
 		$declinedCtr = 0;
 		$totalRcp = 0;
 		$flag = false;
-	?>	
+	?>
 	<body>
 		<div id="wrapper">
 			<?php

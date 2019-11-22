@@ -244,7 +244,7 @@
                     <div class="form-group text-center">
                     <div class="row">
                             <div class="col-md-4">
-                                <input type="file" name="file" id="file" accept="application/pdf">
+                                <input type="file" name="file" id="file" accept=".jpg, .pdf">
                             </div>
                             <div class="col-md-8">
                                 <label for="file" class=" form-control-label tooltiptext">Add supporting file</label>
