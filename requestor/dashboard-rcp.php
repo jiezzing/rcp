@@ -26,10 +26,11 @@
 		$flag = false;
 	?>
 	<body>
-		<div id="wrapper">
+		<img id="overlay" class="center-overlay" src="../assets/gif/loading.gif"/>
+		<div id="wrapper" hidden>
 			<?php
-				include '../navbar.php';
-				include '../requestor/menu.php';
+				include_once '../navbar.php';
+				include_once '../requestor/menu.php';
 			?>
 			<div class="main">
 				<div class="main-content">
@@ -69,7 +70,7 @@
 								$flag = true;
 								extract($row);
 								echo '
-									<div class="col-md-4">
+									<div class="col-md-4 line-content">
 										<div class="panel">
 								';
 								if($row['rcp_rush'] == "Yes"){
@@ -134,6 +135,19 @@
 								</div>
 							</div>
 						</a>
+					</div>
+					<div class="col-md-12 footer">
+						<nav class="pull-right">
+						  <ul class="pagination">
+						    <li class="page-item disabled">
+						      <a class="page-link" href="#" tabindex="-1" id="previous">Previous</a>
+						    </li>
+						    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+						    <li class="page-item">
+						      <a class="page-link" href="#" id="next">Next</a>
+						    </li>
+						  </ul>
+						</nav>
 					</div>
 				</div>
 			</div>
@@ -748,6 +762,13 @@
 		/*                   END OF UPDATING RCP				  */
 		/*========================================================*/
 		});
+
+		// Check if all scripts has been loaded
+			$(window).load(function(){
+			   $('#overlay').fadeOut();
+			   $('#wrapper').fadeIn();
+			});
+		// Check if all scripts has been loaded
 		</script>
 	</body>
 </html>

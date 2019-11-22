@@ -49,20 +49,30 @@
 		height: 220px;
 		width: 175px;
 	}
+	embed{
+		margin-top: 25px;
+		height: 220px;
+		width: 175px;
+	}
 	.canvas-hidden{
 		display: none;
 	}
 	input[type=file]{
-		width:86px;
+		width:89px;
 	}
-
 	.center-overlay{
 		margin: auto;
 		display: flex;
-		position: absolute;
+		position: fixed;
 		right: 0;
 		left: 0;
 		top: 0;
 		bottom: 0;
+	}
+	.footer {
+	   position: relative;
+	   left: 0;
+	   bottom: 0;
+	   width: 100%;
 	}
 </style>

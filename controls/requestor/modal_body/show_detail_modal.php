@@ -450,9 +450,16 @@
                     <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                     <br>
                     <div class="form-group text-center">
-                        <input type="file" name="file" id="file" accept="application/pdf">
+                    <div class="row">
+                            <div class="col-md-4">
+                                <input type="file" name="file" id="file" accept=".jpg, .pdf">
+                            </div>
+                            <div class="col-md-8">
+                                <p for="file" id="file-name" class="form-control-label">'.$supp_file['name'].'</p>
+                            </div>
+                    </div>
 						<canvas id="viewer" class="form-control canvas center-block canvas-hidden"></canvas>
-						<embed id="preview" class="canvas" src="'.$supp_file['path'].'"/>
+						<embed id="preview" src="'.$supp_file['path'].'"/>
                         <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
                     </div>
                     </div>
@@ -484,6 +491,7 @@
 		$("#file").on("change", function(e){
             $('#viewer').removeClass('canvas-hidden');
             $('#preview').addClass('hidden');
+            $('#file-name').text(e.target.files[0].name);
             var file = e.target.files[0];
             filereader(file);
         });

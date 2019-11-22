@@ -247,7 +247,7 @@
                                 <input type="file" name="file" id="file" accept=".jpg, .pdf">
                             </div>
                             <div class="col-md-8">
-                                <label for="file" class=" form-control-label tooltiptext">Add supporting file</label>
+                                <p for="file" id="file-name" class="form-control-label">Add supporting file</p>
                             </div>
                     </div>
                         <canvas id="viewer" class="form-control canvas center-block canvas-hidden" target="_blank"></canvas>
@@ -317,6 +317,7 @@
 
         $("#file").on("change", function(e){
             $('#viewer').removeClass('canvas-hidden');
+            $('#file-name').text(e.target.files[0].name);
             var file = e.target.files[0];
             filereader(file);
         });
