@@ -3,8 +3,8 @@
 <title>Dashboard</title>
 	<?php
 		define('allow_users', TRUE);
-
 		$page = 'Dashboard';
+		
 		require '../controls/auth/auth_checker.php';
 		require '../config/connection.php';
 		require '../objects/requestor/select_queries.php';
@@ -101,7 +101,7 @@
 													<li>Type <span>'.$row['rcp_expense_type'].'</span></li>
 												</ul>
 											</div>
-											<a href="##" data-toggle="modal" data-target="#rcp-modal-details" id="dummier">
+											<a href="javascript" data-toggle="modal">
 												<div class="panel-footer show-more-details" value="'.$row['rcp_no'].':'.$row['rcp_approver_id'].':'.$row['rcp_rush'].':'.$row['rcp_id'].':'.$row['user_email'].':'.$row['rcp_expense_type'].'">
 													<h5>
 														<ul class="list-unstyled list-justify">
@@ -178,6 +178,11 @@
 			var expenseType = 'project';
 			var expense = 'Project Expense';
 			var rcpExpenseType;
+			var details = [];
+			var isRcpOpened;
+
+			// check if the rcp-no is in the details (array)
+			var isExist;
 		// End of global variables
 
 		// Show RCP details when clicked
@@ -190,21 +195,11 @@
 				rush = valueSplitter(key, 2);
 				id = valueSplitter(key, 3);
 				current_appr_email = valueSplitter(key, 4);
-				rcp_id = id;
 				rcpExpenseType = valueSplitter(key, 5);
-				$.ajax({
-					type: "POST",
-					url: "../controls/requestor/modal_body/show_detail_modal.php",
-					data: { rcp_no: rcp_no },
-					cache: false,
-					success: function(html){
-						$("#rcp-modal-details-body").html(html);
-						$("#rcp-modal-details").modal('show');
-					},
-					error: function(xhr, ajaxOptions, thrownError){
-						alert(thrownError);
-					}
-				});
+				rcp_id = id;
+
+                $("#rcp-modal-details").modal('show');
+				showRcpDetails(rcp_no, details);
 			});
 		// End of showing RCP details when clicked
 

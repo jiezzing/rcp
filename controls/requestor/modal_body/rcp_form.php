@@ -289,22 +289,22 @@
             'alt_sec_id': splitter('department', 4),
           };
 
-          $.ajax({
-            type: "POST",
-            url: "../controls/univ/cls_get_approvers_data.php",
-            data: { data: object },
-            success: function(html){
-              $('#approver').html(html);
-              $('#approver option[name="0"]').prop("disabled", true);
-              var prop = $('#approver option[name="0"]');
-              if(prop.length == 4){
-                toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
-              }
-            },
-            error: function(xhr, ajaxOptions, thrownError){
-              alert(thrownError);
-            }
-          }); 
+            $.ajax({
+                type: "POST",
+                url: "../controls/univ/cls_get_approvers_data.php",
+                data: { data: object },
+                success: function(html){
+                    $('#' + expenseType +'-form-modal #approver').html(html);
+                    $('#' + expenseType +'-form-modal #approver option[name="0"]').prop("disabled", true);
+                    var prop = $('#' + expenseType +'-form-modal #approver option[name="0"]');
+                    if(prop.length == 4){
+                        toastr.error("This department has no approvers for now and you cannot proceed in creating an RCP. Please try again later.", "Warning", "error");
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                  alert(thrownError);
+                }
+            }); 
         });
       // End of department change for get id
     

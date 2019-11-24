@@ -1,11 +1,72 @@
+<!-- Show the RCP details -->
 <div class="modal fade bd-example-modal-lg" data-keyboard="true" id="rcp-modal-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <form id="form">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
+          <h4 class="modal-title">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
         </div>
         <div class="modal-body text-size" id="rcp-modal-details-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4">
+                <label class=" form-control-label tooltiptext">RCP NO.</label>
+                <strong><input type="text" class="form-control text-center" disabled id="rcp-no" name="rcp-no"></strong>
+              </div>
+              <div class="col-md-4">
+                  <label class=" form-control-label tooltiptext">DEPARTMENT</label>
+                  <input type="text" id="department-name" class="form-control" disabled>
+              </div>
+              <div class="col-md-4">
+                <label class=" form-control-label tooltiptext">APPROVER</label>
+                <select class="form-control" id="approver"></select>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4">
+                <label class=" form-control-label tooltiptext">PROJECT</label>
+                <select class="form-control" id="project"></select>
+              </div>
+              <div class="col-md-4">
+                  <label class=" form-control-label tooltiptext">COMPANY</label>
+                <select class="form-control" id="company"></select>
+              </div>
+              <div class="col-md-4">
+                <label class=" form-control-label tooltiptext">PAYEE</label>
+                  <input type="text" id="payee" class="form-control">
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12">
+                <label class=" form-control-label tooltiptext">AMOUNT IN WORDS</label>
+                <input type="text" id="amount-in-words" class="form-control text-center" disabled>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12">
+                <div class="panel">
+                  <div class="panel-body no-padding">
+                    <table class="table table-responsive-md table-striped text-left" id="project-table">
+                      <thead>
+                        <tr id="header"></tr>
+                      </thead>
+                      <tbody id="table-body">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -15,7 +76,28 @@
     </form>
   </div>
 </div>
+<!-- End of showing the RCP details -->
 
+<!-- RCP Form -->
+<div class="modal fade bd-example-modal-lg expense-modal" id="project-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="form">
+        <div class="modal-header">
+          <h4 class="modal-title" id="title">Request for Check Payment - Project Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
+        </div>
+        <div class="modal-body text-size expense-modal-body" id="project-form-modal-body">
+      
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="send-rcp-btn"><i class="fa fa-send"></i> Send RCP</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End of RCP Form -->
 
 <div class="modal fade" id="report-generation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -250,25 +332,6 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade bd-example-modal-lg expense-modal" id="project-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <form id="form">
-        <div class="modal-header">
-          <h4 class="modal-title" id="title">Request for Check Payment - Project Expense Form<a href=""><i class="fa fa-remove pull-right"></i></a> </h4>
-        </div>
-        <div class="modal-body text-size expense-modal-body" id="project-form-modal-body">
-      
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id="send-rcp-btn"><i class="fa fa-send"></i> Send RCP</button>
-        </div>
-      </form>
     </div>
   </div>
 </div>

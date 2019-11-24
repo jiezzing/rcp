@@ -27,7 +27,7 @@
         // Get all pending RCP's
         public function getPendingRcp()
         {
-            $query = "SELECT * FROM rcp_file rcp, user_file usr, user_account_file acc, project_file, company_file, department_file WHERE rcp_project=proj_code AND rcp_company=comp_code AND rcp_department=dept_code AND rcp.rcp_status=1 AND rcp.rcp_employee_id=? AND rcp.rcp_approver_id=usr.user_id AND rcp.rcp_approver_id=acc.user_id ORDER BY rcp.created_at";
+            $query = "SELECT * FROM rcp_file rcp, user_file usr, user_account_file acc, project_file, company_file, department_file WHERE rcp_project=proj_code AND rcp_company=comp_code AND rcp_department=dept_code AND rcp.rcp_status=1 AND rcp.rcp_employee_id=? AND rcp.rcp_approver_id=usr.user_id AND rcp.rcp_approver_id=acc.user_id ORDER BY rcp.created_at DESC";
 			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
 			$sel = $this->conn->prepare($query);
 
