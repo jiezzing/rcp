@@ -153,11 +153,18 @@
                     </div>
                         <div class="panel-footer">
                             <div class="row">
-                                <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+                                <div class="col-md-6">
+                                    <span class="panel-note">
+                                        <label id="rcp-no-of-rows"> 5 out of 13 rows /</label>
+                                    </span>
+                                    <span class="panel-note">
+                                        <a href="#" id="rcp-add-row"> Add New Row</a>
+                                    </span>
+                                </div>
                                 <div class="input-group">
-                                <span class="input-group-addon">₱</span>
-                                <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
-                                <span class="input-group-addon">Total Amount Due</span>
+                                    <span class="input-group-addon">₱</span>
+                                    <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
+                                    <span class="input-group-addon">Total Amount Due</span>
                                 </div>
                             </div>
                         </div>
@@ -173,10 +180,30 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
                             <div class="right">
-                                <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                            <label class="fancy-checkbox">
+                                <input type="checkbox" class="fancy-checkbox" name="checkbox" id="vatable">
+                                <span>Vatable?</span>
+                            </label>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body" id="vat-body" hidden>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select class="form-control" id="vat">
+                                        <option hidden>SELECT TYPE</option>
+                                        ';
+                                        $vat = $query->getVat();
+                                            while ($row = $vat->fetch(PDO::FETCH_ASSOC)) {
+                                                $percentage = json_decode($row['vat_percentage'], true);
+                                                echo ' <option value="'.$row['vat_id'].'">'.$row['vat_name'].' - '.$percentage['percentage'].'%</option> ';
+                                            }
+                                        echo '
+                                    </select>
+                                </div>
+                                <div class="col-md-4" hidden id="div-percentage">
+                                    <input class="form-control" type="number" placeholder="Percentage" id="percentage" min="10" max="15">
+                                </div>
+                            </div>
                             <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
                                 <thead>
                                     <tr>
@@ -188,27 +215,27 @@
                                 <tbody>
                                     <tr>
                                     <td class="table-border">P.O.S. Trans #</td>
-                                    <td class="table-border"></td>
+                                    <td class="table-border text-center" id="less-vat"> --- </td>
                                     <td class="table-border">Less: VAT</td>
                                     </tr>
                                     <tr>
                                     <td class="table-border">VATable Sales</td>
-                                    <td class="table-border"></td>
+                                    <td class="table-border text-center" id="net-of-vat"> --- </td>
                                     <td class="table-border">Amount: Net of VAT</td>
                                     </tr>
                                     <tr>
                                     <td class="table-border">VAT-Exempt</td>
-                                    <td class="table-border"></td>
+                                    <td class="table-border text-center" id="discount"> --- </td>
                                     <td class="table-border">Less: SC/PWD Discount</td>
                                     </tr>
                                     <tr>
                                     <td class="table-border">Zero Rated</td>
-                                    <td class="table-border"></td>
+                                    <td class="table-border text-center" id="total-amount"> --- </td>
                                     <td class="table-border">Amount Due</td>
                                     </tr>
                                     <tr>
                                     <td class="table-border">VAT Amount</td>
-                                    <td class="table-border"></td>
+                                    <td class="table-border text-center"> --- </td>
                                     <td class="table-border">Add: VAT</td>
                                     </tr>
                                 </tbody>
@@ -261,9 +288,6 @@
 <script type="text/javascript" src="../assets/vendor/klorofil/scripts/klorofil-common.js"></script>
 <script>
     $(function() {
-        datepicker('project-form-modal');
-        computation('project-form-modal', 'project-table');
-        computation('department-form-modal', 'department-table');
         numbersOnly();
         autocomplete();
         $('.selectpicker').selectpicker();
@@ -283,10 +307,10 @@
       // Department change for get id
         $('#department').on('change', function(){
           var object = {
-            'prmy_id': splitter('department', 1),
-            'alt_prmy_id': splitter('department', 2),
-            'sec_id': splitter('department', 3),
-            'alt_sec_id': splitter('department', 4),
+            'prmy_id': splitter(expenseType, 'department', 1),
+            'alt_prmy_id': splitter(expenseType, 'department', 2),
+            'sec_id': splitter(expenseType, 'department', 3),
+            'alt_sec_id': splitter(expenseType, 'department', 4),
           };
 
             $.ajax({
@@ -309,9 +333,9 @@
       // End of department change for get id
     
       // Approver change
-          $('#approver').on('change', function(){
-            approver_id = splitter('approver', 0);
-            email = splitter('approver', 1);
+          $('#' + expenseType + '-form-modal #approver').on('change', function(){
+            approver_id = splitter(expenseType, 'approver', 0);
+            email = splitter(expenseType, 'approver', 1);
           });
       // End of approver change
 
@@ -321,6 +345,80 @@
             var file = e.target.files[0];
             filereader(file);
         });
+
+        $('#vatable').click(function(){
+            var isChecked = $('#vatable').is(":checked");
+            var total = $('#' + expenseType + '-form-modal #total').val();
+            if(total == '0.00'){
+                toastr.error('No total amount detected.', 'Required');
+                $('#vatable'). prop('checked', false);
+                return;
+            }
+            else{
+                if(isChecked) {
+                    $('#vat-body').css({ display: 'block', overflow: 'hidden' });
+                } else {
+                    $('#vat-body').css({ display: 'none' });
+                }
+            }
+        }); 
+
+        $('#' + expenseType + '-form-modal #vat').on('change', function(){
+            amounts.push(currencyRemoveCommas($('#' + expenseType + '-form-modal #total').val()));
+            var subtotal = amounts[0];
+            var type = $('#' + expenseType + '-form-modal #vat').val();
+            var net_of_vat = subtotal / 1.12;
+            var discount = 0.0;
+            var less_vat = 0.0;
+            var amount = 0.0;
+            console.log(amounts);
+
+            if(type == 1){
+                $('#' + expenseType + '-form-modal #div-percentage').css({display: 'none'});
+                discount = net_of_vat.toFixed(2) * 0.01;
+            }
+            else if(type == 2){
+                $('#' + expenseType + '-form-modal #div-percentage').css({display: 'none'});
+                discount = net_of_vat.toFixed(2) * 0.02;
+            }
+            else if(type == 3){
+                $('#' + expenseType + '-form-modal #div-percentage').css({display: 'none'});
+                discount = net_of_vat.toFixed(2) * 0.05;
+            }
+            else{
+                $('#' + expenseType + '-form-modal #div-percentage').css({display: 'block'});
+            }
+            amount = subtotal - discount;
+            less_vat = subtotal - net_of_vat;
+            
+            $('#' + expenseType + '-form-modal #less-vat').text(less_vat.toFixed(2));
+            $('#' + expenseType + '-form-modal #net-of-vat').text(net_of_vat.toFixed(2));
+            $('#' + expenseType + '-form-modal #discount').text(discount.toFixed(2));
+            $('#' + expenseType + '-form-modal #total').val(amount.toFixed(2));
+            $('#' + expenseType + '-form-modal #total-amount').text(amount.toFixed(2));
+        });
+
+        $('#' + expenseType + '-form-modal #percentage').on("keyup",function (event) {
+            var percent = $('#' + expenseType + '-form-modal #percentage').val();
+            var subtotal = amounts[0];
+            var net_of_vat = subtotal / 1.12;
+            var discount = 0.0;
+            var less_vat = 0.0;
+            var amount = 0.0;
+
+            if(percent >= 10 && percent <= 15){
+                alert('yes');
+                discount = net_of_vat.toFixed(2) * (percent / 100);
+                amount = subtotal - discount;
+                less_vat = subtotal - net_of_vat;
+
+                $('#' + expenseType + '-form-modal #less-vat').text(less_vat.toFixed(2));
+                $('#' + expenseType + '-form-modal #net-of-vat').text(net_of_vat.toFixed(2));
+                $('#' + expenseType + '-form-modal #discount').text(discount.toFixed(2));
+                $('#' + expenseType + '-form-modal #total').val(amount.toFixed(2));
+                $('#' + expenseType + '-form-modal #total-amount').text(amount.toFixed(2));
+            }
+      });
     });
 </script>
 

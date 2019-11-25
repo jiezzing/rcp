@@ -27,6 +27,7 @@
  	}
 
  	if($expense_type ==  'Project Expense'){
+		$type = 'project';
 	 	$headers = [
 	 		'<th>QTY</th>',
 	 		'<th>Unit</th>', 
@@ -46,6 +47,7 @@
 		}
  	}
  	else{
+		$type = 'department';
  		$headers = [
 	 		'<th>QTY</th>',
 	 		'<th>Unit</th>', 
@@ -173,7 +175,8 @@
  		'companies' => $companies,
  		'particulars' => $particulars,
  		'headers' => $headers,
- 		'type' => $expense_type
+		'type' => $expense_type,
+		'expenseType' => $type 
  	);
 
  	echo json_encode($data);

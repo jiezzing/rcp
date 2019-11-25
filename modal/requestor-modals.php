@@ -63,6 +63,16 @@
                       </tbody>
                     </table>
                   </div>
+                  <!-- <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
+                                <div class="input-group">
+                                <span class="input-group-addon">₱</span>
+                                <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
+                                <span class="input-group-addon">Total Amount Due</span>
+                                </div>
+                            </div>
+                        </div> -->
                 </div>
               </div>
             </div>

@@ -456,5 +456,14 @@
 
 			return $sel;
 		}
+
+		public function getVat(){
+            $query = "SELECT * FROM vat_file";
+			$this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO:: ERRMODE_WARNING);
+			$sel = $this->conn->prepare($query);
+			$sel->execute();
+
+			return $sel;
+		}
     }
 ?>

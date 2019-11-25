@@ -180,6 +180,7 @@
 			var rcpExpenseType;
 			var details = [];
 			var isRcpOpened;
+        	var amounts = [];
 
 			// check if the rcp-no is in the details (array)
 			var isExist;
@@ -586,6 +587,8 @@
 						success: function(html) {
 							$("#project-form-modal-body").html(html);
 							$("#project-form-modal").modal('show');
+        					computation('project-form-modal', 'project-table');
+        					datepicker('project-form-modal');
 						}
 					});
 				}
@@ -597,6 +600,7 @@
 						success: function(html) {
 							$("#department-form-modal-body").html(html);
 							$("#department-form-modal").modal('show');
+        					computation('department-form-modal', 'department-table');
 						}
 					});
 					addNewTableRow('department-table', 'department-form-modal', 'Department Expense');
@@ -640,22 +644,24 @@
 				var form = document.getElementById('form');
 				var data = new FormData(form);
 				var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
-				var code = splitter('department', 0);
-				var total_rcp = parseInt(splitter('department', 5)) + 1;
+				var code = splitter(expenseType, 'department', 0);
+				var total_rcp = parseInt(splitter(expenseType, 'department', 5)) + 1;
 				var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
 				var user_id = <?php echo $_SESSION['user_id']; ?>;
 				var rush = 'no';
 				var length = lengthGetter(expenseType);
 				var table_data = [];
 				var reference;
+				var type = $('#' + expenseType + '-form-modal #vat').val();
 				var vat = {
-					'vat_trans': 5,
-					'vat_sales': 10,
-					'vat_exempt': 15,
-					'zero_rated': 20,
+					'type': type,
+					'vat_trans': currencyRemoveCommas($('#' + expenseType + '-form-modal #less-vat').text()),
+					'vat_sales': currencyRemoveCommas($('#' + expenseType + '-form-modal #net-of-vat').text()),
+					'vat_exempt': currencyRemoveCommas($('#' + expenseType + '-form-modal #discount').text()),
+					'zero_rated': currencyRemoveCommas($('#' + expenseType + '-form-modal #total-amount').text()),
 					'vat_amount': 25
 				};
-
+				
 				for(var i = 0; i < length; i++){
 					var qty = $('#' + expenseType + '-table #qty-' + i).text();
 					var unit = $('#' + expenseType + '-table #unit-' + i).text();
@@ -687,13 +693,13 @@
 				data.append('rcp_no', rcp_no);
 				data.append('user_id', user_id);
 				data.append('approver', approver_id);
-				data.append('project', $('#project').val());
-				data.append('company', $('#company').val());
-				data.append('payee', $('#payee').val());
+				data.append('project', $('#' + expenseType + '-form-modal #project').val());
+				data.append('company', $('#' + expenseType + '-form-modal #company').val());
+				data.append('payee', $('#' + expenseType + '-form-modal #payee').val());
 				data.append('department', code);
 				data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
-				data.append('total', currencyRemoveCommas($('#total').val()));
-				data.append('vat', JSON.stringify(vat));
+				data.append('total', currencyRemoveCommas($('#' + expenseType + '-form-modal #total').val()));
+				$('#' + expenseType + '-form-modal #vatable').is(":checked") ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
 				data.append('file', pdf);
 				data.append('rush', rush);
 				data.append('expenseType', expenseType);
@@ -737,7 +743,7 @@
 				var pdf = $('#file')[0].files[0];
 				var total = currencyRemoveCommas($('#total').val());
 				var rcp = $('#rcp-no').val();
-				var vat = {
+				vat = {
 					'vat_trans': 5,
 					'vat_sales': 10,
 					'vat_exempt': 15,

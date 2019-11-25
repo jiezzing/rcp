@@ -27,38 +27,33 @@
   }
 
   function computation(modal, table){
-    var table_class = [
-      '.qty', '.unit', '.particulars', '.bom-ref-code', '.amount'
-    ];
+    var table_class = ['.qty', '.unit', '.particulars', '.bom-ref-code', '.amount'];
     for(var index = 0; index < table_class.length; index++){
-      $('#' + modal).find(table_class[index]).on("keyup",function () {
-        var length = $('#' + table).find('td[name=qty]').length;
+      $('#' + modal + ' ' + table_class[index]).on("keyup",function () {
+        amounts = [];
+        var length = $('#' + modal + ' #' + table).find('td[name=qty]').length;
         var sum = 0.0;
         for(var i = 0; i < length; i++){
-          var qty = $('#' + table).find("#qty-" + i).text();
-          var unit = $('#' + table).find("#unit-" + i).text();
-          var particulars = $('#' + table).find("#particulars-" + i).text();
-          var ref = $('#' + table).find("#bom-ref-code-" + i).text();
-          var amount = $('#' + table).find("#amount-" + i).text();
+          var qty = $('#' + modal + ' #' + table).find("#qty-" + i).text();
+          var unit = $('#' + modal + ' #' + table).find("#unit-" + i).text();
+          var particulars = $('#' + modal + ' #' + table).find("#particulars-" + i).text();
+          var ref = $('#' + modal + ' #' + table).find("#bom-ref-code-" + i).text();
+          var amount = $('#' + modal + ' #' + table).find("#amount-" + i).text();
 
-          if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == ""){
+          if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == "")
               continue;
-          }
           else{
             if(qty != "" && unit != "" && particulars != "" && ref != "" && amount != ""){
               var total = amount;
               currencyRemoveCommas(total);
               sum += currencyRemoveCommas(total);
-              $('#' + modal).find("#total").val(currencyWithCommas(sum));
-
+              $('#' + modal + " #total").val(currencyWithCommas(sum));
               var word = currencyToWords(sum).substr(0, 1).toUpperCase() + "" + currencyToWords(sum).substr(1);
-              $("#total").val(currencyWithCommas(sum));
-              if(sum == 1){
-                $('#' + modal).find("#amount-in-words").val(word + " peso only");
-              }
-              else{
-                $('#' + modal).find("#amount-in-words").val(word + " pesos only");
-              }
+              $('#' + modal + ' #total').val(currencyWithCommas(sum));
+              if(sum == 1)
+                $('#' + modal + ' #amount-in-words').val(word + " peso only");
+              else
+                $('#' + modal + ' #amount-in-words').val(word + " pesos only");
             }
           }
         }
@@ -250,8 +245,8 @@
     });
   }
 
-  function splitter(key, index){
-    var value = $('#' + key).val();
+  function splitter(expenseType, key, index){
+    var value = $('#' + expenseType + '-form-modal #' + key).val();
     var data = value.split("-"); 
     return data[index];
   }
