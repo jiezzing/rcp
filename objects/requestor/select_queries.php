@@ -57,7 +57,6 @@
 			session_start();
 			if(session_destroy()){
 				return true;
-				// unset($_SESSION['user_email']);
 			}
 			else{
 				return false;   	 	
