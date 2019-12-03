@@ -75,4 +75,19 @@
 	   bottom: 0;
 	   width: 100%;
 	}
+	.mtop{
+		margin-top: 15px;
+	}
+	.qty{
+		width: 10%;
+	}
+	.unit{
+		width: 12%;
+	}
+	.ref{
+		width: 25%;
+	}
+	.amout{
+		width: 18%;
+	}
 </style>

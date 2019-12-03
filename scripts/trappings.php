@@ -138,6 +138,72 @@
       return result; //i added the word cent to the last part of the return value to get desired output
   }
 
+  function addRow(type){
+    var tbl_row = $(document).find('#table tr');
+    var tbl = '';
+    var i = $(document).find('#table td[name=qty]').length;
+
+    if(i == 13)
+      return;
+    else{
+      if(type == 'project'){
+        if((i + 1) % 2 != 0){
+          tbl = 
+          '<tr role="row" class="odd">' +
+            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
+            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
+            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
+            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+          '</tr>';
+        }
+        else{
+          tbl = 
+          '<tr role="row" class="even">' +
+            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
+            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
+            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
+            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+          '</tr>';
+        }
+      }
+      else{
+        if((i + 1) % 2 != 0){
+          tbl = 
+          '<tr role="row" class="odd">' +
+            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
+            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
+            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
+            '<td class="code table-border center" id="code-' +i+ '"> --- </td>' +
+            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+          '</tr>';
+        }
+        else{
+          tbl = 
+          '<tr role="row" class="even">' +
+            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
+            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
+            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
+            '<td class="code table-border center" id="code-' +i+ '"> --- </td>' +
+            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+          '</tr>';
+        }
+      }
+      if(i == 12){
+        $('#no-of-rows').css("color", "red");
+        $('#no-of-rows').text("13 out of 13 rows /");
+        $('#add-row').text("MAX");
+      }
+      else
+        $('#no-of-rows').text((i + 1) + " out of 13 rows /");
+      tbl_row.last().after(tbl);
+      $(document).find('#table tr').last().find('.qty').focus();
+    }
+  }
+
   function addNewTableRow(table, modal, expenseType){
     if((modal == 'project-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Project Expense'){
       var  tbl_row = $(document).find('#' + table).find('tr');
@@ -245,8 +311,8 @@
     });
   }
 
-  function splitter(expenseType, key, index){
-    var value = $('#' + expenseType + '-form-modal #' + key).val();
+  function splitter(key, index){
+    var value = $('#' + key).val();
     var data = value.split("-"); 
     return data[index];
   }

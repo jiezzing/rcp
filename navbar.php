@@ -1,5 +1,5 @@
 <?php
-  include '../objects/univ/selects_for_all.php';
+  require '../objects/univ/selects_for_all.php';
   $sel2 = new U_Select($db);
   $user_fullname = "";
   $log_count;

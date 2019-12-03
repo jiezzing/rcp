@@ -118,7 +118,7 @@
 					</div>
 
 					<div class="col-md-4">
-						<a href = "#" id="expense">
+						<a href = "../requestor/create-rcp.php">
 							<div class="panel">
 								<div class="panel-body no-padding bg-primary text-center">
 									<div class="padding-top-30 padding-bottom-30">
@@ -155,7 +155,7 @@
 		<?php
 			require '../modal/requestor-modals.php';
 			require '../scripts/js.php';
-			require '../scripts/rcp_functions.php';
+			require '../scripts/rcp.php';
 		?>
 		<script>
 		// Global variables

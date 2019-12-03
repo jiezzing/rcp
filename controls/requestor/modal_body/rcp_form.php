@@ -182,7 +182,7 @@
                             <div class="right">
                             <label class="fancy-checkbox">
                                 <input type="checkbox" class="fancy-checkbox" name="checkbox" id="vatable">
-                                <span>Vatable?</span>
+                                <span>Is this vatable?</span>
                             </label>
                             </div>
                         </div>
