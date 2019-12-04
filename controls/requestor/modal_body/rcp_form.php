@@ -339,13 +339,6 @@
           });
       // End of approver change
 
-        $("#file").on("change", function(e){
-            $('#viewer').removeClass('canvas-hidden');
-            $('#file-name').text(e.target.files[0].name);
-            var file = e.target.files[0];
-            filereader(file);
-        });
-
         $('#vatable').click(function(){
             var isChecked = $('#vatable').is(":checked");
             var total = $('#' + expenseType + '-form-modal #total').val();

@@ -90,4 +90,12 @@
 	.amout{
 		width: 18%;
 	}
+
+	td{
+		padding-left: 8px !important;
+	}
+	.remove{
+		cursor: pointer;
+		color: red;
+	}
 </style>

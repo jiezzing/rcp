@@ -12,33 +12,35 @@
         return currencyWithCommas;
 	}
 
-  function numbersOnly(){
-      $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-          if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-              event.preventDefault();
-          }
-      });
-
-      $(".allownumeric").on("keypress keyup blur",function (event) {
+  function allowNumbers(selector){
+      $(selector).on("keypress keyup blur",function (event) {
           if ((event.which < 48 || event.which > 57)) {
               event.preventDefault();
           }
       });
   }
 
-  function computation(modal, table){
+  function allowNumbersWithDecimal(selector){
+    $(selector).on("keypress keyup blur",function (event) {
+          if ((event.which != 46 || $(this).text().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+              event.preventDefault();
+          }
+      });
+  }
+
+  function tableExceptions(){
     var table_class = ['.qty', '.unit', '.particulars', '.bom-ref-code', '.amount'];
+    var length = $('#table td[name=qty]').length;
     for(var index = 0; index < table_class.length; index++){
-      $('#' + modal + ' ' + table_class[index]).on("keyup",function () {
+      $(table_class[index]).on("keyup",function () {
         amounts = [];
-        var length = $('#' + modal + ' #' + table).find('td[name=qty]').length;
         var sum = 0.0;
         for(var i = 0; i < length; i++){
-          var qty = $('#' + modal + ' #' + table).find("#qty-" + i).text();
-          var unit = $('#' + modal + ' #' + table).find("#unit-" + i).text();
-          var particulars = $('#' + modal + ' #' + table).find("#particulars-" + i).text();
-          var ref = $('#' + modal + ' #' + table).find("#bom-ref-code-" + i).text();
-          var amount = $('#' + modal + ' #' + table).find("#amount-" + i).text();
+          var qty = $('#qty-' + i).text();
+          var unit = $('#unit-' + i).text();
+          var particulars = $('#particulars-' + i).text();
+          var ref = $('#bom-ref-code-' + i).text();
+          var amount = $('#amount-' + i).text();
 
           if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == "")
               continue;
@@ -47,13 +49,13 @@
               var total = amount;
               currencyRemoveCommas(total);
               sum += currencyRemoveCommas(total);
-              $('#' + modal + " #total").val(currencyWithCommas(sum));
+              $('#total').val(currencyWithCommas(sum));
               var word = currencyToWords(sum).substr(0, 1).toUpperCase() + "" + currencyToWords(sum).substr(1);
-              $('#' + modal + ' #total').val(currencyWithCommas(sum));
+              $('#total').val(currencyWithCommas(sum));
               if(sum == 1)
-                $('#' + modal + ' #amount-in-words').val(word + " peso only");
+                $('#amount-in-words').val(word + " peso only");
               else
-                $('#' + modal + ' #amount-in-words').val(word + " pesos only");
+                $('#amount-in-words').val(word + " pesos only");
             }
           }
         }
@@ -147,50 +149,26 @@
       return;
     else{
       if(type == 'project'){
-        if((i + 1) % 2 != 0){
           tbl = 
-          '<tr role="row" class="odd">' +
-            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+          '<tr>' +
+            '<td class="qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
             '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
             '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
             '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
-            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+            '<td class="amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+            '<td class="table-border text-center"><span><i class="fa fa-trash remove" id="' + i + '"></i></span></td>' +
           '</tr>';
-        }
-        else{
-          tbl = 
-          '<tr role="row" class="even">' +
-            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
-            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
-            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
-            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
-            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
-          '</tr>';
-        }
       }
       else{
-        if((i + 1) % 2 != 0){
           tbl = 
-          '<tr role="row" class="odd">' +
-            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
+          '<tr>' +
+            '<td class="qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
             '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
             '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
             '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
             '<td class="code table-border center" id="code-' +i+ '"> --- </td>' +
-            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+            '<td class="amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"><i class="fa fa-trash pull-right"></i></td>' +
           '</tr>';
-        }
-        else{
-          tbl = 
-          '<tr role="row" class="even">' +
-            '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>' + 
-            '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>' +
-            '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
-            '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
-            '<td class="code table-border center" id="code-' +i+ '"> --- </td>' +
-            '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
-          '</tr>';
-        }
       }
       if(i == 12){
         $('#no-of-rows').css("color", "red");
@@ -204,112 +182,171 @@
     }
   }
 
-  function addNewTableRow(table, modal, expenseType){
-    if((modal == 'project-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Project Expense'){
-      var  tbl_row = $(document).find('#' + table).find('tr');
-      var tbl = '';
-      var i = $(document).find('#' + modal).find('#' + table).find('td[name=qty]').length;
+  function replaceTable(type){
+    var table = '';
+    var header = '';
+      if (type == 'project'){
+          header = 
+          '<table class="table table-responsive-md table-striped text-left" id="table">' +
+              '<thead>' +
+                  '<tr>' +
+                      '<th class="qty">Qty</th>' + 
+                      '<th class="unit">Unit</th>' + 
+                      '<th>Particulars</th>' +
+                      '<th class="ref">BOM Ref/Acct Code</th>' +
+                      '<th class="amount">Amount</th>' +
+                  '</tr>' +
+              '</thead>' + 
+              '<tbody>';
 
-      if(i == 13){
-        return;
+          for(var i = 0; i < 5; i++){
+              table = table + '' + 
+              '<tr>' + 
+                  '<td class="qty table-border" contenteditable="true" name="qty" id="qty-' + i +'"></a></td>' +
+                  '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i +'"></a></td>' + 
+                  '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
+                  '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
+                  '<td class="amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
+              '</tr>';
+          }
       }
       else{
-          if(i == 12){
-            $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
-            $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
-            $('#' + modal).find('#rcp-add-row').text("MAX");
-          }
-          else
-            $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
+          var header = 
+          '<table class="table table-responsive-md table-striped text-left" id="table">' +
+              '<thead>' +
+                  '<tr>' +
+                      '<th class="qty">Qty</th>' + 
+                      '<th class="unit">Unit</th>' + 
+                      '<th>Particulars</th>' +
+                      '<th class="ref">BOM Reference</th>' +
+                      '<th>Code</th>' +
+                      '<th class="amount">Amount</th>' +
+                  '</tr>' +
+              '</thead>' + 
+              '<tbody>';
 
-          if((i + 1) % 2 != 0){
-            tbl += '<tr role="row" class="odd">';
-            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-            tbl += '</tr>';
+          for(var i = 0; i < 5; i++){
+              table = table + '' + 
+              '<tr>' + 
+                  '<td class="qty table-border" contenteditable="true" name="qty" id="qty-' + i +'"></a></td>' +
+                  '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i +'"></a></td>' + 
+                  '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
+                  '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
+                  '<td class="code table-border center" id="code-' + i + '"> --- </td>' +
+                  '<td class="amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
+              '</tr>';
           }
-          else{
-            tbl += '<tr role="row" class="even">';
-            tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-            tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-            tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-            tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-            tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-            tbl += '</tr>';
-          }
-          tbl_row.last().after(tbl);
-          $(document).find('#' + table).find('tr').last().find('.qty').focus();
-          numbersOnly();
-          computation(modal, 'project-table');
       }
-    }
-    else{
-      if((modal == 'department-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Department Expense'){
-        var  tbl_row = $(document).find('#' + table).find('tr');
-        var tbl = '';
-        var i = $(document).find('#' + table).find('td[name=qty]').length;
-
-        if(i == 13){
-          return;
-        }
-        else{
-          if(i == 12){
-            $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
-            $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
-            $('#' + modal).find('#rcp-add-row').text("MAX");
-          }
-          else
-            $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
-
-          if((i + 1) % 2 != 0){
-            tbl += '<tr role="row" class="odd">';
-              tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-              tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-              tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-              tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-              tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
-              tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-            tbl += '</tr>';
-          }
-          else{
-            tbl += '<tr role="row" class="even">';
-              tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
-              tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
-              tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
-              tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
-              tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
-              tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
-            tbl += '</tr>';
-          }
-          tbl_row.last().after(tbl);
-          $(document).find('#' + table).find('tr').last().find('.qty').focus();
-          numbersOnly();
-          computation(modal, 'department-table');
-        }
-      }
-    }
+      table = table + '' + '</tbody></table>';
+      return header + ' ' + table;
   }
 
-  function datepicker(modal){
-    $('#' + modal).find('#datepicker').click(function (){
-      $('#' + modal).scroll(function (){
-        $('#' + modal).find('#datepicker').datepicker('place');
-      });
-    });
+  // function addNewTableRow(table, modal, expenseType){
+  //   if((modal == 'project-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Project Expense'){
+  //     var  tbl_row = $(document).find('#' + table).find('tr');
+  //     var tbl = '';
+  //     var i = $(document).find('#' + modal).find('#' + table).find('td[name=qty]').length;
 
-    $('#' + modal).on('shown.bs.modal', function (e) {
-      $('#' + modal).scroll(function (){
-        $('#' + modal).find('#datepicker').datepicker('place');
-      });
-    });
+  //     if(i == 13){
+  //       return;
+  //     }
+  //     else{
+  //         if(i == 12){
+  //           $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
+  //           $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
+  //           $('#' + modal).find('#rcp-add-row').text("MAX");
+  //         }
+  //         else
+  //           $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
+
+  //         if((i + 1) % 2 != 0){
+  //           tbl += '<tr role="row" class="odd">';
+  //           tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+  //           tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+  //           tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+  //           tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+  //           tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+  //           tbl += '</tr>';
+  //         }
+  //         else{
+  //           tbl += '<tr role="row" class="even">';
+  //           tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+  //           tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+  //           tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+  //           tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+  //           tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+  //           tbl += '</tr>';
+  //         }
+  //         tbl_row.last().after(tbl);
+  //         $(document).find('#' + table).find('tr').last().find('.qty').focus();
+  //         numbersOnly();
+  //         computation(modal, 'project-table');
+  //     }
+  //   }
+  //   else{
+  //     if((modal == 'department-form-modal' || modal == 'rcp-modal-details') && expenseType == 'Department Expense'){
+  //       var  tbl_row = $(document).find('#' + table).find('tr');
+  //       var tbl = '';
+  //       var i = $(document).find('#' + table).find('td[name=qty]').length;
+
+  //       if(i == 13){
+  //         return;
+  //       }
+  //       else{
+  //         if(i == 12){
+  //           $('#' + modal).find('#rcp-no-of-rows').css("color", "red");
+  //           $('#' + modal).find('#rcp-no-of-rows').text("13 out of 13 rows /");
+  //           $('#' + modal).find('#rcp-add-row').text("MAX");
+  //         }
+  //         else
+  //           $('#' + modal).find('#rcp-no-of-rows').text((i + 1) + " out of 13 rows /");
+
+  //         if((i + 1) % 2 != 0){
+  //           tbl += '<tr role="row" class="odd">';
+  //             tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+  //             tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+  //             tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+  //             tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+  //             tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+  //             tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+  //           tbl += '</tr>';
+  //         }
+  //         else{
+  //           tbl += '<tr role="row" class="even">';
+  //             tbl += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'+i+'"></td>';
+  //             tbl += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-'+i+'"></td>';
+  //             tbl += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>';
+  //             tbl += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>';
+  //             tbl += '<td class="code table-border center" id="code-'+i+'"> --- </td>';
+  //             tbl += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>';
+  //           tbl += '</tr>';
+  //         }
+  //         tbl_row.last().after(tbl);
+  //         $(document).find('#' + table).find('tr').last().find('.qty').focus();
+  //         numbersOnly();
+  //         computation(modal, 'department-table');
+  //       }
+  //     }
+  //   }
+  // }
+
+  // function datepicker(modal){
+  //   $('#' + modal).find('#datepicker').click(function (){
+  //     $('#' + modal).scroll(function (){
+  //       $('#' + modal).find('#datepicker').datepicker('place');
+  //     });
+  //   });
+
+  //   $('#' + modal).on('shown.bs.modal', function (e) {
+  //     $('#' + modal).scroll(function (){
+  //       $('#' + modal).find('#datepicker').datepicker('place');
+  //     });
+  //   });
     
-    $('#' + modal).find('#datepicker').datepicker({
-      startDate: "today"
-    });
-  }
+  //   $('#' + modal).find('#datepicker').datepicker({
+  //     startDate: "today"
+  //   });
+  // }
 
   function splitter(key, index){
     var value = $('#' + key).val();
@@ -332,54 +369,4 @@
 			$(this).data('modal', null);
 		});
   }
-
-  function filereader(file){
-    // Loaded via <script> tag, create shortcut to access PDF.js exports.
-    var pdfjsLib = window['pdfjs-dist/build/pdf'];
-    // The workerSrc property shall be specified.
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
-    
-    if(file.type == "application/pdf"){
-        var fileReader = new FileReader();  
-        fileReader.onload = function() {
-            $('#loading').removeClass('hidden');
-            var pdfData = new Uint8Array(this.result);
-            // Using DocumentInitParameters object to load binary data.
-            var loadingTask = pdfjsLib.getDocument({data: pdfData});
-            loadingTask.promise.then(function(pdf) {
-            console.log('PDF loaded');
-            
-            // Fetch the first page
-            var pageNumber = 1;
-            pdf.getPage(pageNumber).then(function(page) {
-                console.log('Page loaded');
-                
-                var scale = 1.5;
-                var viewport = page.getViewport({scale: scale});
-
-                // Prepare canvas using PDF page dimensions
-                var canvas = $("#viewer")[0];
-                var context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Render PDF page into canvas context
-                var renderContext = {
-                canvasContext: context,
-                viewport: viewport
-                };
-                var renderTask = page.render(renderContext);
-                renderTask.promise.then(function () {
-                console.log('Page rendered');
-                    $('#loading').addClass('hidden');
-                });
-            });
-            }, function (reason) {
-            // PDF loading error
-                console.error(reason);
-            });
-        };
-        fileReader.readAsArrayBuffer(file);
-    }
-}
 </script>

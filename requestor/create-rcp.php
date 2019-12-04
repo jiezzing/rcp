@@ -115,21 +115,22 @@
                                     <div class="row mtop">
                                         <div class="col-sm-12">
                                             <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
-                                            <input type="text" name="amount-in-words" class="form-control center" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words">
+                                            <input type="text" class="form-control center" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words">
                                         </div>
                                     </div>
 
                                     <div class="row mtop">
                                         <div class="col-sm-12">
                                             <div class="panel no-padding-bottom">
-                                                <table class="table table-responsive-md table-striped text-left" id="table">
+                                                <table class="table table-responsive-md table-striped text-left no-padding-left" id="table">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 10%">QTY</th>
+                                                                <th style="width: 10%">Qty</th>
                                                                 <th style="width: 12%">Unit</th>
                                                                 <th>Particulars</th>
                                                                 <th style="width: 25%">BOM Ref/Acct Code</th>
                                                                 <th style="width: 18%">Amount</th>
+                                                                <th style="width: 5%"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -137,11 +138,11 @@
                                                             for ($i = 0; $i < 5; $i++) { 
                                                                 echo '
                                                                     <tr>
-                                                                        <td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
+                                                                        <td class="qty table-border" contenteditable="true" name="qty" id="qty-'.$i.'"></a></td>
                                                                         <td class="unit table-border" contenteditable="true" name="unit" id="unit-'.$i.'"></a></td>
                                                                         <td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'.$i.'"></a></td>
                                                                         <td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'.$i.'"></td>
-                                                                        <td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-'.$i.'"></td>
+                                                                        <td class="amount table-border" colspan="2" contenteditable="true" name="amount" id="amount-'.$i.'"></i></td>
                                                                     </tr>
                                                                 ';
                                                             }
@@ -160,7 +161,7 @@
                                                     </div>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">₱</span>
-                                                        <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
+                                                        <input class="form-control" type="text" readonly id="total" value="0.00" style="background-color: white">
                                                         <span class="input-group-addon">Total Amount Due</span>
                                                     </div>
                                                 </div>
@@ -250,10 +251,10 @@
                                                 <div class="input-group-addon">
                                                 <span class="fa fa-calendar "></span>
                                                 </div>
-                                                <input type="text" name="due-date" class="form-control col-md-6" id="datepicker" style="background-color: white;">
+                                                <input type="text" class="form-control col-md-6" id="datepicker" style="background-color: white;">
                                             </div>
                                             <label class=" form-control-label mtop">Reason / Justification</label>
-                                            <textarea name="justification" class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
+                                            <textarea class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                                             <div class="form-group text-center mtop">
                                                 <div class="row">
                                                         <div class="col-md-4">
@@ -272,7 +273,7 @@
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
-                                    <div id="send" class="col-md-4 text-right pull-right"><a href="#" class="btn btn-success  form-control">SEND RCP</a></div>
+                                    <div id="send" class="col-md-4 text-right pull-right"><a href="#" class="btn btn-primary form-control"><i class="fa fa-envelope"></i> SEND RCP</a></div>
                                 </div>
                             </div>
 						</div>
@@ -283,25 +284,38 @@
 		<?php
 			require '../scripts/js.php';
 			require '../scripts/rcp.php';
+			require '../scripts/filereader.php';
 		?>
 		<script>
             // Global 
             window.type = 'project';
+            window.approverId = 0;
+            window.email = '';
 
 
 
-            // Check if all scripts has been loaded
+            // check if all scripts has been loaded
             $(window).load(function(){
                 $('#overlay').fadeOut();
                 $('#wrapper').fadeIn();
             });
-            // End
+            // end
 
             $(document).ready(function(){
-                // Datepicker
+                // datepicker
                 $('#datepicker').datepicker();
 
-                // Department change
+                // selectpicker
+                $('.selectpicker').selectpicker({
+                    dropupAuto: false
+                });
+
+                // table contenteditable exceptions
+                allowNumbers('.qty');
+                allowNumbersWithDecimal('.amount');
+                tableExceptions();
+
+                // department change
                 $('#department').on('change', function(){
                     var object = {
                         'prmy_id': splitter('department', 1),
@@ -327,79 +341,80 @@
                         }
                     }); 
                 });
-                // End
+                // end
 
-                $('input[type=radio][name=type]').change(function() {
-                    var table = '';
-                    if (this.value == 'project'){
-                        type = 'project';
-                        var header = 
-                        '<table class="table table-responsive-md table-striped text-left" id="table">' +
-                            '<thead>' +
-                                '<tr>' +
-                                    '<th class="qty">Qty</th>' + 
-                                    '<th class="unit">Unit</th>' + 
-                                    '<th>Particulars</th>' +
-                                    '<th class="ref">BOM Ref/Acct Code</th>' +
-                                    '<th class="amount">Amount</th>' +
-                                '</tr>' +
-                            '</thead>' + 
-                            '<tbody>';
+                // approver change
+                $('#approver').on('change', function(){
+                    approverId = splitter('approver', 0);
+                    email = splitter('approver', 1);
+                });
+                // end
 
-                        for(var i = 0; i < 5; i++){
-                            table = table + '' + 
-                            '<tr>' + 
-                                '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-' + i +'"></a></td>' +
-                                '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i +'"></a></td>' + 
-                                '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
-                                '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
-                                '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
-                            '</tr>';
-                        }
-                        table = table + '' + '</tbody></table>';
-                        $('#table').replaceWith(header + ' ' + table);
-                        table = '';
+                // supporting file
+                $("#file").on("change", function(e){
+                    $('#viewer').removeClass('canvas-hidden');
+                    $('#file-name').text(e.target.files[0].name);
+                    var file = e.target.files[0];
+                    filereader(file);
+                });
+                // end
+
+                // remove specific table data cell
+                $(document).on('click', '.remove', function(e){
+                    e.preventDefault();
+                    var id = $(this).attr('id');
+                    var length = $(document).find('#table td[name=qty]').length;
+                    
+                    console.log(id);
+                    for(var i = id; i < length; i++){
+                        $('#qty-' + (parseInt(i) + 1)).attr('id', 'qty-' + i);
+                        $('#unit-' + (parseInt(i) + 1)).attr('id', 'unit-' + i);
+                        $('#particulars-' + (parseInt(i) + 1)).attr('id', 'particulars-' + i);
+                        $('#bom-ref-code-' + (parseInt(i) + 1)).attr('id', 'bom-ref-code-' + i);
+                        $('#amount-' + (parseInt(i) + 1)).attr('id', 'amount-' + i);
+                        $('#' + (parseInt(i) + 1)).attr('id', '' + i);
                     }
-                    else{
-                        type = 'department';
-                        var header = 
-                        '<table class="table table-responsive-md table-striped text-left" id="table">' +
-                            '<thead>' +
-                                '<tr>' +
-                                    '<th class="qty">Qty</th>' + 
-                                    '<th class="unit">Unit</th>' + 
-                                    '<th>Particulars</th>' +
-                                    '<th class="ref">BOM Reference</th>' +
-                                    '<th>Code</th>' +
-                                    '<th class="amount">Amount</th>' +
-                                '</tr>' +
-                            '</thead>' + 
-                            '<tbody>';
-
-                        for(var i = 0; i < 5; i++){
-                            table = table + '' + 
-                            '<tr>' + 
-                                '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-' + i +'"></a></td>' +
-                                '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i +'"></a></td>' + 
-                                '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
-                                '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
-                                '<td class="code table-border center" id="code-' + i + '"> --- </td>' +
-                                '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
-                            '</tr>';
-                        }
-                        table = table + '' + '</tbody></table>';
-                        $('#table').replaceWith(header + ' ' + table);
-                        table = '';
+                    $(this).closest('tr').remove();
+                    $('#no-of-rows').text((length - 1) + " out of 13 rows /");
+                    if(length <= 13){
+                        $('#no-of-rows').css("color", '#777777');
+                        $('#add-row').text("Add New Row");
                     }
                 });
+                // end
+
+                // type selection for the table formatting
+                $('input[type=radio][name=type]').change(function() {
+                    if(this.value == 'project'){ type = 'project'; }
+                    else{ type = 'department'; }
+                    $('#table').replaceWith(replaceTable(type));
+                });
+                // end
 
                 // Send of rcp
                 $('#send').on('click', function(e){
                     e.preventDefault();
                     var form = document.getElementById('fillup-form');
 				    var data = new FormData(form);
+                    var departmentCode = splitter('department', 0);
+                    var totalRcp = parseInt(splitter('department', 5)) + 1;
+                    var rcpCode = departmentCode + ' ' + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + totalRcp).slice(-4);
+                    var userId = <?php echo $_SESSION['user_id'] ?>;
+                    var payee = $('#payee').val();
+                    var companyCode = splitter('company', 0);
+                    var projectCode = splitter('project', 0);
+                    var amountInWords = splitter('project', 0);
+                    var total = currencyRemoveCommas($('#total').val());
+                    var words = $('#amount-in-words').val();
                     
-                    data.append('department', splitter('department', 0))
+                    data.append('rcp', rcpCode);
+                    data.append('user_id', userId);
+				    data.append('approver_id', approverId);
+                    data.append('department', departmentCode);
+                    data.append('total', total);
+                    data.append('amount_in_words', words);
+
+                    console.log(approverId)
 
                     for (var pair of data.entries()) {
                         console.log(pair[0]+ ': ' + pair[1]); 
@@ -410,6 +425,9 @@
                 $('#add-row').on('click', function(e){
                     e.preventDefault();
                     addRow(type);
+                    allowNumbers('.qty');
+                    allowNumbersWithDecimal('.amount');
+                    tableExceptions();
                 })
 
                 $('#vatable').click(function(){

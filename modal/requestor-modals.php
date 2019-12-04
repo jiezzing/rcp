@@ -89,7 +89,7 @@
 <!-- End of showing the RCP details -->
 
 <!-- RCP Form -->
-<div class="modal fade bd-example-modal-lg expense-modal" id="project-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<!-- <div class="modal fade bd-example-modal-lg expense-modal" id="project-form-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <form id="form">
@@ -106,7 +106,7 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->
 <!-- End of RCP Form -->
 
 <div class="modal fade" id="report-generation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
