@@ -26,8 +26,7 @@
 		$supp_file = json_decode($row['rcp_supp_file'], true);
  	}
 
- 	if($expense_type ==  'Project Expense'){
-		$type = 'project';
+ 	if($expense_type ==  'project'){
 	 	$headers = [
 	 		'<th>QTY</th>',
 	 		'<th>Unit</th>', 
@@ -47,7 +46,6 @@
 		}
  	}
  	else{
-		$type = 'department';
  		$headers = [
 	 		'<th>QTY</th>',
 	 		'<th>Unit</th>', 
@@ -176,7 +174,7 @@
  		'particulars' => $particulars,
  		'headers' => $headers,
 		'type' => $expense_type,
-		'expenseType' => $type 
+		'total' => $rcp_amt
  	);
 
  	echo json_encode($data);

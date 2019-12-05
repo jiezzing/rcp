@@ -93,12 +93,20 @@
 										</div>
 									';
 								}
-								echo '
+									echo '
 											<div class="panel-body" style="font-size: 13px">
 												<ul class="list-unstyled list-justify">
 													<li>Approver <span>'.$row['user_firstname'].' '.$row['user_lastname'].'</span></li>
 													<li>Department <span>'.$row['dept_name'].'</span></li>
-													<li>Type <span>'.$row['rcp_expense_type'].'</span></li>
+													<li>Type 
+													';
+													if($row['rcp_expense_type'] == 'project'){
+														echo '<span>Project Expense</span>';
+													}
+													else{
+														echo '<span>Department Expense</span>';
+													}
+											echo 	'</li>
 												</ul>
 											</div>
 											<a href="javascript" data-toggle="modal">
@@ -156,6 +164,7 @@
 			require '../modal/requestor-modals.php';
 			require '../scripts/js.php';
 			require '../scripts/rcp.php';
+			require '../scripts/trappings.php';
 		?>
 		<script>
 		// Global variables
@@ -178,9 +187,11 @@
 			var expenseType = 'project';
 			var expense = 'Project Expense';
 			var rcpExpenseType;
-			var details = [];
+
+			window.details = [];
+
 			var isRcpOpened;
-        	var amounts = [];
+        	// var amounts = [];
 
 			// check if the rcp-no is in the details (array)
 			var isExist;
@@ -639,93 +650,93 @@
 		// End of selecting construction expense type
 
 		// Sending of data - RCP
-			$('#' + expenseType + '-form-modal #form').on('submit', function(e){
-				e.preventDefault();
-				var form = document.getElementById('form');
-				var data = new FormData(form);
-				var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
-				var code = splitter(expenseType, 'department', 0);
-				var total_rcp = parseInt(splitter(expenseType, 'department', 5)) + 1;
-				var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-				var user_id = <?php echo $_SESSION['user_id']; ?>;
-				var rush = 'no';
-				var length = lengthGetter(expenseType);
-				var table_data = [];
-				var reference;
-				var type = $('#' + expenseType + '-form-modal #vat').val();
-				var vat = {
-					'type': type,
-					'vat_trans': currencyRemoveCommas($('#' + expenseType + '-form-modal #less-vat').text()),
-					'vat_sales': currencyRemoveCommas($('#' + expenseType + '-form-modal #net-of-vat').text()),
-					'vat_exempt': currencyRemoveCommas($('#' + expenseType + '-form-modal #discount').text()),
-					'zero_rated': currencyRemoveCommas($('#' + expenseType + '-form-modal #total-amount').text()),
-					'vat_amount': 25
-				};
+			// $('#' + expenseType + '-form-modal #form').on('submit', function(e){
+			// 	e.preventDefault();
+			// 	var form = document.getElementById('form');
+			// 	var data = new FormData(form);
+			// 	var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
+			// 	var code = splitter(expenseType, 'department', 0);
+			// 	var total_rcp = parseInt(splitter(expenseType, 'department', 5)) + 1;
+			// 	var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
+			// 	var user_id = <?php echo $_SESSION['user_id']; ?>;
+			// 	var rush = 'no';
+			// 	var length = lengthGetter(expenseType);
+			// 	var table_data = [];
+			// 	var reference;
+			// 	var type = $('#' + expenseType + '-form-modal #vat').val();
+			// 	var vat = {
+			// 		'type': type,
+			// 		'vat_trans': currencyRemoveCommas($('#' + expenseType + '-form-modal #less-vat').text()),
+			// 		'vat_sales': currencyRemoveCommas($('#' + expenseType + '-form-modal #net-of-vat').text()),
+			// 		'vat_exempt': currencyRemoveCommas($('#' + expenseType + '-form-modal #discount').text()),
+			// 		'zero_rated': currencyRemoveCommas($('#' + expenseType + '-form-modal #total-amount').text()),
+			// 		'vat_amount': 25
+			// 	};
 				
-				for(var i = 0; i < length; i++){
-					var qty = $('#' + expenseType + '-table #qty-' + i).text();
-					var unit = $('#' + expenseType + '-table #unit-' + i).text();
-					var particulars = $('#' + expenseType + '-table #particulars-' + i).text();
-					var ref = $('#' + expenseType + '-table #bom-ref-code-' + i).text();
-					var amount = $('#' + expenseType + '-table #amount-' + i).text();
+			// 	for(var i = 0; i < length; i++){
+			// 		var qty = $('#' + expenseType + '-table #qty-' + i).text();
+			// 		var unit = $('#' + expenseType + '-table #unit-' + i).text();
+			// 		var particulars = $('#' + expenseType + '-table #particulars-' + i).text();
+			// 		var ref = $('#' + expenseType + '-table #bom-ref-code-' + i).text();
+			// 		var amount = $('#' + expenseType + '-table #amount-' + i).text();
 					
-					if(expenseType == 'project'){ reference = { 'ref': ref }; }
-					else{
-						var ref_code = $('#department-table #code-' + i).text();
-						reference = {
-							'ref': ref,
-							'code': ref_code
-						};
-					}
+			// 		if(expenseType == 'project'){ reference = { 'ref': ref }; }
+			// 		else{
+			// 			var ref_code = $('#department-table #code-' + i).text();
+			// 			reference = {
+			// 				'ref': ref,
+			// 				'code': ref_code
+			// 			};
+			// 		}
 
-					if(qty == "" || unit == "" || particulars == "" || ref == "" || amount == ""){ continue; }
-					else{
-						table_data.push({
-							'qty': qty,
-							'unit': unit,
-							'particulars': particulars,
-							'reference': reference,
-							'amount': currencyRemoveCommas(amount)
-						});
-					}
-				}
+			// 		if(qty == "" || unit == "" || particulars == "" || ref == "" || amount == ""){ continue; }
+			// 		else{
+			// 			table_data.push({
+			// 				'qty': qty,
+			// 				'unit': unit,
+			// 				'particulars': particulars,
+			// 				'reference': reference,
+			// 				'amount': currencyRemoveCommas(amount)
+			// 			});
+			// 		}
+			// 	}
 
-				data.append('rcp_no', rcp_no);
-				data.append('user_id', user_id);
-				data.append('approver', approver_id);
-				data.append('project', $('#' + expenseType + '-form-modal #project').val());
-				data.append('company', $('#' + expenseType + '-form-modal #company').val());
-				data.append('payee', $('#' + expenseType + '-form-modal #payee').val());
-				data.append('department', code);
-				data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
-				data.append('total', currencyRemoveCommas($('#' + expenseType + '-form-modal #total').val()));
-				$('#' + expenseType + '-form-modal #vatable').is(":checked") ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
-				data.append('file', pdf);
-				data.append('rush', rush);
-				data.append('expenseType', expenseType);
-				data.append('length', length);
-				data.append('table_data', JSON.stringify(table_data));
-				data.append('expense', expense);
+			// 	data.append('rcp_no', rcp_no);
+			// 	data.append('user_id', user_id);
+			// 	data.append('approver', approver_id);
+			// 	data.append('project', $('#' + expenseType + '-form-modal #project').val());
+			// 	data.append('company', $('#' + expenseType + '-form-modal #company').val());
+			// 	data.append('payee', $('#' + expenseType + '-form-modal #payee').val());
+			// 	data.append('department', code);
+			// 	data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
+			// 	data.append('total', currencyRemoveCommas($('#' + expenseType + '-form-modal #total').val()));
+			// 	$('#' + expenseType + '-form-modal #vatable').is(":checked") ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
+			// 	data.append('file', pdf);
+			// 	data.append('rush', rush);
+			// 	data.append('expenseType', expenseType);
+			// 	data.append('length', length);
+			// 	data.append('table_data', JSON.stringify(table_data));
+			// 	data.append('expense', expense);
 
-				$('#' + expenseType + '-form-modal').modal('toggle');
-				swal({
-					title: "Confirmation",
-					text: "Would you like to send the RCP?",
-					type: "info",
-					showCancelButton: true,
-					closeOnConfirm: false,
-					confirmButtonText: "Yes",
-					showLoaderOnConfirm: true
-				}, function (value) {
-					if(value){
-						createRcp(data);
-					}
-					else{
-						$('#' + expenseType + '-form-modal').modal('show');
-						return false;
-					}
-				});
-			});
+			// 	$('#' + expenseType + '-form-modal').modal('toggle');
+			// 	swal({
+			// 		title: "Confirmation",
+			// 		text: "Would you like to send the RCP?",
+			// 		type: "info",
+			// 		showCancelButton: true,
+			// 		closeOnConfirm: false,
+			// 		confirmButtonText: "Yes",
+			// 		showLoaderOnConfirm: true
+			// 	}, function (value) {
+			// 		if(value){
+			// 			createRcp(data);
+			// 		}
+			// 		else{
+			// 			$('#' + expenseType + '-form-modal').modal('show');
+			// 			return false;
+			// 		}
+			// 	});
+			// });
 		// End of sending data - RCP
 
 		/*========================================================*/

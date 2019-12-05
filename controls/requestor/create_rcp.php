@@ -11,15 +11,13 @@
 	if(isset($_FILES['file']['name'])){
 		$path = '../assets/files/' . $_FILES['file']['name'];
 		date_default_timezone_set('Asia/Manila');
-		
 		$supp_file = array(
 			'name' => $_FILES['file']['name'],
 			'path' => $path
 		);
-		move_uploaded_file($_FILES["file"]["tmp_name"], '../../assets/files/' . $_FILES['file']['name']);
-		$sel->rcp_no = $_POST['rcp_no'];
+		$sel->rcp_no = $_POST['rcp'];
 		$sel->rcp_employee_id = $_POST['user_id'];
-		$sel->rcp_approver_id = $_POST['approver'];
+		$sel->rcp_approver_id = $_POST['approver_id'];
 		$sel->rcp_payee = $_POST['payee'];
 		$sel->rcp_company = $_POST['company'];
 		$sel->rcp_project = $_POST['project'];
@@ -45,8 +43,10 @@
 		// else{
 		// 	echo 'Error';
 		// }
+
 		if($query){
 			echo 'Success';
+			move_uploaded_file($_FILES["file"]["tmp_name"], '../../assets/files/' . $_FILES['file']['name']);
 		}
 		else{
 			echo 'Error';

@@ -1,7 +1,7 @@
 <!-- Show the RCP details -->
 <div class="modal fade bd-example-modal-lg" data-keyboard="true" id="rcp-modal-details" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <form id="form">
+    <form id="edit-form" action="../requestor/edit-rcp.php" method="POST">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Request for Check Payment Details <i class="fa fa-remove pull-right" data-dismiss="modal" aria-hidden="true" style="cursor: pointer;"></i></h4>
@@ -11,11 +11,11 @@
             <div class="col-md-12">
               <div class="col-md-4">
                 <label class=" form-control-label tooltiptext">RCP NO.</label>
-                <strong><input type="text" class="form-control text-center" disabled id="rcp-no" name="rcp-no"></strong>
+                <strong><input type="text" class="form-control text-center" readonly id="rcp-no" name="rcp-no"></strong>
               </div>
               <div class="col-md-4">
                   <label class=" form-control-label tooltiptext">DEPARTMENT</label>
-                  <input type="text" id="department-name" class="form-control" disabled>
+                  <input type="text" id="department-name" class="form-control" name="department" readonly>
               </div>
               <div class="col-md-4">
                 <label class=" form-control-label tooltiptext">APPROVER</label>
@@ -23,64 +23,169 @@
               </div>
             </div>
           </div>
-          <br>
-          <div class="row">
+
+          <div class="row mtop">
             <div class="col-md-12">
               <div class="col-md-4">
                 <label class=" form-control-label tooltiptext">PROJECT</label>
-                <select class="form-control" id="project"></select>
+                <select class="form-control" id="project" name="project"></select>
               </div>
               <div class="col-md-4">
                   <label class=" form-control-label tooltiptext">COMPANY</label>
-                <select class="form-control" id="company"></select>
+                <select class="form-control" id="company" name="company"></select>
               </div>
               <div class="col-md-4">
                 <label class=" form-control-label tooltiptext">PAYEE</label>
-                  <input type="text" id="payee" class="form-control">
+                  <input type="text" id="payee" class="form-control" name="payee">
               </div>
             </div>
           </div>
-          <br>
-          <div class="row">
+
+          <div class="row mtop">
             <div class="col-md-12">
               <div class="col-md-12">
                 <label class=" form-control-label tooltiptext">AMOUNT IN WORDS</label>
-                <input type="text" id="amount-in-words" class="form-control text-center" disabled>
+                <input class="form-control text-center" type="text" id="amount-in-words" name="amount-in-words" readonly>
               </div>
             </div>
           </div>
-          <br>
-          <div class="row">
+
+          <div class="row mtop">
             <div class="col-md-12">
               <div class="col-md-12">
-                <div class="panel">
-                  <div class="panel-body no-padding">
-                    <table class="table table-responsive-md table-striped text-left" id="project-table">
-                      <thead>
-                        <tr id="header"></tr>
-                      </thead>
-                      <tbody id="table-body">
-                      </tbody>
-                    </table>
+                <div class="panel no-padding-bottom">
+                  <table class="table table-responsive-md table-striped project-table" id="project-table">
+                    <thead>
+                      <tr id="header"></tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                  </table>
+                  <div class="panel-footer">
+                      <div class="col-sm-6 clearfix"> </div>
+                      <div class="input-group">
+                          <span class="input-group-addon">₱</span>
+                          <input class="form-control" type="text" id="total" name="total-amount">
+                          <span class="input-group-addon">Total Amount Due</span>
+                      </div>
                   </div>
-                  <!-- <div class="panel-footer">
-                            <div class="row">
-                                <div class="col-md-6"><span class="panel-note"><label id="rcp-no-of-rows"> 5 out of 13 rows /</label> </span><span class="panel-note"><a href="#" id="rcp-add-row"> Add New Row</a></span></div>
-                                <div class="input-group">
-                                <span class="input-group-addon">₱</span>
-                                <input class="form-control" type="text" readonly name="total" id="total" value="0.00" style="background-color: white">
-                                <span class="input-group-addon">Total Amount Due</span>
-                                </div>
-                            </div>
-                        </div> -->
                 </div>
               </div>
             </div>
           </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                <div class="col-sm-8">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
+                            <div class="right">
+                            <label class="fancy-checkbox">
+                                <input type="checkbox" class="fancy-checkbox" name="checkbox" id="vatable">
+                                <span>Is this vatable?</span>
+                            </label>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="vat-body" hidden>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select class="form-control" id="vat">
+                                        <option hidden>SELECT TYPE</option>
+                                        <?php
+                                            $vat = $sel2->getVat();
+                                            while ($row = $vat->fetch(PDO::FETCH_ASSOC)) {
+                                                $percentage = json_decode($row['vat_percentage'], true);
+                                                echo ' <option value="'.$row['vat_id'].'">'.$row['vat_name'].' - '.$percentage['percentage'].'%</option> ';
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4" hidden id="div-percentage">
+                                    <input class="form-control" type="number" placeholder="Percentage" id="percentage" min="10" max="15">
+                                </div>
+                            </div>
+                            <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                    <th style="width: 25%"></th>
+                                    <th style="width: 20%"></th>
+                                    <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td class="table-border">P.O.S. Trans #</td>
+                                    <td class="table-border text-center" id="less-vat"> --- </td>
+                                    <td class="table-border">Less: VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VATable Sales</td>
+                                    <td class="table-border text-center" id="net-of-vat"> --- </td>
+                                    <td class="table-border">Amount: Net of VAT</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT-Exempt</td>
+                                    <td class="table-border text-center" id="discount"> --- </td>
+                                    <td class="table-border">Less: SC/PWD Discount</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">Zero Rated</td>
+                                    <td class="table-border text-center" id="total-amount"> --- </td>
+                                    <td class="table-border">Amount Due</td>
+                                    </tr>
+                                    <tr>
+                                    <td class="table-border">VAT Amount</td>
+                                    <td class="table-border text-center"> --- </td>
+                                    <td class="table-border">Add: VAT</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    <label for="company" class=" form-control-label">NOTE:</label>
+                    <p>
+                        1.  BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
+                        <br> 
+                        2.  To facilitate processing, please fill out all the fields COMPLETELY especially the account to be charged and attach the necessary supporting documents.
+                        <br> 
+                        3.  All alterations must be initialed by the authorized requesters / officers. 
+                        <br> 
+                        4.  Avoid having RUSH requests; however, if truly urgent, indicate the date needed (box at the right). 
+                        <br>  
+                        5.  All "RUSH" RCPs should be accompanied by an <u class="bold" ">acceptable explanation.</u>
+                    </p>
+                </div>
+
+                <div class="col-sm-4">
+                    <label class=" form-control-label">If RUSH, fill in the following:</label>
+                    <div class="input-group date" id="datepicker">
+                        <div class="input-group-addon">
+                        <span class="fa fa-calendar "></span>
+                        </div>
+                        <input type="text" class="form-control col-md-6" id="datepicker" style="background-color: white;">
+                    </div>
+                    <label class=" form-control-label mtop">Reason / Justification</label>
+                    <textarea class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
+                    <div class="form-group text-center mtop">
+                        <div class="row">
+                                <div class="col-md-4">
+                                    <input type="file" name="file" id="file" accept=".jpg, .pdf">
+                                </div>
+                                <div class="col-md-8">
+                                    <p for="file" id="file-name" class="form-control-label">Add supporting file</p>
+                                </div>
+                        </div>
+                        <canvas id="viewer" class="form-control canvas center-block canvas-hidden" target="_blank"></canvas>
+                        <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
+                    </div>
+                </div>
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id="save-changes-btn"><i class="fa fa-download" aria-hidden="true"></i> Save Changes</button>
+          <button type="submit" class="btn btn-primary" id="save-changes-btn"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
         </div>
       </div>
     </form>

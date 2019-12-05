@@ -93,6 +93,9 @@
 
 	td{
 		padding-left: 8px !important;
+		padding-right: 8px !important;
+		padding-top: 8px !important;
+		padding-bottom: 8px !important;
 	}
 	.remove{
 		cursor: pointer;

@@ -28,46 +28,53 @@
       });
   }
 
-  function tableExceptions(){
-    var table_class = ['.qty', '.unit', '.particulars', '.bom-ref-code', '.amount'];
-    var length = $('#table td[name=qty]').length;
+  function tableExceptions(length, table_class = []){
     for(var index = 0; index < table_class.length; index++){
-      $(table_class[index]).on("keyup",function () {
-        amounts = [];
-        var sum = 0.0;
-        for(var i = 0; i < length; i++){
-          var qty = $('#qty-' + i).text();
-          var unit = $('#unit-' + i).text();
-          var particulars = $('#particulars-' + i).text();
-          var ref = $('#bom-ref-code-' + i).text();
-          var amount = $('#amount-' + i).text();
-
-          if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == "")
-              continue;
-          else{
-            if(qty != "" && unit != "" && particulars != "" && ref != "" && amount != ""){
-              var total = amount;
-              currencyRemoveCommas(total);
-              sum += currencyRemoveCommas(total);
-              $('#total').val(currencyWithCommas(sum));
-              var word = currencyToWords(sum).substr(0, 1).toUpperCase() + "" + currencyToWords(sum).substr(1);
-              $('#total').val(currencyWithCommas(sum));
-              if(sum == 1)
-                $('#amount-in-words').val(word + " peso only");
-              else
-                $('#amount-in-words').val(word + " pesos only");
-            }
-          }
-        }
-      });
+        $(table_class[index]).on("keyup",function () {
+            $('#vat').val('SELECT TYPE');
+            $('#less-vat').text('---');
+            $('#net-of-vat').text('---');
+            $('#discount').text('---');
+            $('#total-amount').text('---');
+            autoComputation(length);
+        })
     }
+  }
 
-    $("td[contenteditable]").keypress(function (evt) {
-      var keycode = evt.charCode || evt.keyCode;
-      if (keycode  == 13) { //Enter key's keycode
-        return false;
+  function autoComputation(length){
+    amounts = [];
+    var sum = 0.0;
+    for(var i = 0; i < length; i++){
+      var qty = $('#qty-' + i).text();
+      var unit = $('#unit-' + i).text();
+      var particulars = $('#particulars-' + i).text();
+      var ref = $('#bom-ref-code-' + i).text();
+      var amount = $('#amount-' + i).text();
+      var flag = false;
+
+      if(qty == "" && unit == "" && particulars == "" && ref == "" && amount == "")
+          continue;
+      else if(qty != "" && unit != "" && particulars != "" && ref != "" && amount != ""){
+        flag = true;
+        var total = amount;
+        currencyRemoveCommas(total);
+        sum += currencyRemoveCommas(total);
+        $('#total').val(currencyWithCommas(sum));
+        var word = currencyToWords(sum).substr(0, 1).toUpperCase() + "" + currencyToWords(sum).substr(1);
+        $('#total').val(currencyWithCommas(sum));
+        if(sum == 1)
+          $('#amount-in-words').val(word + " peso only");
+        else
+          $('#amount-in-words').val(word + " pesos only");
       }
-    });
+      else{
+        if(sum == 0){
+          $('#amount-in-words').val("NO TOTAL AMOUNT DETECTED (Auto-Generated)");
+          $('#total').val('0.00');
+        }
+      }
+    }
+    return sum;
   }
 
   function currencyToWords(s) {
@@ -167,7 +174,8 @@
             '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-'+i+'"></td>' +
             '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-'+i+'"></td>' +
             '<td class="code table-border center" id="code-' +i+ '"> --- </td>' +
-            '<td class="amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"><i class="fa fa-trash pull-right"></i></td>' +
+            '<td class="amount table-border" contenteditable="true" name="amount" id="amount-'+i+'"></td>' +
+            '<td class="table-border text-center"><span><i class="fa fa-trash remove" id="' + i + '"></i></span></td>' +
           '</tr>';
       }
       if(i == 12){
@@ -187,7 +195,7 @@
     var header = '';
       if (type == 'project'){
           header = 
-          '<table class="table table-responsive-md table-striped text-left" id="table">' +
+          '<table class="table table-responsive-md table-striped project-table" id="table">' +
               '<thead>' +
                   '<tr>' +
                       '<th class="qty">Qty</th>' + 
@@ -195,6 +203,7 @@
                       '<th>Particulars</th>' +
                       '<th class="ref">BOM Ref/Acct Code</th>' +
                       '<th class="amount">Amount</th>' +
+                      '<th style="width: 5%"></th>' +
                   '</tr>' +
               '</thead>' + 
               '<tbody>';
@@ -206,13 +215,13 @@
                   '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i +'"></a></td>' + 
                   '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
                   '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
-                  '<td class="amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
+                  '<td class="amount table-border" colspan="2" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
               '</tr>';
           }
       }
       else{
           var header = 
-          '<table class="table table-responsive-md table-striped text-left" id="table">' +
+          '<table class="table table-responsive-md table-striped department-table" id="table">' +
               '<thead>' +
                   '<tr>' +
                       '<th class="qty">Qty</th>' + 
@@ -221,6 +230,7 @@
                       '<th class="ref">BOM Reference</th>' +
                       '<th>Code</th>' +
                       '<th class="amount">Amount</th>' +
+                      '<th style="width: 5%"></th>' +
                   '</tr>' +
               '</thead>' + 
               '<tbody>';
@@ -233,7 +243,7 @@
                   '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i +'"></a></td>' +
                   '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i +'"></td>' +
                   '<td class="code table-border center" id="code-' + i + '"> --- </td>' +
-                  '<td class="amount table-border" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
+                  '<td class="amount table-border" colspan="2" contenteditable="true" name="amount" id="amount-' + i +'"></td>' +
               '</tr>';
           }
       }

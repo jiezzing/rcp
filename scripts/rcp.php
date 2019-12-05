@@ -12,9 +12,9 @@
     }
 
     function createRcp(data){
-        if(data.rush == 'yes'){
-            isRcpRush(data.rcp_no, data.justification, data.due_date);
-        }
+        // if(data.rush == 'yes'){
+        //     isRcpRush(data.rcp_no, data.justification, data.due_date);
+        // }
         $.ajax({
             type: "POST",
             url: "../controls/requestor/create_rcp.php",
@@ -23,10 +23,9 @@
             cache: false,
             processData: false,
             success: function(response){
-                console.log(response);
                 JSON.parse(data.get('table_data')).forEach((value)=>{
                     createParticulars(
-                        data.get('rcp_no'), 
+                        data.get('rcp'), 
                         value.qty, 
                         value.unit,
                         value.particulars,
@@ -39,7 +38,7 @@
                 alert(thrownError);
             }
         }).done(function (){
-            updateDepartmentRcpNo(splitter(data.get('expenseType'), 'department', 0));
+            updateDepartmentRcpNo(splitter('department', 0));
         }); 
     }
 
@@ -64,12 +63,12 @@
             }
         }).done(function (){
             swal({
-            title: rcp_no,
-            text: "has been successfully sent",
-            type: "success",
-            closeOnConfirm: false,
-            confirmButtonText: "Okay",
-            allowEscapeKey: false
+                title: rcp_no,
+                text: "has been successfully sent",
+                type: "success",
+                closeOnConfirm: false,
+                confirmButtonText: "Okay",
+                allowEscapeKey: false
             });
         }); 
     }
@@ -93,37 +92,36 @@
         }); 
     }
 
-    function autocomplete(){
-        $('#department-form-modal').find('.bom-ref-code').autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            type: "POST",
-                            url: "../controls/requestor/test.php",
-                            data: { search: request.term },
-                            dataType: 'json',
-                            success: function(data) {
-                                response(data);
-                            }
-                        });
-                    },
-                    select: function( event, ui ) {
-                        var data = ui.item.value;
-                        $.ajax({
-                            type: "POST",
-                            url: "../controls/requestor/test2.php",
-                            data: { data: data },
-                            dataType: 'json',
-                            success: function(response) {
-                                for(var i = 0; i < 13; i++){
-                                    if($('#department-table').find('#bom-ref-code-' + i).is(':focus')){
-                                        $('#department-table').find('#code-' + i).text(response);
-                                    }
-                                }
-                            }
-                        });
+    function autocomplete(key){
+        $(key).autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: "POST",
+                    url: "../controls/requestor/test.php",
+                    data: { search: request.term },
+                    dataType: 'json',
+                    success: function(data) {
+                        response(data);
                     }
                 });
-        $('#department-form-modal').find( ".bom-ref-code" ).autocomplete("option", "appendTo", "#department-form-modal" );
+            },
+            select: function( event, ui ) {
+                var data = ui.item.value;
+                $.ajax({
+                    type: "POST",
+                    url: "../controls/requestor/test2.php",
+                    data: { data: data },
+                    dataType: 'json',
+                    success: function(response) {
+                        for(var i = 0; i < 13; i++){
+                            if($('#bom-ref-code-' + i).is(':focus')){
+                                $('#code-' + i).text(response);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
     function updateRcp(data){
@@ -159,16 +157,17 @@
                     // print values
                     rcp_fields(details, 0);
 
-                    if(details[0].type == 'Project Expense'){
+                    if(details[0].type == 'project'){
 
                         // project type table headers
                         $('#rcp-modal-details #project-table #header').html(details[0].headers);
 
                         // get particulars table data
-                        var td = table_data(details[0].expenseType, details, 0)
+                        var td = table_data(details[0].type, details, 0);
                         
                         // open rcp detail modal
                         $('#rcp-modal-details #project-table #table-body').html(td);
+                        td = '';
                     }
                     else{
 
@@ -179,17 +178,17 @@
                         $('#rcp-modal-details #department-table #header').html(details[0].headers);
 
                         // get particulars table data
-                        var td = table_data(details[0].expenseType, details, 0)
+                        var td = table_data(details[0].type, details, 0)
 
                         // open rcp detail modal
                         $('#rcp-modal-details #department-table #table-body').html(td);
+                    td = '';
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError){
                     alert(thrownError);
                 }
             });
-            console.log(details);
             return;
         }
         else{
@@ -218,16 +217,17 @@
                         // print values
                         rcp_fields(details, details.length - 1);
                         
-                        if(details[details.length - 1].type == 'Project Expense'){
+                        if(details[details.length - 1].type == 'project'){
 
                             // project type table headers
                             $('#rcp-modal-details #project-table #header').html(details[details.length - 1].headers);
 
                             // get particulars table data
-                            var td = table_data(details[details.length - 1].expenseType, details, details.length - 1)
+                            var td = table_data(details[details.length - 1].type, details, details.length - 1)
 
                             // open rcp detail modal
                             $('#rcp-modal-details #project-table #table-body').html(td);
+                            td = '';
                         }
                         else{
                             // change table id to department-table
@@ -237,10 +237,11 @@
                             $('#rcp-modal-details #department-table #header').html(details[details.length - 1].headers);
 
                             // get particulars table data
-                            var td = table_data(details[details.length - 1].expenseType, details, details.length - 1)
+                            var td = table_data(details[details.length - 1].type, details, details.length - 1)
 
                             // open rcp detail modal
                             $('#rcp-modal-details #department-table #table-body').html(td);
+                            td = '';
                         }
                         return;
                     },
@@ -266,6 +267,7 @@
 
                     // open rcp detail modal
                     $('#rcp-modal-details #project-table #table-body').html(td);
+                    td = '';
                 }
                 else{
                     // change table id to department-table
@@ -279,8 +281,8 @@
 
                     // open rcp detail modal
                     $('#rcp-modal-details #department-table #table-body').html(td);
+                    td = '';
                 }
-            console.log(details);
                 return;
             }
         }
@@ -291,25 +293,25 @@
         var td = '';
         if(expenseType == 'project'){
             $.each(details[index].particulars, function(i, value){
-                td += '<tr>';
-                    td += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-' + i + '">' + value['qty'] + '</a></td>';
-                    td += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i + '">' + value['unit'] + '</a></td>';
-                    td += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i + '">' + value['particulars'] + '</a></td>';
-                    td += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i + '">' + value['reference'].ref + '</td>';
-                    td += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-' + i + '">' + value['amount'] + '</td>';
-                td += '<tr>';                         
+                td +=   '<tr>' +
+                            '<td class="table-border" name="qty[]">' + value['qty'] + '</a></td>' +
+                            '<td class="table-border">' + value['unit'] + '</a></td>' +
+                            '<td class="table-border">' + value['particulars'] + '</a></td>' +
+                            '<td class="table-border">' + value['reference'].ref + '</td>' +
+                            '<td class="table-border">' + value['amount'] + '</td>' +
+                        '<tr>';                         
             });
         }
         else{
             $.each(details[index].particulars, function(i, value){
-                td += '<tr>';
-                    td += '<td class="allownumeric qty table-border" contenteditable="true" name="qty" id="qty-' + i + '">' + value['qty'] + '</a></td>';
-                    td += '<td class="unit table-border" contenteditable="true" name="unit" id="unit-' + i + '">' + value['unit'] + '</a></td>';
-                    td += '<td class="particulars table-border" contenteditable="true" name="particulars" id="particulars-' + i + '">' + value['particulars'] + '</a></td>';
-                    td += '<td class="bom-ref-code table-border" contenteditable="true" name="bom-ref-code" id="bom-ref-code-' + i + '">' + value['reference'].ref + '</td>';
-                    td += '<td class="code table-border" id="code-' + i + '">' + value['reference'].code + '</td>';
-                    td += '<td class="allownumericwithdecimal amount table-border" contenteditable="true" name="amount" id="amount-' + i + '">' + value['amount'] + '</td>';
-                td += '<tr>';                         
+                td +=   '<tr>' +
+                            '<td class="table-border">' + value['qty'] + '</a></td>' +
+                            '<td class="table-border">' + value['unit'] + '</a></td>' +
+                            '<td class="table-border">' + value['particulars'] + '</a></td>' +
+                            '<td class="table-border">' + value['reference'].ref + '</td>' +
+                            '<td class="table-border">' + value['reference'].code + '</td>' +
+                            '<td class="table-border">' + value['amount'] + '</td>' +
+                        '<tr>';                         
             });
         }
         return td;
@@ -324,5 +326,6 @@
         $('#rcp-modal-details #approver').html(details[index].approvers);
         $('#rcp-modal-details #project').html(details[index].projects);
         $('#rcp-modal-details #company').html(details[index].companies);
+        $('#rcp-modal-details #total').val(currencyWithCommas(parseFloat(details[index].total)));
     }
 </script>
