@@ -76,73 +76,43 @@
           <div class="row">
               <div class="col-md-12">
                 <div class="col-sm-8">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Total Sales (VAT Inclusive)</h3>
-                            <div class="right">
-                            <label class="fancy-checkbox">
-                                <input type="checkbox" class="fancy-checkbox" name="checkbox" id="vatable">
-                                <span>Is this vatable?</span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="panel-body" id="vat-body" hidden>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <select class="form-control" id="vat">
-                                        <option hidden>SELECT TYPE</option>
-                                        <?php
-                                            $vat = $sel2->getVat();
-                                            while ($row = $vat->fetch(PDO::FETCH_ASSOC)) {
-                                                $percentage = json_decode($row['vat_percentage'], true);
-                                                echo ' <option value="'.$row['vat_id'].'">'.$row['vat_name'].' - '.$percentage['percentage'].'%</option> ';
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-4" hidden id="div-percentage">
-                                    <input class="form-control" type="number" placeholder="Percentage" id="percentage" min="10" max="15">
-                                </div>
-                            </div>
-                            <table class="table table-responsive-md table-striped text-left"style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                    <th style="width: 25%"></th>
-                                    <th style="width: 20%"></th>
-                                    <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
+                    <div class="panel" id="vatable">
+                        <div class="panel-body panel-paddings">
+                          <table class="table table-responsive-md table-striped">
+                              <tbody>
+                                  <tr>
+                                    <td class="table-border center" colspan="3" id="is-vatable">NOT VATABLE</td>
+                                  </tr>
+                                  <tr>
                                     <td class="table-border">P.O.S. Trans #</td>
                                     <td class="table-border text-center" id="less-vat"> --- </td>
                                     <td class="table-border">Less: VAT</td>
-                                    </tr>
-                                    <tr>
-                                    <td class="table-border">VATable Sales</td>
-                                    <td class="table-border text-center" id="net-of-vat"> --- </td>
-                                    <td class="table-border">Amount: Net of VAT</td>
-                                    </tr>
-                                    <tr>
-                                    <td class="table-border">VAT-Exempt</td>
-                                    <td class="table-border text-center" id="discount"> --- </td>
-                                    <td class="table-border">Less: SC/PWD Discount</td>
-                                    </tr>
-                                    <tr>
-                                    <td class="table-border">Zero Rated</td>
-                                    <td class="table-border text-center" id="total-amount"> --- </td>
-                                    <td class="table-border">Amount Due</td>
-                                    </tr>
-                                    <tr>
-                                    <td class="table-border">VAT Amount</td>
-                                    <td class="table-border text-center"> --- </td>
-                                    <td class="table-border">Add: VAT</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        </div>
-                    <label for="company" class=" form-control-label">NOTE:</label>
+                                  </tr>
+                                  <tr>
+                                  <td class="table-border">VATable Sales</td>
+                                  <td class="table-border text-center" id="net-of-vat"> --- </td>
+                                  <td class="table-border">Amount: Net of VAT</td>
+                                  </tr>
+                                  <tr>
+                                  <td class="table-border">VAT-Exempt</td>
+                                  <td class="table-border text-center" id="discount"> --- </td>
+                                  <td class="table-border">Less: SC/PWD Discount</td>
+                                  </tr>
+                                  <tr>
+                                  <td class="table-border">Zero Rated</td>
+                                  <td class="table-border text-center" id="total-amount"> --- </td>
+                                  <td class="table-border">Amount Due</td>
+                                  </tr>
+                                  <tr>
+                                  <td class="table-border">VAT Amount</td>
+                                  <td class="table-border text-center"> --- </td>
+                                  <td class="table-border">Add: VAT</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                    <label for="note" class=" form-control-label">NOTE:</label>
                     <p>
                         1.  BOM Ref Code refers to Project Construction Expenses; Account Code refers to department expenses. Fixed Asset must use CPX-code. 
                         <br> 
@@ -157,26 +127,19 @@
                 </div>
 
                 <div class="col-sm-4">
-                    <label class=" form-control-label">If RUSH, fill in the following:</label>
-                    <div class="input-group date" id="datepicker">
-                        <div class="input-group-addon">
-                        <span class="fa fa-calendar "></span>
-                        </div>
+                  <div class="panel" id="vatable">
+                    <div class="panel-body panel-paddings">
+                        <label class=" form-control-label">If RUSH, fill in the following:</label>
                         <input type="text" class="form-control col-md-6" id="datepicker" style="background-color: white;">
+                        <label class=" form-control-label mtop">Reason / Justification</label>
+                        <textarea class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
                     </div>
-                    <label class=" form-control-label mtop">Reason / Justification</label>
-                    <textarea class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
+                  </div>
                     <div class="form-group text-center mtop">
                         <div class="row">
-                                <div class="col-md-4">
-                                    <input type="file" name="file" id="file" accept=".jpg, .pdf">
-                                </div>
-                                <div class="col-md-8">
-                                    <p for="file" id="file-name" class="form-control-label">Add supporting file</p>
-                                </div>
+                                    <a href="#" for="file" id="file-name" class="form-control-label">No file attached</a>
                         </div>
-                        <canvas id="viewer" class="form-control canvas center-block canvas-hidden" target="_blank"></canvas>
-                        <img class="hidden" id="loading" src="../assets/gif/anim_basic_16x16.gif"/>
+                        <embed id="supporting-file" class="form-control canvas center-block"/>
                     </div>
                 </div>
             </div>

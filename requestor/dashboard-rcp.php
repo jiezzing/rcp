@@ -38,25 +38,8 @@
 						<div class="panel panel-headline">
 							<div class="panel-heading">
 								<div class="row">
-									<div class="col-sm-8">
-										<nav aria-label="breadcrumb">
-										<ol class="breadcrumb">
-											<li class="breadcrumb-item"><a href="#" data-toggle="modal" data-target="#exampleModal"><?php echo $user_fullname; ?></a></li>
-											<li class="breadcrumb-item active" aria-current="page"><?php echo $user_type; ?></li>
-										</ol>
-										</nav>
-										<h5 class="panel-title">Request for Check Payment Overview</h5>
-									</div>
-									<div class="col-sm-4">
-											<label>Construction Expense Type: </label>
-											<label class="fancy-radio">
-												<input name="type" value="project" checked="checked" type="radio">
-												<span><i></i>Project Expense</span>
-											</label>
-											<label class="fancy-radio">
-												<input name="type" value="department" type="radio">
-												<span><i></i>Department Expense</span>
-											</label>
+									<div class="col-sm-12">
+										<h5 class="panel-title">Dashboard</h5>
 									</div>
 								</div>
 							</div>
@@ -212,6 +195,7 @@
 
                 $("#rcp-modal-details").modal('show');
 				showRcpDetails(rcp_no, details);
+				console.log(details);
 			});
 		// End of showing RCP details when clicked
 

@@ -69,7 +69,7 @@
       }
       else{
         if(sum == 0){
-          $('#amount-in-words').val("NO TOTAL AMOUNT DETECTED (Auto-Generated)");
+          $('#amount-in-words').val(null);
           $('#total').val('0.00');
         }
       }

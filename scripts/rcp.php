@@ -141,7 +141,7 @@
         });
     }
 
-    function showRcpDetails(rcp_no, details){
+    function showRcpDetails(rcp_no, details = []){
         var index;
         if(details.length === 0){
             $.ajax({
@@ -150,40 +150,22 @@
                 data: { rcp_no: rcp_no},
                 cache: false,
                 success: function(data){
-
-                    // push data to detail array
                     details.push(JSON.parse(data));
-
-                    // print values
                     rcp_fields(details, 0);
 
                     if(details[0].type == 'project'){
-
-                        // project type table headers
-                        $('#rcp-modal-details #project-table #header').html(details[0].headers);
-
-                        // get particulars table data
-                        var td = table_data(details[0].type, details, 0);
-                        
-                        // open rcp detail modal
-                        $('#rcp-modal-details #project-table #table-body').html(td);
-                        td = '';
+                        $('#rcp-modal-details #department-table').attr('id', 'project-table');
+                        $('#rcp-modal-details #project-table #header').html(headers(details, 0));
+                        $('#rcp-modal-details #project-table #table-body').html(table_data(details, 0));
                     }
                     else{
-
-                        // change table id to department-table
                         $('#rcp-modal-details #project-table').attr('id', 'department-table');
-
-                        // department type table headers
-                        $('#rcp-modal-details #department-table #header').html(details[0].headers);
-
-                        // get particulars table data
-                        var td = table_data(details[0].type, details, 0)
-
-                        // open rcp detail modal
-                        $('#rcp-modal-details #department-table #table-body').html(td);
-                    td = '';
+                        $('#rcp-modal-details #department-table #header').html(headers(details, 0));
+                        $('#rcp-modal-details #department-table #table-body').html(table_data(details, 0));
                     }
+                    vatable(details, 0);
+                    supportingFile(details, 0);
+                    
                 },
                 error: function(xhr, ajaxOptions, thrownError){
                     alert(thrownError);
@@ -210,90 +192,52 @@
                     data: { rcp_no: rcp_no},
                     cache: false,
                     success: function(data){
-
-                        // push data to detail array
                         details.push(JSON.parse(data));
-
-                        // print values
                         rcp_fields(details, details.length - 1);
-                        
                         if(details[details.length - 1].type == 'project'){
-
-                            // project type table headers
-                            $('#rcp-modal-details #project-table #header').html(details[details.length - 1].headers);
-
-                            // get particulars table data
-                            var td = table_data(details[details.length - 1].type, details, details.length - 1)
-
-                            // open rcp detail modal
-                            $('#rcp-modal-details #project-table #table-body').html(td);
-                            td = '';
+                            $('#rcp-modal-details #department-table').attr('id', 'project-table');
+                            $('#rcp-modal-details #project-table #header').html(headers(details, details.length - 1));
+                            $('#rcp-modal-details #project-table #table-body').html(table_data(details, details.length - 1));
                         }
                         else{
-                            // change table id to department-table
                             $('#rcp-modal-details #project-table').attr('id', 'department-table');
-
-                            // department type table headers
-                            $('#rcp-modal-details #department-table #header').html(details[details.length - 1].headers);
-
-                            // get particulars table data
-                            var td = table_data(details[details.length - 1].type, details, details.length - 1)
-
-                            // open rcp detail modal
-                            $('#rcp-modal-details #department-table #table-body').html(td);
-                            td = '';
+                            $('#rcp-modal-details #department-table #header').html(headers(details, details.length - 1));
+                            $('#rcp-modal-details #department-table #table-body').html(table_data(details, details.length - 1));
                         }
-                        return;
+                        vatable(details, details.length - 1);
+                        supportingFile(details, details.length - 1);
                     },
                     error: function(xhr, ajaxOptions, thrownError){
                         alert(thrownError);
                     }
                 });
-            console.log(details);
                 return;
             }
             else{
-
-                // print values
                 rcp_fields(details, index);
-
-                if(details[index].type == 'Project Expense'){
-
-                    // project type table headers
-                    $('#rcp-modal-details #project-table #header').html(details[index].headers);
-
-                    // get particulars table data
-                    var td = table_data(details[index].expenseType, details, index)
-
-                    // open rcp detail modal
-                    $('#rcp-modal-details #project-table #table-body').html(td);
-                    td = '';
+                if(details[index].type == 'project'){
+                    $('#rcp-modal-details #department-table').attr('id', 'project-table');
+                    $('#rcp-modal-details #project-table #header').html(headers(details, index));
+                    $('#rcp-modal-details #project-table #table-body').html(table_data(details, index));
                 }
                 else{
-                    // change table id to department-table
                     $('#rcp-modal-details #project-table').attr('id', 'department-table');
-
-                    // department type table headers
-                    $('#rcp-modal-details #department-table #header').html(details[index].headers);
-
-                    // get particulars table data
-                    var td = table_data(details[index].expenseType, details, index)
-
-                    // open rcp detail modal
-                    $('#rcp-modal-details #department-table #table-body').html(td);
-                    td = '';
+                    $('#rcp-modal-details #department-table #header').html(headers(details, index));
+                    $('#rcp-modal-details #department-table #table-body').html(table_data(details, index));
                 }
-                return;
+                vatable(details, index);
+                supportingFile(details, index);
             }
         }
     }
 
     // get all the particular details regarding on its RCP no
-    function table_data(expenseType, details, index) {
+    function table_data(details = [], index) {
         var td = '';
-        if(expenseType == 'project'){
+
+        if(details[index].type == 'project'){
             $.each(details[index].particulars, function(i, value){
-                td +=   '<tr>' +
+                td =   '<tr>' +
                             '<td class="table-border" name="qty[]">' + value['qty'] + '</a></td>' +
                             '<td class="table-border">' + value['unit'] + '</a></td>' +
                             '<td class="table-border">' + value['particulars'] + '</a></td>' +
@@ -304,7 +248,7 @@
         }
         else{
             $.each(details[index].particulars, function(i, value){
-                td +=   '<tr>' +
+                td =   '<tr>' +
                             '<td class="table-border">' + value['qty'] + '</a></td>' +
                             '<td class="table-border">' + value['unit'] + '</a></td>' +
                             '<td class="table-border">' + value['particulars'] + '</a></td>' +
@@ -318,7 +262,7 @@
     }
 
     // set values in the rcp fields
-    function rcp_fields(details, index) {
+    function rcp_fields(details = [], index) {
         $('#rcp-modal-details #rcp-no').val(details[index].rcp_no);
         $('#rcp-modal-details #department-name').val(details[index].department_name);
         $('#rcp-modal-details #payee').val(details[index].payee);
@@ -327,5 +271,69 @@
         $('#rcp-modal-details #project').html(details[index].projects);
         $('#rcp-modal-details #company').html(details[index].companies);
         $('#rcp-modal-details #total').val(currencyWithCommas(parseFloat(details[index].total)));
+    }
+
+    function vatable(details = [], index){
+        var type;
+        if(details[index].vat != null){
+            $.each(details[index], function(i, value){
+                if(value['type'] == 1)
+                    type = 'Materials - 1%'
+                else if(value['type'] == 1)
+                    type = 'Service - 2%'
+                else if(value['type'] == 1)
+                    type = 'Rental - 5%'
+                $('#is-vatable').text(type);
+                $('#less-vat').text(value['vat_trans']);
+                $('#net-of-vat').text(value['vat_sales']);
+                $('#discount').text(value['vat_exempt']);
+                $('#total-amount').text(value['zero_rated']);                        
+            });
+        }
+        else{
+            $('#is-vatable').text('NOT VATABLE');
+            $('#less-vat').text('---');
+            $('#net-of-vat').text('---');
+            $('#discount').text('---');
+            $('#total-amount').text('---');
+        }
+    }
+
+    function headers(details = [], index){
+        var header = '';
+        if(details[index].type == 'project'){
+            header = '<th>QTY</th>' +
+                        '<th>Unit</th>' +
+                        '<th>Particulars</th>' +
+                        '<th>BOM Reference</th>' + 
+                        '<th>Amount</th>';
+        }
+        else{
+            header = '<th>QTY</th>' +
+                        '<th>Unit</th>' +
+                        '<th>Particulars</th>' +
+                        '<th>BOM Reference</th>' + 
+                        '<th>Acct Code</th>' +
+                        '<th>Amount</th>';
+        }
+        return header;
+    }
+
+    function supportingFile(details = [], index){
+        if(details[index].file != null){
+            $.each(details[index], function(i, value){    
+                $('#file-name').text(value['name']);   
+                $('#file-name').attr('href', value['path']);      
+                $('#supporting-file').attr('src', value['path']);     
+                $('#supporting-file').removeClass('canvas-hidden'); 
+                $('#file-name').attr('target', '_blank');        
+            });
+        }
+        else{  
+            $('#file-name').text('No file attached');  
+            $('#file-name').attr('href', '#');  
+            $('#supporting-file').addClass('canvas-hidden');   
+            $('#file-name').removeAttr('target');  
+        }
     }
 </script>

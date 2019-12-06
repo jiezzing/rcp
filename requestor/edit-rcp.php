@@ -29,7 +29,25 @@
                 $sel2->rcp_no = $_POST['rcp-no'];
                 $query = $sel2->getRcpDetails();
                 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                    $type = $row['rcp_expense_type'];
+                    $rcp_no = $row['rcp_no'];
+                    $rcp_dept_code = $row['rcp_department'];
+                    $rcp_comp_code = $row['rcp_company'];
+                    $rcp_proj_code = $row['rcp_project'];
+                    $rcp_payee = $row['rcp_payee'];
+                    $rcp_words_amt = $row['rcp_amount_in_words'];
+                    $rcp_amt = $row['rcp_total_amount'];
+                    $apprvr_id = $row['rcp_approver_id'];
+                    $rcp_rush =  $row['rcp_rush'];
+                    $rcp_date_issued = $row['rcp_date_issued'];
+                    $expense_type = $row['rcp_expense_type'];
+                    $vat = json_decode($row['rcp_vat'], true);
+                    $supp_file = json_decode($row['rcp_supp_file'], true);
+                }
+
+                $sel2->dept_code = $rcp_dept_code;
+                $query = $sel2->getSpecificDepartment();
+                while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                    $dept_name = $row['dept_name'];
                 }
 			?>
 			<div class="main text-size">
@@ -42,7 +60,7 @@
 										<h5 class="panel-title">Request for Check Payment - Edit Form</h5>
 									</div>
 									<div class="col-md-4">
-                                    <h5 class="panel-title"><?php echo $_POST['rcp-no'] ?></h5>
+                                    <h5 class="panel-title"><?php echo $rcp_no; ?></h5>
                                         <label class="fancy-radio">
                                             <input name="type" value="project" checked="checked" type="radio">
                                             <span><i></i>Project Expense</span>
@@ -61,7 +79,7 @@
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <label for="department" class=" form-control-label tooltiptext">DEPARTMENT</label>
-                                            <input type="text" class="form-control" value="<?php echo $_POST['department'] ?>" readonly>
+                                            <input type="text" class="form-control" value="<?php echo $dept_name; ?>" readonly>
                                         </div>
 
                                         <div class="col-sm-4">
@@ -78,7 +96,7 @@
                                                 <?php
                                                     $project = $sel2->getAllProject();
                                                     while ($row = $project->fetch(PDO::FETCH_ASSOC)) {
-                                                        if($row['proj_code'] == $_POST['project']){
+                                                        if($row['proj_code'] == $rcp_proj_code){
                                                             echo ' <option value="'.$row['proj_code'].'" selected>'.$row['proj_name'].'</option> ';
                                                         }
                                                         else{
@@ -98,7 +116,7 @@
                                             <?php
                                                 $company = $sel2->getAllCompany();
                                                 while ($row = $company->fetch(PDO::FETCH_ASSOC)) {
-                                                    if($row['comp_code'] == $_POST['company']){
+                                                    if($row['comp_code'] == $rcp_comp_code){
                                                         echo ' <option value="'.$row['comp_code'].'" selected>'.$row['comp_name'].'</option> ';
                                                     }
                                                     else{
@@ -111,14 +129,14 @@
 
                                         <div class="col-sm-8">
                                             <label for="company" class="form-control-label">PAYEE</label>
-                                            <input type="text" class="form-control" id="payee" value="<?php echo $_POST['payee'] ?>">
+                                            <input type="text" class="form-control" id="payee" value="<?php echo $rcp_payee ?>">
                                         </div>
                                     </div>
 
                                     <div class="row mtop">
                                         <div class="col-sm-12">
                                             <label for="company" class="form-control-label">AMOUNT IN WORDS</label>
-                                            <input type="text" class="form-control center" id="amount-in-words" value="<?php echo $_POST['amount-in-words'] ?>" readonly>
+                                            <input type="text" class="form-control center" id="amount-in-words" value="<?php echo $rcp_words_amt ?>" readonly>
                                         </div>
                                     </div>
 
@@ -126,7 +144,7 @@
                                         <div class="col-sm-12">
                                             <div class="panel no-padding-bottom">
                                                 <?php
-                                                    if($type == 'project'){
+                                                    if($expense_type == 'project'){
                                                         echo '
                                                             <table class="table table-responsive-md table-striped project-table" id="table">
                                                                 <thead>
@@ -142,7 +160,7 @@
                                                                 <tbody>
                                                                     ';
                                                                     $i = 0;
-                                                                    $sel2->rcp_no = $_POST['rcp-no'];
+                                                                    $sel2->rcp_no = $rcp_no;
                                                                     $query = $sel2->getRcpParticularDetails();
                                                                     while ($row = $query->fetch(PDO::FETCH_ASSOC)){ 
                                                                         $reference = json_decode($row['rcp_ref_code'], true);

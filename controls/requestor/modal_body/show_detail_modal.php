@@ -27,13 +27,6 @@
  	}
 
  	if($expense_type ==  'project'){
-	 	$headers = [
-	 		'<th>QTY</th>',
-	 		'<th>Unit</th>', 
-	 		'<th>Particulars</th>', 
-	 		'<th>BOM Reference</th>', 
-	 		'<th>Amount</th>'
-	 	];
 	 	$query = $sel->getRcpParticularDetails();
 		while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			$particulars[] = array(
@@ -46,14 +39,6 @@
 		}
  	}
  	else{
- 		$headers = [
-	 		'<th>QTY</th>',
-	 		'<th>Unit</th>', 
-	 		'<th>Particulars</th>', 
-	 		'<th>BOM Reference</th>', 
-	 		'<th>Acct Code</th>', 
-	 		'<th>Amount</th>'
-	 	];
 	 	$query = $sel->getRcpParticularDetails();
 		while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			$particulars[] = array(
@@ -172,9 +157,10 @@
  		'projects' => $projects,
  		'companies' => $companies,
  		'particulars' => $particulars,
- 		'headers' => $headers,
 		'type' => $expense_type,
-		'total' => $rcp_amt
+		'total' => $rcp_amt,
+		'vat' => $vat,
+		'file' => $supp_file
  	);
 
  	echo json_encode($data);

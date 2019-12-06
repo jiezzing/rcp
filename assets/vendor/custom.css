@@ -101,4 +101,13 @@
 		cursor: pointer;
 		color: red;
 	}
+	table{
+		margin-bottom: 0px !important;
+	}
+	.panel-paddings{ 
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+		padding-top: 15px !important;
+		padding-bottom: 15px !important;
+	}
 </style>

@@ -34,15 +34,16 @@
 			?>
 			<div class="main text-size">
 				<div class="main-content">
-					<div class="container-fluid">
+                <div class="container-fluid">
 						<div class="panel panel-headline">
 							<div class="panel-heading">
 								<div class="row">
-									<div class="col-sm-8">
-										<h5 class="panel-title">Request for Check Payment Fill-up Form</h5>
+                                <div class="col-sm-8">
+                                        <h5 class="panel-title">Request for Check Payment Fill-up Form</h5>
+                                        <span><i class="fa fa-warning"></i> Please ensure all the important details before sending the Request for Check Payment.</span>
 									</div>
 									<div class="col-sm-4">
-                                        <label>Construction Expense Type: </label>
+                                        <label class="panel-title">Construction Expense Type: </label>
                                         <label class="fancy-radio">
                                             <input name="type" value="project" checked="checked" type="radio">
                                             <span><i></i>Project Expense</span>
@@ -53,11 +54,13 @@
                                         </label>
 									</div>
 								</div>
-                                <hr>
 							</div>
-                            <div class="panel-body">
+						</div>
+					</div>
+					<div class="container-fluid">
+						<div class="panel panel-headline">
+                            <div class="panel-body mtop">
                                 <form id="fillup-form">
-
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <label for="company" class=" form-control-label tooltiptext">DEPARTMENT</label>
@@ -116,7 +119,7 @@
                                     <div class="row mtop">
                                         <div class="col-sm-12">
                                             <label for="company" class=" form-control-label">AMOUNT IN WORDS</label>
-                                            <input type="text" class="form-control center" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" disabled id="amount-in-words">
+                                            <input type="text" class="form-control center" maxlength="100" placeholder="NO TOTAL AMOUNT DETECTED (Auto-Generated)" id="amount-in-words" readonly>
                                         </div>
                                     </div>
 
@@ -302,6 +305,13 @@
             window.email = '';
             window.table_class = ['.qty', '.unit', '.particulars', '.bom-ref-code', '.amount'];
             window.amounts = [];
+            window.toastr.options = {
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": true,
+				"showDuration": "300",
+				"hideDuration": "1000",
+			};
 
             // check if all scripts has been loaded
             $(window).load(function(){
@@ -473,6 +483,7 @@
                         }
                     }
                     
+                    alert(total)
                     data.append('rcp', rcpCode);
                     data.append('user_id', userId);
 				    data.append('approver_id', approverId);
@@ -484,8 +495,13 @@
                     data.append('rush', rush);
 				    data.append('table_data', JSON.stringify(table_data));
 
-
-
+                    if(departmentCode == 'SELECT DEPARTMENT'){ toastr.error('Please select a department.', 'Required'); }
+                    else if(approverId == 0){ toastr.error('Please select an approver.', 'Required'); }
+                    else if(projectCode == 'SELECT PROJECT'){ toastr.error('Please select a project.', 'Required'); }
+                    else if(companyCode == 'SELECT COMPANY'){ toastr.error('Please select a company.', 'Required'); }
+                    else if(payee == ''){ toastr.error('Please specify a payee', 'Required'); }
+                    else if(words == '' && total != '0.00'){ toastr.error('Qty, unit, particulars, BOM Ref/Acct Code and amount is required in this field.', 'Required'); }
+                    return;
                     createRcp(data);
                 });
                 // End
