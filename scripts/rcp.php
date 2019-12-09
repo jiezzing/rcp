@@ -12,9 +12,6 @@
     }
 
     function createRcp(data){
-        // if(data.rush == 'yes'){
-        //     isRcpRush(data.rcp_no, data.justification, data.due_date);
-        // }
         $.ajax({
             type: "POST",
             url: "../controls/requestor/create_rcp.php",
@@ -24,20 +21,16 @@
             processData: false,
             success: function(response){
                 JSON.parse(data.get('table_data')).forEach((value)=>{
-                    createParticulars(
-                        data.get('rcp'), 
-                        value.qty, 
-                        value.unit,
-                        value.particulars,
-                        value.reference,
-                        value.amount
-                    );
+                    createParticulars(data.get('rcp'), value.qty, value.unit, value.particulars, value.reference, value.amount);
                 });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
             }
         }).done(function (){
+            if(data.get('rush') == 'yes'){
+                isRcpRush(data.get('rcp'), data.get('justification'), data.get('rush_date'));
+            }
             updateDepartmentRcpNo(splitter('department', 0));
         }); 
     }
@@ -55,9 +48,7 @@
             type: "POST",
             url: "../controls/requestor/create_particulars.php",
             data: { data: object },
-            success: function(response){
-            console.log(response);
-            },
+            success: function(response){ },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert(thrownError);
             }

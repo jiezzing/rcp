@@ -193,9 +193,8 @@
 				rcpExpenseType = valueSplitter(key, 5);
 				rcp_id = id;
 
-                $("#rcp-modal-details").modal('show');
 				showRcpDetails(rcp_no, details);
-				console.log(details);
+                $("#rcp-modal-details").modal('show');
 			});
 		// End of showing RCP details when clicked
 

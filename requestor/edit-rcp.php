@@ -61,14 +61,15 @@
 									</div>
 									<div class="col-md-4">
                                     <h5 class="panel-title"><?php echo $rcp_no; ?></h5>
-                                        <label class="fancy-radio">
-                                            <input name="type" value="project" checked="checked" type="radio">
-                                            <span><i></i>Project Expense</span>
-                                        </label>
-                                        <label class="fancy-radio">
-                                            <input name="type" value="department" type="radio">
-                                            <span><i></i>Department Expense</span>
-                                        </label>
+                                        <?php
+                                            if($expense_type == 'project'){
+                                                echo '<span>TYPE: Project Expense</span>';
+                                            }
+                                            else{
+                                                echo '<span>TYPE: Department Expense</span>';
+                                            }
+                                        ?>
+                                        
 									</div>
 								</div>
                                 <hr>
@@ -351,7 +352,7 @@
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
-                                    <div id="send" class="col-md-4 text-right pull-right"><a href="#" class="btn btn-primary form-control"><i class="fa fa-envelope"></i> SEND RCP</a></div>
+                                    <div id="send" class="col-md-4 text-right pull-right"><a href="#" class="btn btn-primary form-control">SAVE CHANGES</a></div>
                                 </div>
                             </div>
 						</div>
@@ -363,6 +364,7 @@
 			require '../scripts/js.php';
 			require '../scripts/rcp.php';
 			require '../scripts/filereader.php';
+			require '../scripts/page_scripts.php';
 		?>
 		<script>
             // Global 
@@ -380,6 +382,13 @@
             // end
 
             $(document).ready(function(){
+
+                var length = $(document).find('#table td[name=qty]').length;
+                allowNumbers('.qty');
+                allowNumbersWithDecimal('.amount');
+                tableExceptions(length, table_class);
+                vat('#vatable');
+
                 // add new table row
                 $('#add-row').on('click', function(e){
                     e.preventDefault();

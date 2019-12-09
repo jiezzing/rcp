@@ -262,7 +262,7 @@
                                                 <div class="input-group-addon">
                                                 <span class="fa fa-calendar "></span>
                                                 </div>
-                                                <input type="text" class="form-control col-md-6" id="datepicker" style="background-color: white;">
+                                                <input type="text" class="form-control col-md-6" name="datepicker">
                                             </div>
                                             <label class=" form-control-label mtop">Reason / Justification</label>
                                             <textarea class="form-control" placeholder="Your text here. . ." rows="5" id="justification"></textarea>
@@ -297,6 +297,7 @@
 			require '../scripts/js.php';
 			require '../scripts/rcp.php';
 			require '../scripts/filereader.php';
+			require '../scripts/page_scripts.php';
 		?>
 		<script>
             // Global 
@@ -334,6 +335,7 @@
                 allowNumbers('.qty');
                 allowNumbersWithDecimal('.amount');
                 tableExceptions(length, table_class);
+                vat('#vatable');
 
                 // department change
                 $('#department').on('change', function(){
@@ -438,10 +440,12 @@
                     var amountInWords = splitter('project', 0);
                     var total = currencyRemoveCommas($('#total').val());
                     var words = $('#amount-in-words').val();
-                    var rush = 'no';
                     var table_data = [];
                     var reference;
                     var vatType = $('#vat').val();
+                    var rushDate = $('input[name=datepicker]').val();
+                    var justification = $('#justification').val();
+                    var pdf = $('#file')[0].files[0];
                     var vat = {
                         'type': vatType,
                         'vat_trans': currencyRemoveCommas($('#less-vat').text()),
@@ -483,26 +487,50 @@
                         }
                     }
                     
-                    alert(total)
                     data.append('rcp', rcpCode);
                     data.append('user_id', userId);
 				    data.append('approver_id', approverId);
                     data.append('department', departmentCode);
                     data.append('total', total);
                     data.append('amount_in_words', words);
-                    $('#vatable').is(":checked") && $('#vat').val() != 'SELECT TYPE' ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
                     data.append('expense', type);
-                    data.append('rush', rush);
 				    data.append('table_data', JSON.stringify(table_data));
+                    $('#vatable').is(":checked") && $('#vat').val() != 'SELECT TYPE' ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
+                    $('#file').get(0).files.length === 0 ? data.append('file', null) : data.append('file', pdf);
 
                     if(departmentCode == 'SELECT DEPARTMENT'){ toastr.error('Please select a department.', 'Required'); }
                     else if(approverId == 0){ toastr.error('Please select an approver.', 'Required'); }
                     else if(projectCode == 'SELECT PROJECT'){ toastr.error('Please select a project.', 'Required'); }
                     else if(companyCode == 'SELECT COMPANY'){ toastr.error('Please select a company.', 'Required'); }
                     else if(payee == ''){ toastr.error('Please specify a payee', 'Required'); }
-                    else if(words == '' && total != '0.00'){ toastr.error('Qty, unit, particulars, BOM Ref/Acct Code and amount is required in this field.', 'Required'); }
-                    return;
-                    createRcp(data);
+                    else if(words == '' && total == '0.00'){ toastr.error('Qty, unit, particulars, BOM Ref/Acct Code and amount is required in this field.', 'Required'); }
+                    else{
+                        if((rushDate == '' && justification != '') || (rushDate != '' && justification == '')){
+                            toastr.error('It seems that this RCP want to be rushed, so please clarify the date and reason/justification.', 'Required');
+                            data.append('rush', 'no');
+                            return;
+                        }
+                        else if(rushDate != '' && justification != '') { 
+                            data.append('rush', 'yes'); 
+                            data.append('justification', justification);
+                            data.append('rush_date', rushDate);
+                        }
+                        else{ 
+                            if(rushDate == '' && justification == '') { data.append('rush', 'no'); } 
+                        }
+                        
+                        swal({
+							title: "Confirmation",
+							text: "Please check all the important details before sending the RCP. Would you like to send this RCP?",
+							type: "info",
+							showCancelButton: true,
+							closeOnConfirm: false,
+							confirmButtonText: "Yes",
+							showLoaderOnConfirm: true
+						}, function (response) {
+                            createRcp(data);
+                        });
+                    }
                 });
                 // End
 
@@ -562,23 +590,6 @@
                     $('#discount').text(discount.toFixed(2));
                     $('#total').val(amount.toFixed(2));
                     $('#total-amount').text(amount.toFixed(2));
-                });
-
-                $('#vatable').click(function(){
-                    var isChecked = $('#vatable').is(":checked");
-                    var total = $('#total').val();
-                    // if(total == '0.00'){
-                    //     toastr.error('No total amount detected.', 'Required');
-                    //     $('#vatable'). prop('checked', false);
-                    //     return;
-                    // }
-                    // else{
-                        if(isChecked) {
-                            $('#vat-body').css({ display: 'block', overflow: 'hidden' });
-                        } else {
-                            $('#vat-body').css({ display: 'none' });
-                        }
-                    // }
                 });
 
                 // prevent table from using enter key
