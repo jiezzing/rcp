@@ -17,6 +17,12 @@
 	<link rel="stylesheet" href="assets/vendor/fonts/google-font.css">
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+
+	<style>
+	.mask-password{
+		-webkit-text-security:disc;
+	}
+	</style>
 </head>
 <?php 		
 	include 'config/connection.php';
@@ -50,7 +56,7 @@
 								</div>
 								<div class="form-group">
 									<label for="signin-password" class="control-label sr-only">Password</label>
-									<input type="password" class="form-control" id="signin-password" placeholder="Password">
+									<input type="text" class="form-control mask-password" id="signin-password" placeholder="Password">
 								</div>
 								<a href="##">
 									<button type="button" class="btn btn-primary btn-lg btn-block" id="login-btn">Login</button>

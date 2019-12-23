@@ -31,6 +31,12 @@
 			<?php
 				include_once '../navbar.php';
 				include_once '../requestor/menu.php';
+
+				$count->rcp_employee_id = $_SESSION['user_id'];
+				$select = $count->totalRcp();
+				while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
+					$totalRcp = $row['TOTAL'];
+				}
 			?>
 			<div class="main">
 				<div class="main-content">
@@ -38,102 +44,30 @@
 						<div class="panel panel-headline">
 							<div class="panel-heading">
 								<div class="row">
-									<div class="col-sm-12">
+									<div class="col-md-9">
 										<h5 class="panel-title">Dashboard</h5>
+									</div>
+									<div class="col-md-3">
+										<a href="../requestor/create-rcp.php"> 
+											<i class="fa fa-plus"></i> Click to create RCP
+										</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div id="load-rcp">
-						<?php
-							$sel->rcp_employee_id = $_SESSION['user_id'];
-							$select = $sel->getPendingRcp();
-							while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
-								$flag = true;
-								extract($row);
-								echo '
-									<div class="col-md-4 line-content">
-										<div class="panel">
-								';
-								if($row['rcp_rush'] == "Yes"){
-									echo '
-										<div class="panel-heading">
-											<h3 class="panel-title"> <i class="fa fa-bolt" aria-hidden="true" style="color: #ff8000"></i> '.$row['rcp_no'].'</h3>
-											<div class="right">
-												<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-											</div>
-										</div>
-									';
-								}
-								else{
-									echo '
-										<div class="panel-heading">
-											<h3 class="panel-title">'.$row['rcp_no'].'</h3>
-											<div class="right">
-												<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
-											</div>
-										</div>
-									';
-								}
-									echo '
-											<div class="panel-body" style="font-size: 13px">
-												<ul class="list-unstyled list-justify">
-													<li>Approver <span>'.$row['user_firstname'].' '.$row['user_lastname'].'</span></li>
-													<li>Department <span>'.$row['dept_name'].'</span></li>
-													<li>Type 
-													';
-													if($row['rcp_expense_type'] == 'project'){
-														echo '<span>Project Expense</span>';
-													}
-													else{
-														echo '<span>Department Expense</span>';
-													}
-											echo 	'</li>
-												</ul>
-											</div>
-											<a href="javascript" data-toggle="modal">
-												<div class="panel-footer show-more-details" value="'.$row['rcp_no'].':'.$row['rcp_approver_id'].':'.$row['rcp_rush'].':'.$row['rcp_id'].':'.$row['user_email'].':'.$row['rcp_expense_type'].'">
-													<h5>
-														<ul class="list-unstyled list-justify">
-															<li>Created: '.$row['created_at'].'<i class="fa fa-pencil pull-right"></i></li>
-														</ul>
-													</h5>
-												</div>
-											</a>
-										</div>
-									</div>
-								';
-							}
-						?>
-					</div>
-
-					<div class="col-md-4">
-						<a href = "../requestor/create-rcp.php">
-							<div class="panel">
-								<div class="panel-body no-padding bg-primary text-center">
-									<div class="padding-top-30 padding-bottom-30">
-										<i class="fa fa-file fa-4x"></i>
-										<h4>Click to create RCP</h4>
-									</div>
-								</div>
-								<div class="panel-footer">
-									<h5>
-										<ul class="list-unstyled list-justify">
-											<li>RCP Fill-up Form<i class="fa fa-plus pull-right"></i> </li>
-										</ul>
-									</h5>
-								</div>
-							</div>
-						</a>
-					</div>
+					<div id="rcp"></div>
 					<div class="col-md-12 footer">
 						<nav class="pull-right">
 						  <ul class="pagination">
 						    <li class="page-item disabled">
 						      <a class="page-link" href="#" tabindex="-1" id="previous">Previous</a>
 						    </li>
-						    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+							<?php
+								for($page = 1; $page <= ceil($totalRcp / 9); $page++){
+									echo '<li class="page-item pages" value="'.$page.'"><a class="page-link" href="#">'.$page.'</a></li>';
+								}
+							?>
 						    <li class="page-item">
 						      <a class="page-link" href="#" id="next">Next</a>
 						    </li>
@@ -148,6 +82,7 @@
 			require '../scripts/js.php';
 			require '../scripts/rcp.php';
 			require '../scripts/trappings.php';
+			include '../scripts/components.php';
 		?>
 		<script>
 		// Global variables
@@ -632,100 +567,6 @@
 			});
 		// End of selecting construction expense type
 
-		// Sending of data - RCP
-			// $('#' + expenseType + '-form-modal #form').on('submit', function(e){
-			// 	e.preventDefault();
-			// 	var form = document.getElementById('form');
-			// 	var data = new FormData(form);
-			// 	var pdf = $('#' + expenseType + '-form-modal #file')[0].files[0];
-			// 	var code = splitter(expenseType, 'department', 0);
-			// 	var total_rcp = parseInt(splitter(expenseType, 'department', 5)) + 1;
-			// 	var rcp_no = code + " " + new Date().getFullYear().toString().substr(-2) + "-" + ("0000" + total_rcp).slice(-4);
-			// 	var user_id = <?php echo $_SESSION['user_id']; ?>;
-			// 	var rush = 'no';
-			// 	var length = lengthGetter(expenseType);
-			// 	var table_data = [];
-			// 	var reference;
-			// 	var type = $('#' + expenseType + '-form-modal #vat').val();
-			// 	var vat = {
-			// 		'type': type,
-			// 		'vat_trans': currencyRemoveCommas($('#' + expenseType + '-form-modal #less-vat').text()),
-			// 		'vat_sales': currencyRemoveCommas($('#' + expenseType + '-form-modal #net-of-vat').text()),
-			// 		'vat_exempt': currencyRemoveCommas($('#' + expenseType + '-form-modal #discount').text()),
-			// 		'zero_rated': currencyRemoveCommas($('#' + expenseType + '-form-modal #total-amount').text()),
-			// 		'vat_amount': 25
-			// 	};
-				
-			// 	for(var i = 0; i < length; i++){
-			// 		var qty = $('#' + expenseType + '-table #qty-' + i).text();
-			// 		var unit = $('#' + expenseType + '-table #unit-' + i).text();
-			// 		var particulars = $('#' + expenseType + '-table #particulars-' + i).text();
-			// 		var ref = $('#' + expenseType + '-table #bom-ref-code-' + i).text();
-			// 		var amount = $('#' + expenseType + '-table #amount-' + i).text();
-					
-			// 		if(expenseType == 'project'){ reference = { 'ref': ref }; }
-			// 		else{
-			// 			var ref_code = $('#department-table #code-' + i).text();
-			// 			reference = {
-			// 				'ref': ref,
-			// 				'code': ref_code
-			// 			};
-			// 		}
-
-			// 		if(qty == "" || unit == "" || particulars == "" || ref == "" || amount == ""){ continue; }
-			// 		else{
-			// 			table_data.push({
-			// 				'qty': qty,
-			// 				'unit': unit,
-			// 				'particulars': particulars,
-			// 				'reference': reference,
-			// 				'amount': currencyRemoveCommas(amount)
-			// 			});
-			// 		}
-			// 	}
-
-			// 	data.append('rcp_no', rcp_no);
-			// 	data.append('user_id', user_id);
-			// 	data.append('approver', approver_id);
-			// 	data.append('project', $('#' + expenseType + '-form-modal #project').val());
-			// 	data.append('company', $('#' + expenseType + '-form-modal #company').val());
-			// 	data.append('payee', $('#' + expenseType + '-form-modal #payee').val());
-			// 	data.append('department', code);
-			// 	data.append('amount_in_words', $('#' + expenseType + '-form-modal #amount-in-words').val());
-			// 	data.append('total', currencyRemoveCommas($('#' + expenseType + '-form-modal #total').val()));
-			// 	$('#' + expenseType + '-form-modal #vatable').is(":checked") ? data.append('vat', JSON.stringify(vat)) : data.append('vat', null);
-			// 	data.append('file', pdf);
-			// 	data.append('rush', rush);
-			// 	data.append('expenseType', expenseType);
-			// 	data.append('length', length);
-			// 	data.append('table_data', JSON.stringify(table_data));
-			// 	data.append('expense', expense);
-
-			// 	$('#' + expenseType + '-form-modal').modal('toggle');
-			// 	swal({
-			// 		title: "Confirmation",
-			// 		text: "Would you like to send the RCP?",
-			// 		type: "info",
-			// 		showCancelButton: true,
-			// 		closeOnConfirm: false,
-			// 		confirmButtonText: "Yes",
-			// 		showLoaderOnConfirm: true
-			// 	}, function (value) {
-			// 		if(value){
-			// 			createRcp(data);
-			// 		}
-			// 		else{
-			// 			$('#' + expenseType + '-form-modal').modal('show');
-			// 			return false;
-			// 		}
-			// 	});
-			// });
-		// End of sending data - RCP
-
-		/*========================================================*/
-		/*                   END OF SENDING RCP					  */
-		/*========================================================*/
-
 		/*========================================================*/
 		/*                      UPDATE OF RCP					  */
 		/*========================================================*/
@@ -756,14 +597,56 @@
 		/*========================================================*/
 		/*                   END OF UPDATING RCP				  */
 		/*========================================================*/
+
+			/*
+			|--------------------------------------------------------------------------
+			| Pagination
+			|--------------------------------------------------------------------------
+			*/
+			$(document).on('click', '.pages', function(e){
+				e.preventDefault();
+				var page = $(this).attr('value');
+				var offset = (page - 1) * 9
+
+				$.ajax({
+					type: "POST",
+					url: "../controls/requestor/rcp.php",
+					data: { 
+						user_id: <?php echo $_SESSION['user_id'] ?>,
+						limit: 9,
+						offset: offset 
+					},
+					success: function(html) {
+						$('#rcp').html(html);
+					}
+				}).done(function (){
+					$('#wrapper').fadeIn();
+					$('#overlay').fadeOut();
+				});
+			});
 		});
 
-		// Check if all scripts has been loaded
-			$(window).load(function(){
-			   $('#overlay').fadeOut();
-			   $('#wrapper').fadeIn();
+		$(window).load(function(){
+			$.ajax({
+				type: "POST",
+				url: "../controls/requestor/rcp.php",
+				data: { 
+					user_id: <?php echo $_SESSION['user_id'] ?>,
+					limit: 9,
+					offset: 0 
+				},
+				success: function(response) {
+					console.log('no1' + response);
+					$('#rcp').html(response);
+				}
+			}).done(function (){
+				$('#wrapper').fadeIn();
+				$('#overlay').fadeOut();
+				if(this.response == 'no data'){
+					$('#rcp').html(notify);		
+				}
 			});
-		// Check if all scripts has been loaded
+		});
 		</script>
 	</body>
 </html>
